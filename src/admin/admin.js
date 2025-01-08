@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 qrCodeContainer.style.margin = "10px";
     
                 const qrCodeTitle = document.createElement("p");
-                qrCodeTitle.textContent = `QR Code for ${id}`;
+                qrCodeTitle.textContent = `QR Code for ${name}`;
                 qrCodeContainer.appendChild(qrCodeTitle);
     
                 qrCodeContainer.appendChild(qrCodeDiv);
