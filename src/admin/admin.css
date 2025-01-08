@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    height: 125vh;
+  }
+  
+
+h1 {
+    text-shadow: 7px 7px 7px gray;
+}
+
+.header {
+    color: white;
+    padding: 1em;
+    text-align: center;
+    align-items: center;
+    border: solid 1px black;
+    height: 30vh;
+    width: 97vw;
+    background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
+    background-size: 97%;
+    font-size: 1.7em;
+}
+
+ul{
+    padding-left: 0;
+}
+
+.navButton {
+    margin: 0.5em;
+    background-color: #5d403a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    top: 10%;
+  }
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+}
+
+
+
+main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h3 {
+    color: #333;
+}
+
+form {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form input, form select, form button {
+    padding: 8px;
+    font-size: 14px;
+}
+
+form button {
+    background-color:  #5d403a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #874336;
+}
+
+#registrationRequests{
+    list-style: none;
+    padding: 0;
+}
+
+#registrationRequests li {
+    background-color: #f4f4f4;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#registrationRequests li img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#registrationRequests li button {
+    background-color:  #5d403a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+#registrationRequests li button:hover {
+    background-color: #874336;
+}
+
+@media screen and (max-width: 1024px) {
+    nav ul {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    nav ul li {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    header {
+        text-align: left;
+        padding: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #registrationRequests li {
+        flex-direction: row;
+      
+    }
+
+    #registrationRequests li img {
+        margin-bottom: 10px;
+    }
+}
+

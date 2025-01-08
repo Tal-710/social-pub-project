@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Management</title>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="con">
+        <div class="header">
+          <h1>Social Pub</h1>
+          <h2>Admin Panel</h2>
+        </div>
+    <main>
+        <nav>
+            <ul >
+                <li class="navButton"><a href="#product-management">Product Management</a></li>
+                <li class="navButton"><a href="#user-management">User Management</a></li>
+                <li class="navButton"><a href="#registration-management">Registration Management</a></li>
+            </ul>
+        </nav>
+       
+        <section id="product-management">
+            <h3>Product Management</h3>
+            <form id="product-form">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" name="product-name" required>
+        
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" name="product-price" required>
+        
+                <label for="product-image">Image:</label>
+                <input type="file" id="product-image" name="product-image" accept="image/*" required>
+        
+                <button type="submit">Add Product</button>
+            </form>
+            <ul id="product-list">
+                <!-- List of products -->
+            </ul>
+        </section>
+        
+
+        <section id="user-management">
+            <h3>User Management</h3>
+            <form id="user-form">
+                <label for="user-picture">Profile Picture:</label>
+                <input type="file" id="user-picture" name="user-picture" accept="image/*" required>
+        
+                <label for="user-name">Name:</label>
+                <input type="text" id="user-name" name="user-name" required>
+        
+                <label for="user-name">Last name:</label>
+                <input type="text" id="user-last-name" name="user-last-name" required>
+        
+                <label for="user-age">Age:</label>
+                <input type="number" id="user-age" name="user-age" required>
+        
+                <label for="user-role">Role:</label>
+                <select id="user-role" name="user-role">
+                    <option value="user">User</option>
+                    <option value="bartender">Bartender</option>
+                    <option value="admin">Admin</option>
+                </select>
+    
+                <button type="submit">Create User</button>
+            </form>
+            <ul id="user-list">
+                <!-- List of users -->
+            </ul>
+        </section>
+        
+
+        <section id="registration-management">
+            <h1>Registration Requests</h1>
+            <ul id="registrationRequests"></ul>
+            <div id="qrCodes"></div>
+            </ul>
+        </section>
+    </main>
+    <script src="admin.js"></script>
+</body>
+</html>
