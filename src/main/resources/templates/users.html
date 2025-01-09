@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+</head>
+<body>
+<h1>Manage Users</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Age</th>
+        <th>Enabled</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.enabled}"></td>
+        <td>
+            <a th:href="@{/admin/users/edit/{id}(id=${user.id})}">Edit</a> |
+            <a th:href="@{/admin/users/delete/{id}(id=${user.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<h3>Add New User</h3>
+<form action="/admin/users" method="post">
+    <label>Username:</label> <input type="text" name="username" required><br>
+    <label>Age:</label> <input type="number" name="age" required><br>
+    <label>Password:</label> <input type="password" name="password" required><br>
+    <button type="submit">Add User</button>
+</form>
+
+<hr>
+<a th:href="@{/admin}">Back to Dashboard</a>
+</body>
+</html>
