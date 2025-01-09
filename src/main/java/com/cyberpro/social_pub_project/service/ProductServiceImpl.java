@@ -2,6 +2,7 @@ package com.cyberpro.social_pub_project.service;
 
 import com.cyberpro.social_pub_project.entity.Product;
 import com.cyberpro.social_pub_project.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
 
+    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
+
         this.productRepository =productRepository;
     }
 

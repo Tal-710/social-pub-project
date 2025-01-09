@@ -1,5 +1,7 @@
 package com.cyberpro.social_pub_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -57,8 +59,10 @@ public class Authority {
     @EmbeddedId
     private AuthorityId id;
 
+
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
+    @JsonBackReference
     private User user;
 
     public Authority() {
