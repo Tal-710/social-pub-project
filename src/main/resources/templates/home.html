@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Pub</title>
+    <link rel="stylesheet" href="/css/homePage.css" />
+</head>
+
+<body>
+<div class="header">
+    <h1>Social Pub</h1>
+
+</div>
+<h2>Welcome to  Social Pub-Kibbutz Zikim!</h2>
+<div id="button-container">
+        <a th:href="@{/register}" class="button">
+            <button id="text">Register</button>
+        </a>
+        <a th:href="@{showMyLoginPage}" class="button">
+            <button>Login</button>
+        </a>
+</div>
+<!-- <div id="logo"></div> -->
+<div class="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://images.squarespace-cdn.com/content/v1/57eaddcf2e69cfdc14bda7b2/1495654720897-42ORYPPSGK4YCWLYX62Q/draft+beer+pour"
+                 alt="Slide 1" />
+        </div>
+        <div class="carousel-item">
+            <img src="image/pic5.jpg" alt="Slide 3" />
+        </div>
+    </div>
+</div>
+<script src="../static/js/homepage.js"></script>
+</body>
+</html>
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>luv2code Company Home Page - Yoooo!!</title>-->
+
+<!--</head>-->
+<!--<body>-->
+<!--<h2>luv2code Company Home Page</h2>-->
+<!--<hr>-->
+<!--Welcome to lu2code company home page-->
+
+<!--<hr>-->
+
+<!--&lt;!&ndash; display usre name and rule &ndash;&gt;-->
+
+<!--<p>-->
+<!--    User: <span sec:authentication="principal.username"></span>-->
+
+<!--    <br><br>-->
+
+<!--    Role (s) : <span sec:authentication="principal.authorities"></span>-->
+<!--</p>-->
+
+<!--<hr>-->
+
+<!--<div sec:authorize="hasRole('MANAGER')" >-->
+<!--    <a th:href="@{/leaders}">Leasdrship Mettings</a>-->
+<!--    (only for Manager peeps)-->
+<!--</div>-->
+
+<!--<div sec:authorize="hasRole('ADMIN')">-->
+<!--    <a th:href="@{/systems}">Admin only</a>-->
+<!--</div>-->
+
+<!--<form action="#" th:action="@{/logout}" method="POST">-->
+
+<!--    <input type="submit" value="Logout"/>-->
+
+<!--</form>-->
+
+<!--</body>-->
+<!--</html>-->

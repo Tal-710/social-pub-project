@@ -1,8 +1,10 @@
 package com.cyberpro.social_pub_project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.List;
 
@@ -24,23 +26,41 @@ public class User {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
     @Column(name = "age",nullable = false)
     private Integer age;
 
-    @Column(name = "id_number", unique = true, nullable = false)
-    private String idNumber;
+    @Column(nullable = false, unique = true)
+    private Integer idNumber;
 
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(name = "qr_code", unique = true, nullable = false)
+    @Column(name = "qr_code", unique = false, nullable = true)
     private String qrCode;
 
     @Column(name = "enabled")
     private int enabled = 0;
 
+    public User(){
+
+    }
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Authority> authorities;
+
+    @PersistenceConstructor
+    public User(String username, String password, String firstName, String lastName, int age, int idNumber) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.idNumber = idNumber;
+    }
 
     public Integer getId() {
         return id;
@@ -82,11 +102,15 @@ public class User {
         this.age = age;
     }
 
-    public String getIdNumber() {
+    public String getLastName() {return lastName;}
+
+    public void setLastName(String lastName) {this.lastName = lastName;}
+
+    public int getIdNumber() {
         return idNumber;
     }
 
-    public void setIdNumber(String idNumber) {
+    public void setIdNumber(int idNumber) {
         this.idNumber = idNumber;
     }
 
@@ -122,20 +146,22 @@ public class User {
         this.authorities = authorities;
     }
 
-    public User(){
-
-    }
-
-    public User(Integer id, String username, String password, Integer age, String firstName, String idNumber, String profilePicture, String qrCode, int enabled, List<Authority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.age = age;
-        this.firstName = firstName;
-        this.idNumber = idNumber;
-        this.profilePicture = profilePicture;
-        this.qrCode = qrCode;
-        this.enabled = enabled;
-        this.authorities = authorities;
-    }
+//    public User(String lastName){
+//
+//        this.lastName = lastName;
+//    }
+//
+//    public User(Integer id, String username, String password, Integer age, String firstName, String lastName, int idNumber, String profilePicture, String qrCode, int enabled, List<Authority> authorities) {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//        this.age = age;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.idNumber = idNumber;
+//        this.profilePicture = profilePicture;
+//        this.qrCode = qrCode;
+//        this.enabled = enabled;
+//        this.authorities = authorities;
+//    }
 }
