@@ -1,0 +1,133 @@
+* {
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+
+.header {
+    color: white;
+    padding: 1em;
+    text-align: center;
+    align-items: center;
+    border: solid 1px black;
+    height: 30vh;
+    width: 100vw;
+    background-size: 100% 100%;
+    background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
+    font-size: 1.7em;
+}
+
+h1 {
+    text-shadow: 7px 7px 7px gray;
+}
+
+h2 {
+    width: 80%;
+    padding: 10%;
+    border: #5D403A solid 5px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#button-container {
+       display: flex;
+       flex-direction: row;
+       align-items: center;
+       width: 100%;
+       justify-content:space-evenly;
+}
+
+button {
+        padding: 2%;
+        border-radius: 15px;
+        border: 0;
+        background-color: #825247;
+        width: 100px;
+        height: 35px;
+        margin-bottom: 20px;
+}
+
+#text {
+    text-align: center;
+}
+
+.carousel {
+    border: none;
+    position: relative;
+    width: 90vw;
+    height: 50vh;
+    background-position: left top;
+    /* Align to the top-left corner */
+    background-size: 50%;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 50vh;
+}
+
+.carousel-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    height: 50vh;
+}
+
+.carousel-item img {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+    height: 50vh;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-btn{
+    width: 8%;
+    height: 10%;
+}
+
+@media (max-width:768px) {
+    .carousel {
+        height: 30vh;
+    }
+
+    .carousel-item img {
+        height: 25vh;
+    }
+}

@@ -7,11 +7,16 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<User> findAll(); // Fixed naming convention
 
-    Optional<User> findById(int theId);
+    Optional<User> findById(int id); // Renamed parameter for clarity
 
-    User save(User theEmployee);
+    User save(User user); // Renamed parameter for clarity
 
-    void deleteById(int theId);
+    void deleteById(int id);// Renamed parameter for clarity
+
+    void registerUser(String username, String password, String first_name, String last_name, int age,int Id_number);
+
+    Optional<User> findByUsername(String username);
 }
+
