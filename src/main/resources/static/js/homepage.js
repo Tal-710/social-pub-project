@@ -11,7 +11,7 @@ function showImage(index) {
         currentIndex = items.length - 1;
     }
     const offset = -currentIndex * 100;
-    carousel.style.transform = translateX(${offset}%);
+    carousel.style.transform = `translateX(${offset}%)`;
 }
 
 prevButton.addEventListener('click', function() {

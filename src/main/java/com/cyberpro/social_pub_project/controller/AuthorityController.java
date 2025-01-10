@@ -14,6 +14,7 @@ public class AuthorityController {
 
     @Autowired
     public AuthorityController(AuthorityService authorityService) {
+
         this.authorityService = authorityService;
     }
 

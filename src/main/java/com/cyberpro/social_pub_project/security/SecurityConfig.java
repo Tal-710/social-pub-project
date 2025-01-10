@@ -35,31 +35,31 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        authProvider.setUserDetailsService(username -> {
-            return userRepository.findByUsername(username)
-                    .map(user -> {
-                        System.out.println("Successful login: " + username);
-                        // Determine roles based on username
-                        String role = username.contains("Bartender") ? "BARTENDER" : "EMPLOYEE";
-                        return org.springframework.security.core.userdetails.User.builder()
-                                .username(user.getUsername())
-                                .password(user.getPassword())
-                                .roles(role) // Assign role based on username
-                                .build();
-                    })
-                    .orElseThrow(() -> {
-                        System.err.println("Failed login attempt for username: " + username);
-                        return new UsernameNotFoundException("User not found: " + username);
-                    });
-        });
-
-        return authProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//
+//        authProvider.setUserDetailsService(username -> {
+//            return userRepository.findByUsername(username)
+//                    .map(user -> {
+//                        System.out.println("Successful login: " + username);
+//                        // Determine roles based on username
+//                        String role = username.contains("Bartender") ? "BARTENDER" : "EMPLOYEE";
+//                        return org.springframework.security.core.userdetails.User.builder()
+//                                .username(user.getUsername())
+//                                .password(user.getPassword())
+//                                .roles(role)
+//                                .build();
+//                    })
+//                    .orElseThrow(() -> {
+//                        System.err.println("Failed login attempt for username: " + username);
+//                        return new UsernameNotFoundException("User not found: " + username);
+//                    });
+//        });
+//
+//        return authProvider;
+//    }
 
 
     @Bean
@@ -79,18 +79,11 @@ public class SecurityConfig {
                         .loginPage("/showMyLoginPage")
                         .loginProcessingUrl("/authenticateTheUser")
                         .successHandler((request, response, authentication) -> {
-                            // Redirect based on roles or other logic
-                            response.sendRedirect("/showMyLoginPage");
+                            response.sendRedirect("/confirmation");
                         })
                         .permitAll()
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout") // Endpoint to trigger logout
-                        .logoutSuccessUrl("/showMyLoginPage?logout") // Redirect to login page after logout
-                        .invalidateHttpSession(true) // Invalidate session
-                        .deleteCookies("JSESSIONID") // Delete session cookie
-                        .permitAll()
-                )
+                .logout(logout -> logout.permitAll())
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access-denied"));
 
         return http.build();

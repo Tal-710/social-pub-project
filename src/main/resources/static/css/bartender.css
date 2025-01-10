@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
@@ -12,7 +12,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Header */
+
 .header {
   color: white;
   padding: 1em;
@@ -29,7 +29,7 @@ body {
   text-shadow: 7px 7px 7px gray;
 }
 
-/* Navigation */
+
 nav {
   height: 20%;
 }
@@ -46,7 +46,7 @@ nav button {
   top: 10%;
 }
 
-/* Main Content */
+
 main {
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@ section.active {
   margin: 5px;
 }
 
-/* Form Section */
+
 .form {
   display: flex;
   flex-wrap: wrap;
@@ -99,7 +99,7 @@ button {
   margin: 0 10px;
 }
 
-/* Scan Section */
+
 .scan {
   display: flex;
   flex-direction: column;
