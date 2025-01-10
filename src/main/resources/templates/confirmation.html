@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation</title>
-    <link rel="stylesheet" th:href="@{/css/welcome.css}">
+    <link rel="stylesheet" th:href="@{/css/confirmation.css}">
 </head>
 
 
@@ -19,22 +19,34 @@
 <div id="qrImageContainer">
     <img id="image" src="https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png" alt="Placeholder Image">
 </div>
+
+
 <div id="button-container">
     <button id="showImageButton">QR</button>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-    <script th:src="@{/js/welcome.js}"></script>
+
 </div>
 
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Logout</button>
+<form th:action="@{/logout}" method="POST">
+    <button type="submit" value="Logout">Logout</button>
 </form>
     <div sec:authorize="hasRole('BARTENDER')" >
         <a th:href="@{/bartender}" class="button">
             <button id="text">Create Order</button>
         </a>
     </div>
+<!-- Move this div here -->
+<div class="user-info">
+    <p>
+        User: <span sec:authentication="principal.username"></span>
+        <br><br>
+        Role (s): <span sec:authentication="principal.authorities"></span>
+    </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script th:src="@{/js/confirmation.js}"></script>
 </body>
 </html>
 

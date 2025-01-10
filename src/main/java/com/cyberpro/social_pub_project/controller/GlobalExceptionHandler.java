@@ -12,7 +12,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
-        // Add details to the model for rendering
         model.addAttribute("error", ex.getMessage());
         model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         return "error";

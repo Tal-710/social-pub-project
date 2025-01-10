@@ -66,6 +66,13 @@ body {
     background-color: rgba(55, 65, 81, 1);
 }
 
+.login-error {
+    color: red;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
+}
+
 .signup {
     text-align: center;
     font-size: 0.75rem;

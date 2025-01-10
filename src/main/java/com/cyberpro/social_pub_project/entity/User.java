@@ -4,6 +4,7 @@ package com.cyberpro.social_pub_project.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class User {
     @Column(name="id")
     private Integer id;
 
-    @Column(name = "username" ,unique = true, nullable = false)
+
+    @Column(name = "username", unique = true, nullable = false)
+    @NotNull(message = "Username is required")
     private String username;
 
     @Column(name="password",nullable = false)
@@ -30,9 +33,11 @@ public class User {
     private String lastName;
 
     @Column(name = "age",nullable = false)
+    @Min(value = 18, message = "Must be at least 18 years old")
     private Integer age;
 
-    @Column(nullable = false, unique = true)
+    @NotNull(message = "ID Number is required")
+    @Column( name = "id_number", nullable = false, unique = true)
     private Integer idNumber;
 
     @Column(name = "profile_picture")
@@ -42,7 +47,7 @@ public class User {
     private String qrCode;
 
     @Column(name = "enabled")
-    private int enabled = 0;
+    private int enabled = 1;
 
     public User(){
 
@@ -106,11 +111,11 @@ public class User {
 
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public int getIdNumber() {
+    public Integer getIdNumber() {
         return idNumber;
     }
 
-    public void setIdNumber(int idNumber) {
+    public void setIdNumber(Integer idNumber) {
         this.idNumber = idNumber;
     }
 
