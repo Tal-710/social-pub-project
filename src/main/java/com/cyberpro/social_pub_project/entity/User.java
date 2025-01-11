@@ -23,10 +23,10 @@ public class User {
     @NotNull(message = "Username is required")
     private String username;
 
-    @Column(name="password",nullable = false)
+    @Column(name = "password", nullable = false, length = 68)
     private String password;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
@@ -36,8 +36,8 @@ public class User {
     @Min(value = 18, message = "Must be at least 18 years old")
     private Integer age;
 
+    @Column(name = "id_number", unique = true, nullable = false, length = 9)
     @NotNull(message = "ID Number is required")
-    @Column( name = "id_number", nullable = false, unique = true)
     private Integer idNumber;
 
     @Column(name = "profile_picture")
@@ -46,16 +46,28 @@ public class User {
     @Column(name = "qr_code", unique = false, nullable = true)
     private String qrCode;
 
-    @Column(name = "enabled")
+    @Column(name = "enabled" ,nullable = false)
     private int enabled = 1;
 
     public User(){
 
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Authority> authorities;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Order> orders;
+
+    @JsonManagedReference
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     @PersistenceConstructor
     public User(String username, String password, String firstName, String lastName, int age, int idNumber) {

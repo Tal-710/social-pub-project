@@ -35,33 +35,6 @@ public class SecurityConfig {
     }
 
 
-//    @Bean
-//    public DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setPasswordEncoder(passwordEncoder());
-//
-//        authProvider.setUserDetailsService(username -> {
-//            return userRepository.findByUsername(username)
-//                    .map(user -> {
-//                        System.out.println("Successful login: " + username);
-//                        // Determine roles based on username
-//                        String role = username.contains("Bartender") ? "BARTENDER" : "EMPLOYEE";
-//                        return org.springframework.security.core.userdetails.User.builder()
-//                                .username(user.getUsername())
-//                                .password(user.getPassword())
-//                                .roles(role)
-//                                .build();
-//                    })
-//                    .orElseThrow(() -> {
-//                        System.err.println("Failed login attempt for username: " + username);
-//                        return new UsernameNotFoundException("User not found: " + username);
-//                    });
-//        });
-//
-//        return authProvider;
-//    }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -69,10 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/").hasRole("EMPLOYEE")
-                        .requestMatchers("bartender").hasRole("BARTENDER")
-                        .requestMatchers("/leaders/**").hasRole("MANAGER")
-                        .requestMatchers("/systems/**").hasRole("ADMIN")
+                        .requestMatchers("/api/authorities/**").permitAll()
+                        .requestMatchers("/bartender").hasRole("BARTENDER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

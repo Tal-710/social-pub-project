@@ -2,6 +2,7 @@ package com.cyberpro.social_pub_project.service;
 
 import com.cyberpro.social_pub_project.entity.Product;
 import com.cyberpro.social_pub_project.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteById(int theId) {
 
         productRepository.deleteById(theId);

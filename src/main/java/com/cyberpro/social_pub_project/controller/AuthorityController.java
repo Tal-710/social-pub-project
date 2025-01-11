@@ -4,6 +4,7 @@ import com.cyberpro.social_pub_project.entity.Authority;
 import com.cyberpro.social_pub_project.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +29,6 @@ public class AuthorityController {
     }
 
     @GetMapping("/{username}")
-    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Authority> getUserAuthority(@PathVariable String username) {
         System.out.println();
         Authority authority = authorityService.getUserAuthority(username);

@@ -1,9 +1,11 @@
 package com.cyberpro.social_pub_project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Entity
@@ -16,14 +18,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @Column(name = "quantity" ,nullable = false)
-    private int quantity;
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails;
 
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
@@ -38,9 +37,7 @@ public class Order {
     public Order(Integer id, User user, Product product, Double totalPrice, int quantity, Timestamp orderDate) {
         this.id = id;
         this.user = user;
-        this.product = product;
         this.totalPrice = totalPrice;
-        this.quantity = quantity;
         this.orderDate = orderDate;
     }
 
@@ -60,13 +57,6 @@ public class Order {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 
     public Double getTotalPrice() {
         return totalPrice;
@@ -76,13 +66,6 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     public Timestamp getOrderDate() {
         return orderDate;

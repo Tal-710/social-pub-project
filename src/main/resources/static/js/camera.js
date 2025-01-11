@@ -32,7 +32,7 @@ async function toggleCamera() {
   }
 }
 
-// Start QR Scan
+
 function startQRScan() {
   qrScanInterval = setInterval(() => {
     qrCanvas.width = cameraFeed.videoWidth;
@@ -51,10 +51,9 @@ function startQRScan() {
       qrResultDiv.textContent = "QR Code Detected: " + qrCode.data;
       console.log(qrCode)
       fetchUserDetails(qrCode.data);
-       // Fetch user details using QR code data
       closeCamera();
     } else {
-      qrResultDiv.textContent = ""; // Clear previous result if no QR code
+      qrResultDiv.textContent = "";
     }
   }, 300);
 }

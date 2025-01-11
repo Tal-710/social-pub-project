@@ -41,26 +41,6 @@ public class UserController {
         userService.deleteById(id);
     }
 
-    @GetMapping("/register")
-    public String showRegisterPage() {
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String registerUser(
-            @RequestParam String username,
-            @RequestParam String password,
-            @RequestParam String first_name,
-            @RequestParam String last_name,
-            @RequestParam int age,
-            @RequestParam int idNumber) {
-
-        userService.registerUser(username, password, first_name, last_name, age, idNumber);
-
-        return "redirect:/login";
-    }
-
-
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";

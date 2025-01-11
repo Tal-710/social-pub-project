@@ -16,6 +16,7 @@ public class OrderController {
     private final OrderServiceImpl orderService;
 
     public OrderController(OrderServiceImpl orderService1) {
+
         this.orderService = orderService1;
     }
 
@@ -25,9 +26,9 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
+    public Optional<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);
-        return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return order;
     }
 
     @PostMapping

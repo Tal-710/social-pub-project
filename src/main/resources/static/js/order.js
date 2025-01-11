@@ -109,28 +109,6 @@ function addProduct() {
   }
 
 
-  const carouselInner = document.querySelector('.carousel-inner');
-const prevButton = document.querySelector('.carousel-btn.prev');
-const nextButton = document.querySelector('.carousel-btn.next');
-const items = document.querySelectorAll('.carousel-item');
-
-let currentIndex = 0;
-
-function updateCarousel() {
-    const offset = -currentIndex * 100; // Calculate the transform offset
-    carouselInner.style.transform = translateX(`${offset}%`);
-}
-
-nextButton.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % items.length; // Loop back to first slide
-    updateCarousel();
-});
-
-prevButton.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + items.length) % items.length; // Loop to last slide
-    updateCarousel();
-});
-
 // Select all the + and - buttons
 const minusButtons = document.querySelectorAll('.minus');
 const plusButtons = document.querySelectorAll('.plus');

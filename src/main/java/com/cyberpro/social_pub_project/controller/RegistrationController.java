@@ -16,24 +16,19 @@ public class RegistrationController {
     public RegistrationController(UserService userService) {
         this.userService = userService;
     }
-
     @GetMapping
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
-
     @PostMapping
-    public String registerUser(@Valid @ModelAttribute("user") User user,
-                               BindingResult bindingResult,
-                               Model model) {
-        // Check for existing username
+    public String registerUser(@Valid @RequestBody @ModelAttribute("user") User user, BindingResult bindingResult, Model model)
+    {
         if (userService.findByUsername(user.getUsername()).isPresent()) {
             bindingResult.rejectValue("username", "error.user",
                     "Username already exists");
         }
 
-        // Check for existing ID number
         if (userService.findByIdNumber(user.getIdNumber()).isPresent()) {
             bindingResult.rejectValue("idNumber", "error.user",
                     "ID Number already exists");
