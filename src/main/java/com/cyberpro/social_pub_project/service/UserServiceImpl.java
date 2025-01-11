@@ -3,6 +3,7 @@ package com.cyberpro.social_pub_project.service;
 import com.cyberpro.social_pub_project.entity.Authority;
 import com.cyberpro.social_pub_project.entity.User;
 import com.cyberpro.social_pub_project.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,13 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addRoleUser(User user) {
-            Authority userAuthority = new Authority(user.getUsername(), "ROLE_USER", user);
-            if (user.getAuthorities() == null) {
-                user.setAuthorities(new ArrayList<>());
-            }
-            user.getAuthorities().add(userAuthority);
+        Authority userAuthority = new Authority(user.getUsername(), "ROLE_USER", user);
+        if (user.getAuthorities() == null) {
+            user.setAuthorities(new ArrayList<>());
         }
+        user.getAuthorities().add(userAuthority);
+    }
 
     @Override
     public Optional<User> findByIdNumber(Integer idNumber) {
@@ -64,11 +66,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
         userRepository.deleteById(id);
     }

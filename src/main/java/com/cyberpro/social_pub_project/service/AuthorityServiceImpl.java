@@ -42,10 +42,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Authority getUserAuthority(String username) {
-        return authorityRepository.findById(new Authority.AuthorityId(username, "ROLE_USER"))
+        return authorityRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Authority not found for user: " + username));
     }
 }
-
-
-

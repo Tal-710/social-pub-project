@@ -13,7 +13,7 @@ public class Authority {
     @Embeddable
     public static class AuthorityId implements Serializable {
 
-        @Column(name = "username", nullable = false)
+        @Column(name = "username", nullable = false )
         private String username;
 
         @Column(name = "authority", nullable = false)
@@ -61,9 +61,13 @@ public class Authority {
 
 
     @ManyToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
+    @JoinColumn(name = "username", referencedColumnName = "username" ,insertable=false, updatable=false)
     @JsonBackReference
     private User user;
+
+    @Column(name = "username" , insertable=false, updatable=false)
+    private String username;
+
 
     public Authority() {
     }
@@ -89,9 +93,3 @@ public class Authority {
         this.user = user;
     }
 }
-
-
-
-
-
-

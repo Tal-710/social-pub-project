@@ -10,3 +10,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByIdNumber(Integer idNumber);
 
 }
+
