@@ -4,8 +4,12 @@ package com.cyberpro.social_pub_project.controller;
 import com.cyberpro.social_pub_project.entity.Order;
 import com.cyberpro.social_pub_project.service.OrderService;
 import com.cyberpro.social_pub_project.service.OrderServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,32 +17,59 @@ import java.util.Optional;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
-    public OrderController(OrderServiceImpl orderService1) {
-
+    @Autowired
+    public OrderController(OrderService orderService1) {
         this.orderService = orderService1;
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
-        return ResponseEntity.ok(orderService.findAll());
+        List<Order> orders = orderService.findAll();
+        if (orders.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No orders found");
+        }
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
-    public Optional<Order> getOrderById(@PathVariable Integer id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);
-        return order;
+        if (order.isPresent()) {
+            return ResponseEntity.ok(order.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Order not found with id: " + id);
+        }
     }
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.save(order));
+        try {
+            Order savedOrder = orderService.save(order);
+            return ResponseEntity.ok(savedOrder);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Error creating order: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable Integer id) {
-        orderService.deleteById(id);
+    public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
+        Optional<Order> order = orderService.findById(id);
+        if (order.isPresent()) {
+            try {
+                orderService.deleteById(id);
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Error deleting order: " + e.getMessage());
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Order not found with id: " + id);
+        }
     }
 }
 

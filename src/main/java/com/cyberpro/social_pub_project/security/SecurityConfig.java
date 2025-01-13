@@ -23,14 +23,9 @@ public class SecurityConfig {
         return new JdbcUserDetailsManager(dataSource);
     }
 
-    private final UserRepository userRepository;
-
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
@@ -44,17 +39,23 @@ public class SecurityConfig {
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/api/authorities/**").permitAll()
                         .requestMatchers("/bartender").hasRole("BARTENDER")
+                        .requestMatchers("/error/**").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/showMyLoginPage")
+                        .loginPage("/login")
                         .loginProcessingUrl("/authenticateTheUser")
+                        .failureUrl("/login?error")
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/confirmation");
                         })
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/home")
+                        .permitAll()
+                )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access-denied"));
 
         return http.build();

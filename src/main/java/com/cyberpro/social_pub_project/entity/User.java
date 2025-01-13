@@ -1,11 +1,10 @@
 package com.cyberpro.social_pub_project.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
-import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
 
 
@@ -32,7 +31,7 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "age",nullable = false)
+    @Column(name = "age", nullable = false)
     @Min(value = 18, message = "Must be at least 18 years old")
     private Integer age;
 
@@ -46,22 +45,23 @@ public class User {
     @Column(name = "qr_code", unique = false, nullable = true)
     private String qrCode;
 
-    @Column(name = "enabled" ,nullable = false)
+    @Column(name = "enabled", nullable = false)
     private int enabled = 1;
 
-    public User(){
+    public User() {
 
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Authority> authorities;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Order> orders;
 
-    @JsonManagedReference
     public List<Order> getOrders() {
+
         return orders;
     }
 
@@ -69,7 +69,6 @@ public class User {
         this.orders = orders;
     }
 
-    @PersistenceConstructor
     public User(String username, String password, String firstName, String lastName, int age, int idNumber) {
         this.username = username;
         this.password = password;
@@ -119,9 +118,13 @@ public class User {
         this.age = age;
     }
 
-    public String getLastName() {return lastName;}
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName(String lastName) {this.lastName = lastName;}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public Integer getIdNumber() {
         return idNumber;
@@ -162,23 +165,5 @@ public class User {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
-
-//    public User(String lastName){
-//
-//        this.lastName = lastName;
-//    }
-//
-//    public User(Integer id, String username, String password, Integer age, String firstName, String lastName, int idNumber, String profilePicture, String qrCode, int enabled, List<Authority> authorities) {
-//        this.id = id;
-//        this.username = username;
-//        this.password = password;
-//        this.age = age;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.idNumber = idNumber;
-//        this.profilePicture = profilePicture;
-//        this.qrCode = qrCode;
-//        this.enabled = enabled;
-//        this.authorities = authorities;
-//    }
 }
+

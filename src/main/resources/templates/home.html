@@ -18,7 +18,7 @@
         <a th:href="@{/register}" class="button">
             <button id="text">Register</button>
         </a>
-        <a th:href="@{showMyLoginPage}" class="button">
+        <a th:href="@{/login}" class="button">
             <button>Login</button>
         </a>
 </div>
@@ -37,53 +37,3 @@
 <script th:src="@{js/homepage.js}"></script>
 </body>
 </html>
-
-
-
-
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
-
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>luv2code Company Home Page - Yoooo!!</title>-->
-
-<!--</head>-->
-<!--<body>-->
-<!--<h2>luv2code Company Home Page</h2>-->
-<!--<hr>-->
-<!--Welcome to lu2code company home page-->
-
-<!--<hr>-->
-
-<!--&lt;!&ndash; display usre name and rule &ndash;&gt;-->
-
-<!--<p>-->
-<!--    User: <span sec:authentication="principal.username"></span>-->
-
-<!--    <br><br>-->
-
-<!--    Role (s) : <span sec:authentication="principal.authorities"></span>-->
-<!--</p>-->
-
-<!--<hr>-->
-
-<!--<div sec:authorize="hasRole('MANAGER')" >-->
-<!--    <a th:href="@{/leaders}">Leasdrship Mettings</a>-->
-<!--    (only for Manager peeps)-->
-<!--</div>-->
-
-<!--<div sec:authorize="hasRole('ADMIN')">-->
-<!--    <a th:href="@{/systems}">Admin only</a>-->
-<!--</div>-->
-
-<!--<form action="#" th:action="@{/logout}" method="POST">-->
-
-<!--    <input type="submit" value="Logout"/>-->
-
-<!--</form>-->
-
-<!--</body>-->
-<!--</html>-->

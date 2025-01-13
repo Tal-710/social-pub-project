@@ -2,10 +2,8 @@ package com.cyberpro.social_pub_project.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import com.cyberpro.social_pub_project.entity.OrderDetail;
 
 import java.util.List;
 

@@ -22,11 +22,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<Product> findAll() {
+
         return productRepository.findAll();
     }
 
     @Override
     public Optional<Product> findById(int theId) {
+
         return productRepository.findById(theId);
     }
 
@@ -36,7 +38,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
     public void deleteById(int theId) {
 
         productRepository.deleteById(theId);

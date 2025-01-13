@@ -1,120 +1,95 @@
-console.log("asfa");
+
+console.log("1")
 function addOrder() {
-    // Fetch the counts for beer, wine, and chips
-    const beerCount = parseInt(document.querySelector('#beer .order-count').textContent);
-    const wineCount = parseInt(document.querySelector('#wine .order-count').textContent);
-    const chipsCount = parseInt(document.querySelector('#chips .order-count').textContent);
-    const coctailCount = parseInt(document.querySelector('#coctail .order-count').textContent);
-    const cafeCount = parseInt(document.querySelector('#cafe .order-count').textContent);
-    const sandwishCount = parseInt(document.querySelector('#sandwish .order-count').textContent);
-    const cakeCount = parseInt(document.querySelector('#cake .order-count').textContent);
+  const maxOrders = 3;
+  const currentOrderCount = document.querySelectorAll('#orderSummary > div').length;
+  if (currentOrderCount >= maxOrders) {
+    return;}
+  // Fetch item counts
+  const itemCounts = {
+    beer: parseInt(document.querySelector('#beer .order-count').textContent),
+    wine: parseInt(document.querySelector('#wine .order-count').textContent),
+    chips: parseInt(document.querySelector('#chips .order-count').textContent),
+    coctail: parseInt(document.querySelector('#coctail .order-count').textContent),
+    cafe: parseInt(document.querySelector('#cafe .order-count').textContent),
+    sandwish: parseInt(document.querySelector('#sandwish .order-count').textContent),
+    cake: parseInt(document.querySelector('#cake .order-count').textContent),
+  };
 
-    const orderSummary = document.getElementById('orderSummary');
-    const purchaseHistory = document.getElementById('purchaseHistory');
+  const orderSummary = document.getElementById('orderSummary');
+  const purchaseHistory = document.getElementById('purchaseHistory');
 
-    // Check if there are any items in the order
-    if (
-      beerCount === 0 &&
-      wineCount === 0 &&
-      chipsCount === 0 &&
-      coctailCount === 0 &&
-      cafeCount === 0 &&
-      sandwishCount === 0 &&
-      cakeCount === 0
-    ) {
-      alert('Please add some items to your order.');
-      return;
-    }
-
-    // Get the current timestamp
-    const timestamp = new Date().toLocaleString();
-
-    // Create the order summary text dynamically
-    let orderText = `Order at ${timestamp}: `;
-    if (beerCount > 0) orderText += `Beer: ${beerCount} | `;
-    if (wineCount > 0) orderText += `Wine: ${wineCount} | `;
-    if (chipsCount > 0) orderText += `Chips: ${chipsCount} | `;
-    if (coctailCount > 0) orderText += `Coctail: ${coctailCount} | `;
-    if (cafeCount > 0) orderText += `Cafe: ${cafeCount} | `;
-    if (sandwishCount > 0) orderText += `Sandwish: ${sandwishCount} | `;
-    if (cakeCount > 0) orderText += `Cake: ${cakeCount}`;
-
-    // Remove the trailing "| " if present
-    orderText = orderText.trim();
-    if (orderText.endsWith('|')) {
-      orderText = orderText.slice(0, -1);
-    }
-
-    // Display the order summary
-    const newOrder = document.createElement('div');
-    newOrder.id = 'invite';
-    newOrder.textContent = orderText;
-    orderSummary.appendChild(newOrder);
-
-    // Add the order to purchase history
-    const historyItem = document.createElement('li');
-    historyItem.textContent = orderText;
-    purchaseHistory.appendChild(historyItem);
+  // Check if any item is selected
+  const hasItems = Object.values(itemCounts).some((count) => count > 0);
+  if (!hasItems) {
+  alert("you must select at least one item to order")
+    return;
   }
 
+  // Get current timestamp
+  const timestamp = new Date().toLocaleString();
 
-
-  // Function to add a new user
-  function addUser() {
-    const newUser = document.getElementById('newUser').value;
-    if (newUser) {
-      const userList = document.getElementById('userList');
-      const userItem = document.createElement('li');
-      userItem.textContent = newUser;
-      // Create a delete button
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.onclick = function() {
-        userList.removeChild(userItem);
-      };
-
-      // Append the delete button to the product item
-      userItem.appendChild(deleteButton);
-      userList.appendChild(userItem);
-      document.getElementById('newUser').value = '';
+  // Create order summary text
+  let orderText = `Order at ${timestamp}: `;
+  for (const [item, count] of Object.entries(itemCounts)) {
+    if (count > 0) {
+      orderText += `${item.charAt(0).toUpperCase() + item.slice(1)}: ${count} | `;
     }
   }
 
-// Function to add a new product
-function addProduct() {
-    const newProduct = document.getElementById('newProduct').value;
-    if (newProduct) {
-      const productList = document.getElementById('productList');
+  // Remove trailing "| " and trim whitespace
+  orderText = orderText.trim().replace(/\| $/, '');
 
-      // Create a list item for the new product
-      const productItem = document.createElement('li');
-      productItem.textContent = newProduct;
+  // Display order summary with delete button
+  const newOrder = document.createElement('div');
+  newOrder.id = 'invite';
+  newOrder.textContent = orderText;
 
-      // Create a delete button
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.onclick = function() {
-        productList.removeChild(productItem);
-      };
+  // Create delete button
+  const deleteButton = document.createElement('button');
+  deleteButton.id = 'deleteButton';
+  deleteButton.textContent = 'Delete';
+  deleteButton.style.cursor = 'pointer';
 
-      // Append the delete button to the product item
-      productItem.appendChild(deleteButton);
+  // Attach delete functionality
+  deleteButton.addEventListener('click', () => {
+    newOrder.remove();
+    historyItem.remove();
+  });
+  const submitButton = document.createElement('button');
+  submitButton.id = 'submitButton';
+  submitButton.textContent = 'Submit';
+  submitButton.style.cursor = 'pointer';
 
-      // Append the product item to the list
-      productList.appendChild(productItem);
+  // Attach submit functionality (log to console)
+  submitButton.addEventListener('click', () => {
+    console.log('Submitted Order: ', orderText);
+    newOrder.remove();
+  });
 
-      // Clear the input field
-      document.getElementById('newProduct').value = '';
-    }
-  }
+  newOrder.appendChild(deleteButton);
+  orderSummary.appendChild(newOrder);
+  newOrder.appendChild(submitButton);
 
+  // Add order to purchase history with delete button
+  const historyItem = document.createElement('li');
+  historyItem.textContent = orderText;
 
-// Select all the + and - buttons
+  const historyDeleteButton = deleteButton.cloneNode(true);
+  historyDeleteButton.addEventListener('click', () => {
+    newOrder.remove();
+    historyItem.remove();
+  });
+
+  historyItem.appendChild(historyDeleteButton);
+  purchaseHistory.appendChild(historyItem);
+}
+
+// Order Quantity Adjustment
 const minusButtons = document.querySelectorAll('.minus');
 const plusButtons = document.querySelectorAll('.plus');
 
-// Function to handle the button click events
-minusButtons.forEach((button, index) => {
+minusButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const orderCount = button.nextElementSibling;
     let count = parseInt(orderCount.textContent);
@@ -124,10 +99,10 @@ minusButtons.forEach((button, index) => {
   });
 });
 
-plusButtons.forEach((button, index) => {
+plusButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const orderCount = button.previousElementSibling;
     let count = parseInt(orderCount.textContent);
     orderCount.textContent = count + 1;
   });
-});
+  });

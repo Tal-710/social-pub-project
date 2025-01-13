@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void registerUser(String username, String password, String firstName, String lastName, int age, int idNumber) {
         String hashedPassword = passwordEncoder.encode(password);
 
@@ -66,13 +67,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+
     public User save(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    @Transactional
+
     public void deleteById(int id) {
         userRepository.deleteById(id);
     }

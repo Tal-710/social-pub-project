@@ -1,21 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <title>Admin Panel</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
 </head>
 <body>
-<h1>Admin Dashboard</h1>
+<div class="container">
+    <h2>User Management</h2>
 
-<nav>
-    <ul>
-        <li><a th:href="@{/admin/users}">Manage Users</a></li>
-        <li><a th:href="@{/admin/authorities}">Manage Authorities</a></li>
-        <li><a th:href="@{/admin/products}">Manage Products</a></li>
-    </ul>
-</nav>
+    <div class="table-responsive">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Roles</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                <td>
+                    <div class="roles-container">
+                        <th:block th:each="authority : ${user.authorities}">
+                            <div class="role-badge"
+                                 th:data-user-id="${user.id}"
+                                 th:data-role="${authority.id.authority}">
+                                <span th:text="${authority.id.authority}"></span>
+                                <button class="role-remove-btn">×</button>
+                            </div>
+                        </th:block>
+                        <button class="role-add-btn"
+                                th:data-user-id="${user.id}"
+                                title="Add Role">+</button>
+                    </div>
+                </td>
+                <td>
+                            <span th:class="${user.enabled == 1 ? 'active' : 'inactive'}"
+                                  th:text="${user.enabled == 1 ? 'Active' : 'Inactive'}">
+                            </span>
+                </td>
+                <td class="action-buttons">
+                    <button class="toggle-btn"
+                            th:data-user-id="${user.id}"
+                            th:data-status="${user.enabled}">
+                        Change Status
+                    </button>
+                    <button class="delete-btn"
+                            th:data-user-id="${user.id}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<hr>
-<a th:href="@{/logout}">Logout</a>
+    <div id="addRoleModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Add Role</h3>
+            <select id="newRoleSelect">
+                <option value="ROLE_USER">User</option>
+                <option value="ROLE_ADMIN">Admin</option>
+                <option value="ROLE_BARTENDER">Bartender</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="cancel-btn">Cancel</button>
+                <button class="save-btn">Add Role</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this user?</p>
+            <div class="modal-buttons">
+                <button class="cancel-btn">Cancel</button>
+                <button class="delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

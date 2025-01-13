@@ -1,48 +1,66 @@
 package com.cyberpro.social_pub_project.controller;
+
 import com.cyberpro.social_pub_project.entity.User;
+import com.cyberpro.social_pub_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
+
 import com.cyberpro.social_pub_project.service.UserServiceImpl;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl theUserService) {
-
+    public UserController(UserService theUserService) {
         this.userService = theUserService;
     }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        System.out.println(userService.findAll());
-        return userService.findAll();
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.findAll();
+        if (users.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No users found");
+        }
+        return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.findById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+        }
     }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.save(user));
+        try {
+            User savedUser = userService.save(user);
+            return ResponseEntity.ok(savedUser);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating user: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id) {
-        userService.deleteById(id);
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login";
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isPresent()) {
+            userService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+        }
     }
 }

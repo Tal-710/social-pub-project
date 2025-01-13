@@ -8,54 +8,47 @@
     <link rel="stylesheet" th:href="@{/css/confirmation.css}">
 </head>
 
-
 <body>
 <div class="header">
     <h1 id="social-pub">Social Pub</h1>
 </div>
 <div id="wellcome-container"><h1>Welcome, <span sec:authentication="principal.username"></span>!</h1></div>
 
-
 <div id="qrImageContainer">
     <img id="image" src="https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png" alt="Placeholder Image">
 </div>
 
-
 <div id="button-container">
     <button id="showImageButton">QR</button>
 
-
-
-</div>
-
-<form th:action="@{/logout}" method="POST">
-    <button type="submit" value="Logout">Logout</button>
-</form>
-    <div sec:authorize="hasRole('BARTENDER')" >
+    <div sec:authorize="hasRole('BARTENDER')">
         <a th:href="@{/bartender}" class="button">
-            <button id="text">Create Order</button>
+            <button id="order">Create Order</button>
         </a>
     </div>
-<!-- Move this div here -->
-<div class="user-info">
-    <p>
-        User: <span sec:authentication="principal.username"></span>
-        <br><br>
-        Role (s): <span sec:authentication="principal.authorities"></span>
-    </p>
+
+    <div id="logoutButton">
+        <form th:action="@{/logout}" method="POST">
+            <button type="submit" value="Logout">Logout</button>
+        </form>
+    </div>
+
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin}" class="button">
+            <button id="admin">Admin Panel</button>
+        </a>
+    </div>
 </div>
+
+<!--<div class="user-info">-->
+<!--    <p>-->
+<!--        User: <span sec:authentication="principal.username"></span>-->
+<!--        <br><br>-->
+<!--        Role (s): <span sec:authentication="principal.authorities"></span>-->
+<!--    </p>-->
+<!--</div>-->
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script th:src="@{/js/confirmation.js}"></script>
 </body>
 </html>
-
-
-
-<!--<body>-->
-<!--<h1>Welcome,<span sec:authentication="principal.username"></span><!</h1>-->
-<!--<p>You have successfully logged in.</p>-->
-<!--<p>Authenticated user roles: <span sec:authentication="principal.authorities"></span></p>-->
-
-<!--</body>-->
-

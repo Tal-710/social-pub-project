@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="item" id="sandwish">
-                    <h4>FOOD</h4>
+                    <h4>TOAST</h4>
                     <img
                             class="svg"
                             th:src="@{/images/sandwich-svgrepo-com.svg}"
@@ -100,12 +100,17 @@
                     <video id="cameraFeed" autoplay></video>
                     <canvas id="qrCanvas" style="display: none"></canvas>
                     <span id="closeCamera" onclick="closeCamera()"></span>
-                    <div id="qrResult"></div>
                     <button class="add-button" onclick="addOrder()">Add Order</button>
                 </div>
+                <div id="qrResult"></div>
+                <div id="orderSummary"></div>
+                <div class="icon-home">
+                    <a class = "svgHome" th:href="@{/home}">
+                        <img class="icon-pic" th:src="@{/images/icon8-home.svg}"
+                             alt="logo  home"/>
+                    </a>
+                </div>
             </div>
-
-            <div id="orderSummary"></div>
         </section>
     </main>
 </div>
@@ -114,141 +119,3 @@
 <script th:src="@{js/camera.js}"></script>
 </body>
 </html>
-
-
-
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-
-<!--<head>-->
-
-<!--    <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>-->
-<!--    <meta charset="UTF-8" />-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-<!--    <title>Social Pub</title>-->
-<!--    <link rel="stylesheet" th:href="@{/css/bartender.css}">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="con">-->
-<!--    <div class="header">-->
-<!--        <h1>Social Pub</h1>-->
-<!--    </div>-->
-
-<!--    <main>-->
-<!--        <section id="orders" class="active">-->
-<!--            <h2>Order Management</h2>-->
-<!--            <div class="form">-->
-<!--            </div>-->
-<!--            <div class="form">-->
-<!--                <div class="beer" id="beer">-->
-<!--                    <h4>BEER</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\beer-svgrepo-com.svg"-->
-<!--                         alt="photo of beer"-->
-<!--                    />-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="wine" id="wine">-->
-<!--                    <h4>WINE</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\wine-glass-svgrepo-com.svg"-->
-<!--                         alt="photo of wine"-->
-<!--                    />-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="chips" id="chips">-->
-<!--                    <h4>CHIPS</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\french-fries-svgrepo-com.svg"-->
-<!--                         alt="photo of chips"/>-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="coctail" id="coctail">-->
-<!--                    <h4>SHAKE</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\drink-cocktail-svgrepo-com.svg"-->
-<!--                         alt="photo of coctail"/>-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="cafe" id="cafe">-->
-<!--                    <h4>CAFE</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\cafe-svgrepo-com.svg"-->
-<!--                         alt="photo of cafe"/>-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="chips" id="sandwish">-->
-<!--                    <h4>FOOD</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\sandwich-svgrepo-com.svg"-->
-<!--                         alt="photo of sandwich"/>-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--                <div class="chips" id="cake">-->
-<!--                    <h4>CAKE</h4>-->
-<!--                    <img class="svg"-->
-<!--                         src="C:\Users\origi\Desktop\PUB\front\svg\cake-4-svgrepo-com.svg"-->
-<!--                         alt="photo of sandwich"/>-->
-<!--                    <button class="minus">-</button>-->
-<!--                    <span class="order-count">0</span>-->
-<!--                    <button class="plus">+</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--</div>-->
-<!--<div class="scan">-->
-<!--    <div class="button-container" id="buttonContainer">-->
-<!--        <button id="toggleButton" onclick="toggleCamera()">-->
-<!--            Open Camera-->
-<!--        </button>-->
-<!--        <video id="cameraFeed" autoplay></video>-->
-<!--        <canvas id="qrCanvas" style="display: none"></canvas>-->
-<!--        <span id="closeCamera" onclick="closeCamera()"></span>-->
-<!--        <div id="qrResult"></div>-->
-<!--        <div>-->
-<!--            <button class="add-but" onclick="addOrder()">Add Order</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div id="orderSummary"></div>-->
-<!--</section>-->
-<!--&lt;!&ndash; <div class="photo"></div> &ndash;&gt;-->
-<!--<div class="carousel">-->
-<!--    <div class="carousel-inner">-->
-<!--        <div class="carousel-item active">-->
-<!--            <img-->
-<!--                    src="https://images.squarespace-cdn.com/content/v1/57eaddcf2e69cfdc14bda7b2/1495654720897-42ORYPPSGK4YCWLYX62Q/draft+beer+pour"-->
-<!--                    alt="Slide 1"-->
-<!--            />-->
-<!--        </div>-->
-<!--        <div class="carousel-item">-->
-<!--            <img src="" alt="Slide 2" />-->
-<!--        </div>-->
-<!--        <div class="carousel-item">-->
-<!--            <img-->
-<!--                    src="https://via.placeholder.com/600x300?text=Slide+3"-->
-<!--                    alt="Slide 3"-->
-<!--            />-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <button class="carousel-btn prev">❮</button>-->
-<!--    <button class="carousel-btn next">❯</button>-->
-<!--</div>-->
-<!--</main>-->
-<!--</div>-->
-<!--<script th:src="@{/js/order.js}"></script>-->
-<!--<script th:src="@{js/camera.js}"></script>-->
-<!--</body>-->
-<!--</html>-->

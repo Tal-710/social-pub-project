@@ -2,7 +2,6 @@ package com.cyberpro.social_pub_project.service;
 
 import com.cyberpro.social_pub_project.entity.Authority;
 import com.cyberpro.social_pub_project.repository.AuthorityRepository;
-import com.cyberpro.social_pub_project.service.AuthorityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,8 +40,26 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Authority getUserAuthority(String username) {
-        return authorityRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Authority not found for user: " + username));
+    public List<Authority> getUserAuthority(String username) {
+        return authorityRepository.findByUsername(username);
+    }
+
+    public void addUserAuthority(String username, String role) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean hasRole = user.getAuthorities().stream()
+                .anyMatch(auth -> auth.getId().getAuthority().equals(role));
+
+        if (!hasRole) {
+            Authority authority = new Authority(username, role, user);
+            authorityRepository.save(authority);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeUserAuthority(String username, String role) {
+        authorityRepository.deleteByUsernameAndRole(username, role);
     }
 }

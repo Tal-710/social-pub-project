@@ -1,7 +1,6 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 body {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,7 +11,7 @@ body {
   box-sizing: border-box;
 }
 
-
+/* Header */
 .header {
   color: white;
   padding: 1em;
@@ -21,31 +20,34 @@ body {
   border: solid 1px black;
   height: 30vh;
   background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
-  background-size: 97%;
+  background-size: 100% 100%;
   font-size: 1.7em;
 }
 
 .header h1 {
   text-shadow: 7px 7px 7px gray;
 }
-
-
-nav {
-  height: 20%;
-}
-
-nav button {
-  margin: 2.5em;
-  padding: 2em 1.5rem;
-  background-color: #5d403a;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.svgHome {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  top: 10%;
-}
 
+}
+.icon-home {
+  background-color: #5d403a;
+  width: 80px;
+  height: 50px;
+  border-radius: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-pic {
+  width: 45%;
+  height: 50%;
+}
 
 main {
   display: flex;
@@ -64,7 +66,7 @@ section.active {
   margin: 5px;
 }
 
-
+/* Form Section */
 .form {
   display: flex;
   flex-wrap: wrap;
@@ -83,15 +85,26 @@ section.active {
   align-items: center;
 }
 
-button {
+#toggleButton, .add-button {
   padding: 0.5rem 1rem;
   background-color: #5d403a;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
-  height: min-content;
-  width: min-content;
+  height: 50px;
+  width: 80px;
+}
+.plus, .minus {
+  padding: 0.5rem 1rem;
+  background-color: #5d403a;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  height: 35px;
+  width: 50px;
+  font-size: 1.2em;
 }
 
 .order-count {
@@ -99,16 +112,19 @@ button {
   margin: 0 10px;
 }
 
-
+/* Scan Section */
 .scan {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .button-container {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  gap: 10px;
 }
 
 #cameraFeed {
@@ -127,7 +143,6 @@ ul li {
   padding: 0.5rem 0;
   border-bottom: 1px solid #ccc;
 }
-
 
 /* Images and SVGs */
 .svg {
@@ -148,18 +163,32 @@ ul li {
   padding: 5%;
   border: solid black 2px;
   margin: 5%;
+  display: flex;
+  width : 85vw
+}
+#deleteButton{
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #8E1616;
+  color: azure;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  height : 35px;
+}
+#submitButton{
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #809D3C;
+  color: azure;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  height : 35px;
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .carousel {
-    height: 30vh;
-  }
-
-  .carousel-item img {
-    height: 25vh;
-  }
-
   nav button {
     margin: 0.5em;
     padding: 1em 0.5rem;

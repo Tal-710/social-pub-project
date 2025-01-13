@@ -16,7 +16,6 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonBackReference
     private Product product;
 
     @Column(nullable = false)
