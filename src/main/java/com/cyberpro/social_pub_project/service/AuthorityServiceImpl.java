@@ -3,12 +3,7 @@ package com.cyberpro.social_pub_project.service;
 import com.cyberpro.social_pub_project.entity.Authority;
 import com.cyberpro.social_pub_project.repository.AuthorityRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
-// AuthorityServiceImpl.java
-
-
 import com.cyberpro.social_pub_project.entity.User;
 import com.cyberpro.social_pub_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

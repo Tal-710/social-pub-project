@@ -1,6 +1,5 @@
 package com.cyberpro.social_pub_project.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity

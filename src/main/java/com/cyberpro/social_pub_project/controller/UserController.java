@@ -33,6 +33,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.findById(id);
@@ -43,24 +44,24 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            User savedUser = userService.save(user);
-            return ResponseEntity.ok(savedUser);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating user: " + e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
-        Optional<User> user = userService.findById(id);
-        if (user.isPresent()) {
-            userService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user) {
+//        try {
+//            User savedUser = userService.save(user);
+//            return ResponseEntity.ok(savedUser);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating user: " + e.getMessage());
+//        }
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+//        Optional<User> user = userService.findById(id);
+//        if (user.isPresent()) {
+//            userService.deleteById(id);
+//            return ResponseEntity.ok().build();
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+//        }
+//    }
 }

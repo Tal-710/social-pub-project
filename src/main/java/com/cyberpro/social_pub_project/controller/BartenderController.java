@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
-public class BarTenderController {
+public class BartenderController {
 
     @GetMapping("/bartender")
     public String showConfirmationPage() {

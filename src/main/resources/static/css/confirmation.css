@@ -31,12 +31,11 @@ div {
     border: solid 1px black;
     height: 30vh;
     text-align: center;
-    width: 95vw;
+    width: 100vw;
     background-size: cover;
     background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
     background-size: 100% 100%;
     font-size: 1.7em;
-    margin-inline: 1%;
 }
 
 #welcome-container {

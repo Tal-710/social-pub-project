@@ -1,11 +1,9 @@
-
-console.log("1")
 function addOrder() {
   const maxOrders = 3;
   const currentOrderCount = document.querySelectorAll('#orderSummary > div').length;
   if (currentOrderCount >= maxOrders) {
     return;}
-  // Fetch item counts
+
   const itemCounts = {
     beer: parseInt(document.querySelector('#beer .order-count').textContent),
     wine: parseInt(document.querySelector('#wine .order-count').textContent),
@@ -19,17 +17,16 @@ function addOrder() {
   const orderSummary = document.getElementById('orderSummary');
   const purchaseHistory = document.getElementById('purchaseHistory');
 
-  // Check if any item is selected
+
   const hasItems = Object.values(itemCounts).some((count) => count > 0);
   if (!hasItems) {
   alert("you must select at least one item to order")
     return;
   }
 
-  // Get current timestamp
+
   const timestamp = new Date().toLocaleString();
 
-  // Create order summary text
   let orderText = `Order at ${timestamp}: `;
   for (const [item, count] of Object.entries(itemCounts)) {
     if (count > 0) {
@@ -37,21 +34,20 @@ function addOrder() {
     }
   }
 
-  // Remove trailing "| " and trim whitespace
+
   orderText = orderText.trim().replace(/\| $/, '');
 
-  // Display order summary with delete button
   const newOrder = document.createElement('div');
   newOrder.id = 'invite';
   newOrder.textContent = orderText;
 
-  // Create delete button
+
   const deleteButton = document.createElement('button');
   deleteButton.id = 'deleteButton';
   deleteButton.textContent = 'Delete';
   deleteButton.style.cursor = 'pointer';
 
-  // Attach delete functionality
+
   deleteButton.addEventListener('click', () => {
     newOrder.remove();
     historyItem.remove();
@@ -61,7 +57,7 @@ function addOrder() {
   submitButton.textContent = 'Submit';
   submitButton.style.cursor = 'pointer';
 
-  // Attach submit functionality (log to console)
+
   submitButton.addEventListener('click', () => {
     console.log('Submitted Order: ', orderText);
     newOrder.remove();
@@ -71,7 +67,7 @@ function addOrder() {
   orderSummary.appendChild(newOrder);
   newOrder.appendChild(submitButton);
 
-  // Add order to purchase history with delete button
+
   const historyItem = document.createElement('li');
   historyItem.textContent = orderText;
 
@@ -85,7 +81,7 @@ function addOrder() {
   purchaseHistory.appendChild(historyItem);
 }
 
-// Order Quantity Adjustment
+
 const minusButtons = document.querySelectorAll('.minus');
 const plusButtons = document.querySelectorAll('.plus');
 
@@ -103,6 +99,8 @@ plusButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const orderCount = button.previousElementSibling;
     let count = parseInt(orderCount.textContent);
-    orderCount.textContent = count + 1;
+      if (count < 10) {
+          orderCount.textContent = count + 1;
+        }
   });
   });

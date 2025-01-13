@@ -23,7 +23,7 @@ public class AdminController {
         this.authorityService = authorityService;
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public String showAdminPanel(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
@@ -31,7 +31,6 @@ public class AdminController {
     }
 
     @PostMapping("/users/{id}/status")
-    @ResponseBody
     public ResponseEntity<?> updateUserStatus(@PathVariable Integer id, @RequestParam int enabled) {
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
@@ -43,7 +42,6 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
     @PostMapping("/users/{id}/roles/add")
-    @ResponseBody
     public ResponseEntity<?> addUserRole(@PathVariable Integer id, @RequestParam String role) {
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
@@ -55,7 +53,6 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{userId}/roles/{role}")
-    @ResponseBody
     public ResponseEntity<?> removeUserRole(@PathVariable Integer userId, @PathVariable String role) {
         try {
             Optional<User> userOptional = userService.findById(userId);
@@ -71,7 +68,6 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{id}")
-    @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         try {
             Optional<User> userOptional = userService.findById(id);

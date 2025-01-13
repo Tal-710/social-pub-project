@@ -16,7 +16,6 @@ public class LoginController {
 
     @GetMapping("/confirmation")
     public String showConfirmationPage() {
-        // You could check if confirmation.html exists
         try {
             return "confirmation";
         } catch (Exception e) {

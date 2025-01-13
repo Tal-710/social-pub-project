@@ -70,7 +70,6 @@ button {
     width: 90vw;
     height: 50vh;
     background-position: left top;
-    /* Align to the top-left corner */
     background-size: 50%;
     overflow: hidden;
     border: 2px solid #ccc;

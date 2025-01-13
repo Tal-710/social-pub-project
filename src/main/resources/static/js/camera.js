@@ -19,7 +19,6 @@ async function toggleCamera() {
       cameraFeed.style.display = "block";
       closeCameraButton.style.display = "block";
       toggleButton.textContent = "Close Camera";
-      // Styling the container
       buttonContainer.style.flexDirection = "column";
       cameraActive = true;
       startQRScan();
@@ -32,13 +31,11 @@ async function toggleCamera() {
   }
 }
 
-
 function startQRScan() {
   qrScanInterval = setInterval(() => {
     qrCanvas.width = cameraFeed.videoWidth;
     qrCanvas.height = cameraFeed.videoHeight;
     qrContext.drawImage(cameraFeed, 0, 0, qrCanvas.width, qrCanvas.height);
-
     const imageData = qrContext.getImageData(
       0,
       0,
@@ -58,7 +55,6 @@ function startQRScan() {
   }, 300);
 }
 
-// Stop Camera
 function closeCamera() {
   if (cameraStream) {
     const tracks = cameraStream.getTracks();

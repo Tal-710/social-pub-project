@@ -1,9 +1,20 @@
-
 let currentUserId = null;
 const addRoleModal = document.getElementById('addRoleModal');
 const deleteModal = document.getElementById('deleteModal');
 const toast = document.getElementById('toast');
 
+document.addEventListener('DOMContentLoaded', function() {
+    const message = sessionStorage.getItem('toastMessage');
+    const type = sessionStorage.getItem('toastType');
+
+    if (message) {
+        setTimeout(() => {
+            showToast(message, type);
+            sessionStorage.removeItem('toastMessage');
+            sessionStorage.removeItem('toastType');
+        }, 500); 
+    }
+});
 
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('role-add-btn')) {
@@ -50,7 +61,8 @@ addRoleModal.querySelector('.save-btn').addEventListener('click', function() {
     })
     .then(response => {
         if (response.ok) {
-            showToast('Role added successfully', 'success');
+            sessionStorage.setItem('toastMessage', 'Role added successfully');
+            sessionStorage.setItem('toastType', 'success');
             closeAllModals();
             window.location.reload();
         } else {
@@ -100,7 +112,9 @@ function toggleStatus(userId, currentStatus) {
     })
     .then(response => {
         if (response.ok) {
-            showToast('Status updated successfully', 'success');
+            sessionStorage.setItem('toastMessage', 'Status updated successfully');
+            sessionStorage.setItem('toastType', 'success');
+            closeAllModals();
             window.location.reload();
         } else {
             showToast('Error updating status', 'error');
@@ -124,12 +138,15 @@ deleteModal.querySelector('.delete-btn').addEventListener('click', function() {
     })
     .then(response => {
         if (response.ok) {
-            showToast('User deleted successfully', 'success');
+            sessionStorage.setItem('toastMessage', 'User deleted successfully');
+            sessionStorage.setItem('toastType', 'success');
             closeAllModals();
             window.location.reload();
         } else {
             showToast('Error deleting user', 'error');
         }
+
+        
     })
     .catch(error => {
         showToast('Error deleting user', 'error');
@@ -143,13 +160,19 @@ function closeAllModals() {
 }
 
 function showToast(message, type) {
+    const toast = document.getElementById('toast');
     toast.textContent = message;
     toast.className = `toast ${type}`;
+
     toast.style.display = 'block';
+    toast.style.opacity = '1';
 
     setTimeout(() => {
-        toast.style.display = 'none';
-    }, 3000);
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 300);
+    }, 1000);
 }
 
 window.onclick = function(event) {

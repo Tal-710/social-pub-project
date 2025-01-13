@@ -42,11 +42,11 @@ public class User {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(name = "qr_code", unique = false, nullable = true)
+    @Column(name = "qr_code")
     private String qrCode;
 
     @Column(name = "enabled", nullable = false)
-    private int enabled = 1;
+    private int enabled = 0;
 
     public User() {
 

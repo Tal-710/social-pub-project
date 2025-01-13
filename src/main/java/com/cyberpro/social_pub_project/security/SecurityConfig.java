@@ -25,10 +25,8 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,10 +35,9 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/api/authorities/**").permitAll()
-                        .requestMatchers("/bartender").hasRole("BARTENDER")
+                        .requestMatchers("/bartender").hasAnyRole("BARTENDER","ADMIN")
                         .requestMatchers("/error/**").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/admin/****").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
