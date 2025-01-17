@@ -1,6 +1,7 @@
 package com.cyberpro.social_pub_project.controller;
 
 import com.cyberpro.social_pub_project.entity.User;
+import com.cyberpro.social_pub_project.service.ProductService;
 import com.cyberpro.social_pub_project.service.RoleService;
 import com.cyberpro.social_pub_project.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,19 @@ import java.util.Optional;
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
+    private final ProductService productService;
 
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService ,ProductService productService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.productService = productService;
     }
 
     @GetMapping("/")
     public String showAdminPanel(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
+        model.addAttribute("products", productService.findAll());
         return "admin";
     }
 

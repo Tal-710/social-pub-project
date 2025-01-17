@@ -1,7 +1,9 @@
 package com.cyberpro.social_pub_project.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,10 +17,20 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonManagedReference("user-orders")
     private User user;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetails;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("order-details")  // Add this
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;

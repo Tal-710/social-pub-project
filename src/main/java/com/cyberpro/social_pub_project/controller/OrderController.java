@@ -1,7 +1,10 @@
 package com.cyberpro.social_pub_project.controller;
 
 
+import com.cyberpro.social_pub_project.dto.OrderRequest;
 import com.cyberpro.social_pub_project.entity.Order;
+import com.cyberpro.social_pub_project.entity.OrderDetail;
+import com.cyberpro.social_pub_project.entity.Product;
 import com.cyberpro.social_pub_project.service.OrderService;
 import com.cyberpro.social_pub_project.service.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +15,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5500", "http://127.0.0.1:5500"},
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class OrderController {
 
     private final OrderService orderService;
@@ -44,15 +52,11 @@ public class OrderController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        try {
-            Order savedOrder = orderService.save(order);
-            return ResponseEntity.ok(savedOrder);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Error creating order: " + e.getMessage());
-        }
+    @PostMapping("/")
+    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest)
+    {
+        Order order = orderService.createOrder(orderRequest);
+        return ResponseEntity.ok(order);
     }
 
     @DeleteMapping("/{id}")

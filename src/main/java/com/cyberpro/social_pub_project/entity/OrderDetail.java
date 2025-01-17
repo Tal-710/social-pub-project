@@ -1,5 +1,6 @@
 package com.cyberpro.social_pub_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +11,8 @@ public class OrderDetail {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id")
+    @JsonBackReference("order-details")  // Add this
     private Order order;
 
     @ManyToOne
@@ -25,6 +27,10 @@ public class OrderDetail {
 
     @Column(nullable = false)
     private  Double subtotal;
+
+    public OrderDetail() {
+
+    }
 
     public Integer getId() {
         return id;
