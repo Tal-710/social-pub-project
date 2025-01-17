@@ -17,7 +17,6 @@ function reloadPage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Toast message handling
     const message = sessionStorage.getItem('toastMessage');
     const type = sessionStorage.getItem('toastType');
 
@@ -29,10 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
 
-    // Navigation handling with session storage
     const activeSection = sessionStorage.getItem('activeSection') || 'users';
 
-    // Set initial section display based on stored value
     if (activeSection === 'products') {
         productSection.style.display = 'block';
         userSection.style.display = 'none';
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         userSection.style.display = 'block';
     }
 
-    // Set initial active button
     document.querySelectorAll('.nav-btn').forEach(button => {
         if (button.dataset.section === activeSection) {
             button.classList.add('active');
@@ -63,11 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Product management
     const addProductBtn = document.getElementById('add-product-btn');
     const productForm = document.getElementById('product-form');
 
-    // Add new product button handler
     addProductBtn?.addEventListener('click', () => {
         currentProductId = null;
         productForm.reset();
@@ -75,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
         productModal.style.display = 'block';
     });
 
-    // Product form submission
     productForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const token = document.querySelector('meta[name="_csrf"]').content;
@@ -114,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add Role Modal Event Handler
 addRoleModal?.querySelector('.save-btn')?.addEventListener('click', function() {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;
@@ -142,9 +134,7 @@ addRoleModal?.querySelector('.save-btn')?.addEventListener('click', function() {
     });
 });
 
-// Click event delegation for both users and products
 document.addEventListener('click', async function(e) {
-    // User management click handlers
     if (e.target.classList.contains('role-add-btn')) {
         currentUserId = e.target.dataset.userId;
         addRoleModal.style.display = 'block';
@@ -165,7 +155,6 @@ document.addEventListener('click', async function(e) {
         toggleStatus(userId, currentStatus);
     }
 
-    // Product management click handlers
     if (e.target.classList.contains('edit-btn')) {
         currentProductId = e.target.dataset.productId;
         try {
@@ -184,7 +173,6 @@ document.addEventListener('click', async function(e) {
         }
     }
 
-    // Delete handlers for both users and products
     if (e.target.classList.contains('delete-btn') && !e.target.closest('.modal')) {
         if (e.target.dataset.productId) {
             currentProductId = e.target.dataset.productId;
@@ -195,13 +183,12 @@ document.addEventListener('click', async function(e) {
         }
     }
 
-    // Modal close handlers
     if (e.target.classList.contains('close') || e.target.classList.contains('cancel-btn')) {
         closeAllModals();
     }
 });
 
-// Remove Role Function
+
 function removeRole(userId, roleName, roleBadge) {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;
@@ -226,7 +213,7 @@ function removeRole(userId, roleName, roleBadge) {
     });
 }
 
-// Toggle Status Function
+
 function toggleStatus(userId, currentStatus) {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;
@@ -254,7 +241,7 @@ function toggleStatus(userId, currentStatus) {
     });
 }
 
-// Delete User Event Handler
+
 deleteModal?.querySelector('.delete-btn')?.addEventListener('click', function() {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;
@@ -288,7 +275,7 @@ function closeAllModals() {
     deleteProductModal.style.display = 'none';
 }
 
-// Delete product handler
+
 deleteProductModal?.querySelector('.delete-btn')?.addEventListener('click', async function() {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;

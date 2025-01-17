@@ -1,13 +1,13 @@
 package com.cyberpro.social_pub_project.controller;
 
 import com.cyberpro.social_pub_project.entity.User;
-import com.cyberpro.social_pub_project.service.ProductService;
-import com.cyberpro.social_pub_project.service.RoleService;
-import com.cyberpro.social_pub_project.service.UserService;
+import com.cyberpro.social_pub_project.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +18,14 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
     private final ProductService productService;
+    private final QRCodeService qrCodeService;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    public AdminController(UserService userService, RoleService roleService ,ProductService productService) {
+    public AdminController(UserService userService, RoleService roleService , ProductService productService, QRCodeService qrCodeService) {
         this.userService = userService;
         this.roleService = roleService;
         this.productService = productService;
+        this.qrCodeService = qrCodeService;
     }
 
     @GetMapping("/")
@@ -38,6 +41,17 @@ public class AdminController {
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+
+            // Only generate QR code if it doesn't already have a QR code
+            if (enabled == 1 && user.getQrCode() == null) {
+                try {
+                    String qrCodeUrl = qrCodeService.generateAndUploadQRCode(user);
+                    user.setQrCode(qrCodeUrl);
+                } catch (Exception e) {
+                    logger.error("Failed to generate QR code", e);
+                }
+            }
+
             user.setEnabled(enabled);
             userService.save(user);
             return ResponseEntity.ok().build();
