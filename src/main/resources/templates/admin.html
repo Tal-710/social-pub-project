@@ -28,13 +28,14 @@
                 <td th:text="${user.id}"></td>
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                <!-- Change the roles display section -->
                 <td>
                     <div class="roles-container">
-                        <th:block th:each="authority : ${user.authorities}">
+                        <th:block th:each="role : ${user.roles}">
                             <div class="role-badge"
                                  th:data-user-id="${user.id}"
-                                 th:data-role="${authority.id.authority}">
-                                <span th:text="${authority.id.authority}"></span>
+                                 th:data-role="${role.roleName}">
+                                <span th:text="${role.roleName}"></span>
                                 <button class="role-remove-btn">×</button>
                             </div>
                         </th:block>
