@@ -30,11 +30,11 @@
                 <td th:text="${user.firstName + ' ' + user.lastName}"></td>
                 <td>
                     <div class="roles-container">
-                        <th:block th:each="role : ${user.roles}">
+                        <th:block th:each="authority : ${user.authorities}">
                             <div class="role-badge"
                                  th:data-user-id="${user.id}"
-                                 th:data-role="${role.roleName}">
-                                <span th:text="${role.roleName}"></span>
+                                 th:data-role="${authority.id.authority}">
+                                <span th:text="${authority.id.authority}"></span>
                                 <button class="role-remove-btn">×</button>
                             </div>
                         </th:block>

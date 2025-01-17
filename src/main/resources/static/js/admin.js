@@ -75,12 +75,11 @@ addRoleModal.querySelector('.save-btn').addEventListener('click', function() {
     });
 });
 
-// Update the removeRole function
-function removeRole(userId, roleName, roleBadge) {
+function removeRole(userId, role, roleBadge) {
     const token = document.querySelector('meta[name="_csrf"]').content;
     const header = document.querySelector('meta[name="_csrf_header"]').content;
 
-    fetch(`/admin/users/${userId}/roles/${roleName}`, {
+    fetch(`/admin/users/${userId}/roles/${role}`, {
         method: 'DELETE',
         headers: {
             [header]: token
