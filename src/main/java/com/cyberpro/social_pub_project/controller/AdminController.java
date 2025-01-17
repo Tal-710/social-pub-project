@@ -84,4 +84,13 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (userOptional.isPresent()) {
+            userService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
