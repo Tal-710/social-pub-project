@@ -6,19 +6,53 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitOrderButton = document.getElementById('submit-order-button');
   const qrResultDiv = document.getElementById('qrResult');
 
-  // Get CSRF token from meta tags
+
   const token = document.querySelector('meta[name="_csrf"]').content;
   const header = document.querySelector('meta[name="_csrf_header"]').content;
 
   let order = [];
   let scannedUser = null;
 
-  // Disable submit button until user is scanned
+  function restoreSessionData() {
+    const savedOrder = sessionStorage.getItem('currentOrder');
+    const savedUser = sessionStorage.getItem('scannedUser');
+
+    if (savedOrder) {
+      order = JSON.parse(savedOrder);
+      orderList.innerHTML = '';
+      order.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.productName} (x${item.quantity}) - $${item.totalPrice.toFixed(2)}`;
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.className = 'remove-button';
+        removeButton.addEventListener('click', () => {
+          order = order.filter(o => o.productId !== item.productId);
+          sessionStorage.setItem('currentOrder', JSON.stringify(order));
+          listItem.remove();
+        });
+
+        listItem.appendChild(removeButton);
+        orderList.appendChild(listItem);
+      });
+    }
+
+    if (savedUser) {
+      scannedUser = JSON.parse(savedUser);
+      window.handleUserScan(scannedUser);
+    }
+  }
+
+
   submitOrderButton.disabled = true;
 
-  // Handle QR result integration
+
   window.handleUserScan = (user) => {
     scannedUser = user;
+
+    sessionStorage.setItem('scannedUser', JSON.stringify(user));
+
     qrResultDiv.innerHTML = `
       <h3>User Details</h3>
       <p>ID: ${user.idNumber}</p>
@@ -27,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     submitOrderButton.disabled = false;
   };
 
-  // Add item to order
   addItemButton.addEventListener('click', () => {
     const productId = productDropdown.value;
     const productName = productDropdown.selectedOptions[0].textContent.split(' - $')[0];
@@ -43,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const item = { productId, productName, quantity, totalPrice };
     order.push(item);
 
+    sessionStorage.setItem('currentOrder', JSON.stringify(order));
+
     const listItem = document.createElement('li');
     listItem.textContent = `${productName} (x${quantity}) - $${totalPrice.toFixed(2)}`;
 
@@ -51,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     removeButton.className = 'remove-button';
     removeButton.addEventListener('click', () => {
       order = order.filter(o => o.productId !== productId);
+      // Update session storage on remove
+      sessionStorage.setItem('currentOrder', JSON.stringify(order));
       listItem.remove();
     });
 
@@ -61,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     quantityInput.value = 1;
   });
 
-  // Submit order with CSRF
   submitOrderButton.addEventListener('click', async () => {
     if (!scannedUser) {
       alert('Please scan a user before submitting the order.');
@@ -85,39 +121,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      console.log('Payload:', JSON.stringify(payload));
-
       const response = await fetch('/orders/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          [header]: token  // Add CSRF token
+          [header]: token
         },
-        credentials: 'include',  // Important for CSRF
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-
-      const responseText = await response.text();
-      console.log('Response body:', responseText);
-
       if (response.ok) {
         alert('Order submitted successfully!');
-        // Clear the form after successful submission
+        sessionStorage.removeItem('currentOrder');
+        sessionStorage.removeItem('scannedUser');
+
         order = [];
         orderList.innerHTML = '';
         scannedUser = null;
         qrResultDiv.innerHTML = '';
         submitOrderButton.disabled = true;
       } else {
-        alert(`Failed to submit order. Status: ${response.status}, Body: ${responseText}`);
+        alert(`Failed to submit order. Status: ${response.status}`);
       }
     } catch (error) {
       console.error('Error submitting order:', error);
       alert('Error submitting order. Please try again.');
     }
   });
+
+  restoreSessionData();
 });

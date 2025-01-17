@@ -61,19 +61,42 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
         user.getRoles().add(userRole);
 
-        // Save user first to get ID
-        User savedUser = userRepository.save(user);
-
-        // Generate and set QR code
-        try {
-            String localUrl = String.format("http://localhost:8080/users/%d", savedUser.getId());
-            String qrCodeUrl = qrCodeService.generateAndUploadQRCode(savedUser);
-            savedUser.setQrCode(qrCodeUrl);
-            userRepository.save(savedUser);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate QR code", e);
-        }
+        // Save user
+        userRepository.save(user);
     }
+
+//    @Override
+//    @Transactional
+//    public void registerUser(String username, String password, String firstName, String lastName, int age, int idNumber) {
+//        // First encrypt the password
+//        String hashedPassword = passwordEncoder.encode(password);
+//
+//        User user = new User();
+//        user.setUsername(username);
+//        user.setPassword(hashedPassword);
+//        user.setFirstName(firstName);
+//        user.setLastName(lastName);
+//        user.setAge(age);
+//        user.setIdNumber(idNumber);
+//        user.setEnabled(0);  // Set enabled by default
+//
+//        Role userRole = roleRepository.findByRoleName("ROLE_USER")
+//                .orElseThrow(() -> new RuntimeException("Default role not found"));
+//        user.getRoles().add(userRole);
+//
+//        // Save user first to get ID
+//        User savedUser = userRepository.save(user);
+//
+//        // Generate and set QR code
+//        try {
+//            String localUrl = String.format("http://localhost:8080/users/%d", savedUser.getId());
+//            String qrCodeUrl = qrCodeService.generateAndUploadQRCode(savedUser);
+//            savedUser.setQrCode(qrCodeUrl);
+//            userRepository.save(savedUser);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to generate QR code", e);
+//        }
+//    }
 
     @Override
     public void addUserRole(User user, String roleName) {

@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 @Service
-public class QRCodeServiceImpl {
+public class QRCodeServiceImpl implements QRCodeService {
     private final AzureBlobServiceImpl azureBlobService;
     private static final Logger logger = LoggerFactory.getLogger(QRCodeServiceImpl.class);
 
