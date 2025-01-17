@@ -10,14 +10,15 @@
 <div class="form-container">
     <h1 class="title">Register</h1>
 
-    <form th:action="@{/register}" id="register-form"  th:object="${user}"  method="POST" class="form" onsubmit="return validatePassword()">
+    <form th:action="@{/register}" id="register-form" th:object="${user}" method="POST" class="form" onsubmit="return validatePassword()">
+        <div th:if="${errorMessage}" class="error">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
         <div class="input-group">
             <label for="username">Username:</label>
-            <input type="text" id="username" th:field="*{username}" maxlength="50" required name="username">
-            <span th:if="${#fields.hasErrors('username')}"
-                  th:errors="*{username}"
-                  class="error">
-        </span>
+            <input type="text" id="username" th:field="*{username}" maxlength="50" required>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></span>
         </div>
 
         <div class="input-group">
@@ -27,21 +28,18 @@
 
         <div class="input-group">
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" th:field="*{lastName}"  maxlength="50" required autocomplete="new-password">
+            <input type="text" id="lastName" th:field="*{lastName}" maxlength="50" required autocomplete="new-password">
         </div>
 
         <div class="input-group">
             <label for="idNumber">ID Number:</label>
             <input type="number" id="idNumber" th:field="*{idNumber}" required autocomplete="new-password">
-            <span th:if="${#fields.hasErrors('idNumber')}"
-                  th:errors="*{idNumber}"
-                  class="error">
-        </span>
+            <span th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></span>
         </div>
 
         <div class="input-group">
             <label for="age">Age:</label>
-            <input type="number" id="age" th:field="*{age}"  max="130" min="18" required>
+            <input type="number" id="age" th:field="*{age}" max="130" min="18" required>
         </div>
 
         <div class="input-group">
@@ -51,7 +49,7 @@
 
         <div class="input-group">
             <label for="confirm-password">Confirm Password:</label>
-            <input type="password" id="confirm-password" maxlength="30"  name="confirm-password" required>
+            <input type="password" id="confirm-password" maxlength="30" name="confirm-password" required>
         </div>
 
         <div id="error-message"></div>
@@ -59,18 +57,11 @@
         <button type="submit" class="btn">Register</button>
 
         <div class="signup">
-
-                <button class="btn"> <a th:href="@{/login}"> All ready Sign up? Login</button>
-            </a>
+            <a th:href="@{/login}" class="btn">Already Sign up? Login</a>
         </div>
-
     </form>
-
-
 </div>
+
 <script th:src="@{/js/register.js}"></script>
 </body>
 </html>
-
-
-

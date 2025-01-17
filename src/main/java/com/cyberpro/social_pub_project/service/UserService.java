@@ -22,5 +22,8 @@ public interface UserService {
     void addRoleUser(User user);
 
     Optional<User> findByIdNumber(Integer idNumber);
+
+    void addUserRole(User user, String roleName);
+    void removeUserRole(User user, String roleName);
 }
 

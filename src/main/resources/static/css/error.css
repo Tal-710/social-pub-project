@@ -39,7 +39,6 @@
             color: #5D403A;
         }
 
-        /* Mobile optimization */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;

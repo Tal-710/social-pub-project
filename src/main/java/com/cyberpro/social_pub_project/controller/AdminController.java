@@ -1,7 +1,7 @@
 package com.cyberpro.social_pub_project.controller;
 
 import com.cyberpro.social_pub_project.entity.User;
-import com.cyberpro.social_pub_project.service.AuthorityService;
+import com.cyberpro.social_pub_project.service.RoleService;
 import com.cyberpro.social_pub_project.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,13 +14,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     private final UserService userService;
-    private final AuthorityService authorityService;
+    private final RoleService roleService;
 
-    public AdminController(UserService userService, AuthorityService authorityService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.authorityService = authorityService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/")
@@ -41,12 +40,13 @@ public class AdminController {
         }
         return ResponseEntity.notFound().build();
     }
+
     @PostMapping("/users/{id}/roles/add")
     public ResponseEntity<?> addUserRole(@PathVariable Integer id, @RequestParam String role) {
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            authorityService.addUserAuthority(user.getUsername(), role);
+            roleService.addUserRole(user.getUsername(), role);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -58,26 +58,12 @@ public class AdminController {
             Optional<User> userOptional = userService.findById(userId);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-                authorityService.removeUserAuthority(user.getUsername(), role);
+                roleService.removeUserRole(user.getUsername(), role);
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
-        try {
-            Optional<User> userOptional = userService.findById(id);
-            if (userOptional.isPresent()) {
-                userService.deleteById(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
         }
     }
 }

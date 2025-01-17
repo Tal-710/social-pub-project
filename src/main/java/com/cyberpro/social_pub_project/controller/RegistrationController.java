@@ -22,32 +22,36 @@ public class RegistrationController {
         return "register";
     }
     @PostMapping
-    public String registerUser(@Valid @RequestBody @ModelAttribute("user") User user, BindingResult bindingResult, Model model)
-    {
-        if (userService.findByUsername(user.getUsername()).isPresent()) {
-            bindingResult.rejectValue("username", "error.user",
-                    "Username already exists");
-        }
-
-        if (userService.findByIdNumber(user.getIdNumber()).isPresent()) {
-            bindingResult.rejectValue("idNumber", "error.user",
-                    "ID Number already exists");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "register";
-        }
-
+    public String registerUser(@Valid @ModelAttribute("user") User user,
+                               BindingResult bindingResult,
+                               Model model) {
         try {
+            // Validate existing username
+            if (userService.findByUsername(user.getUsername()).isPresent()) {
+                bindingResult.rejectValue("username", "error.user",
+                        "Username already exists");
+            }
+
+            // Validate existing ID
+            if (userService.findByIdNumber(user.getIdNumber()).isPresent()) {
+                bindingResult.rejectValue("idNumber", "error.user",
+                        "ID Number already exists");
+            }
+
+            if (bindingResult.hasErrors()) {
+                return "register";
+            }
+
             userService.registerUser(user.getUsername(),
                     user.getPassword(),
                     user.getFirstName(),
                     user.getLastName(),
                     user.getAge(),
                     user.getIdNumber());
+
             return "redirect:/login";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Registration failed");
+            model.addAttribute("errorMessage", "Registration failed: " + e.getMessage());
             return "register";
         }
     }
