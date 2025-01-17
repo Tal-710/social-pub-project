@@ -71,10 +71,15 @@ function closeCamera() {
 
 async function fetchUserDetails(userId) {
   try {
-    const response = await fetch(`${userId}`);
+    const response = await fetch(`${userId}`); // Adjust API endpoint if needed
     if (response.ok) {
       const user = await response.json();
       displayUserDetails(user);
+
+      // Call the global function from order.js to enable the submit button
+      if (typeof window.handleUserScan === "function") {
+        window.handleUserScan(user);
+      }
     } else {
       qrResultDiv.textContent = "User not found.";
     }
@@ -83,6 +88,22 @@ async function fetchUserDetails(userId) {
     qrResultDiv.textContent = "Error fetching user details.";
   }
 }
+
+
+//async function fetchUserDetails(userId) {
+//  try {
+//    const response = await fetch(`${userId}`);
+//    if (response.ok) {
+//      const user = await response.json();
+//      displayUserDetails(user);
+//    } else {
+//      qrResultDiv.textContent = "User not found.";
+//    }
+//  } catch (error) {
+//    console.error("Error fetching user details:", error);
+//    qrResultDiv.textContent = "Error fetching user details.";
+//  }
+//}
 
 
 function displayUserDetails(user) {

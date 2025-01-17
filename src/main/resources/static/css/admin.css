@@ -230,3 +230,46 @@ font-size: 0.9em;
 font-size: 0.8em;
 }
 }
+
+.admin-nav {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.primary-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.product-thumbnail {
+    max-width: 50px;
+    max-height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}

@@ -4,6 +4,9 @@
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add CSRF meta tags -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Social Pub</title>
     <link rel="stylesheet" th:href="@{/css/bartender.css}" />
 </head>
@@ -14,107 +17,49 @@
     </header>
 
     <main>
-        <section id="orders" class="active">
+        <section id="order-management">
             <h2>Order Management</h2>
 
-            <div class="form">
-                <div class="item" id="beer">
-                    <h4>BEER</h4>
-                    <img class="svg" th:src="@{/images/beer-svgrepo-com.svg}" alt="Beer" />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
+            <!-- Product Selection -->
+            <div id="product-selection">
+                <label for="product-dropdown">Select Product:</label>
+                <select id="product-dropdown">
+                    <option value="" disabled selected>Select a product</option>
+                    <option th:each="product : ${products}"
+                            th:value="${product.id}"
+                            th:data-price="${product.price}"
+                            th:text="${product.name} + ' - $' + ${product.price}">
+                    </option>
+                </select>
 
-                <div class="item" id="wine">
-                    <h4>WINE</h4>
-                    <img
-                            class="svg"
-                            th:src="@{/images/wine-glass-svgrepo-com.svg}"
-                            alt="Wine"
-                    />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
+                <label for="quantity-input">Quantity:</label>
+                <input type="number" id="quantity-input" min="1" value="1" />
 
-                <div class="item" id="chips">
-                    <h4>CHIPS</h4>
-                    <img
-                            class="svg"
-                            th:src="@{/images/french-fries-svgrepo-com.svg}"
-                            alt="Chips"
-                    />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
-
-                <div class="item" id="coctail">
-                    <h4>SHAKE</h4>
-                    <img
-                            class="svg"
-                            th:src="@{/images/drink-cocktail-svgrepo-com.svg}"
-                            alt="Cocktail"
-                    />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
-
-                <div class="item" id="cafe">
-                    <h4>CAFE</h4>
-                    <img class="svg" th:src="@{/images/cafe-svgrepo-com.svg}" alt="Cafe" />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
-
-                <div class="item" id="sandwish">
-                    <h4>TOAST</h4>
-                    <img
-                            class="svg"
-                            th:src="@{/images/sandwich-svgrepo-com.svg}"
-                            alt="Sandwich"
-                    />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
-
-                <div class="item" id="cake">
-                    <h4>CAKE</h4>
-                    <img class="svg" th:src="@{/images/cake-4-svgrepo-com.svg}" alt="Cake" />
-                    <button class="minus">-</button>
-                    <span class="order-count">0</span>
-                    <button class="plus">+</button>
-                </div>
+                <button id="add-item-button">Add Item</button>
             </div>
 
+            <h3>Order Summary</h3>
+            <ul id="order-list"></ul>
+
+            <button id="submit-order-button">Submit Order</button>
+        </section>
+
+        <section id="camera">
+            <h2>QR Code Scanner</h2>
             <div class="scan">
                 <div class="button-container" id="buttonContainer">
-                    <button id="toggleButton" onclick="toggleCamera()">
-                        Open Camera
-                    </button>
+                    <button id="toggleButton" onclick="toggleCamera()">Open Camera</button>
                     <video id="cameraFeed" autoplay></video>
                     <canvas id="qrCanvas" style="display: none"></canvas>
                     <span id="closeCamera" onclick="closeCamera()"></span>
-                    <button class="add-button" onclick="addOrder()">Add Order</button>
                 </div>
                 <div id="qrResult"></div>
-                <div id="orderSummary"></div>
-                <div class="icon-home">
-                    <a class = "svgHome" th:href="@{/home}">
-                        <img class="icon-pic" th:src="@{/images/icon8-home.svg}"
-                             alt="logo  home"/>
-                    </a>
-                </div>
             </div>
         </section>
     </main>
 </div>
 
 <script th:src="@{/js/order.js}"></script>
-<script th:src="@{js/camera.js}"></script>
+<script th:src="@{/js/camera.js}"></script>
 </body>
 </html>

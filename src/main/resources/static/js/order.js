@@ -1,106 +1,123 @@
-function addOrder() {
-  const maxOrders = 3;
-  const currentOrderCount = document.querySelectorAll('#orderSummary > div').length;
-  if (currentOrderCount >= maxOrders) {
-    return;}
+document.addEventListener('DOMContentLoaded', () => {
+  const productDropdown = document.getElementById('product-dropdown');
+  const quantityInput = document.getElementById('quantity-input');
+  const addItemButton = document.getElementById('add-item-button');
+  const orderList = document.getElementById('order-list');
+  const submitOrderButton = document.getElementById('submit-order-button');
+  const qrResultDiv = document.getElementById('qrResult');
 
-  const itemCounts = {
-    beer: parseInt(document.querySelector('#beer .order-count').textContent),
-    wine: parseInt(document.querySelector('#wine .order-count').textContent),
-    chips: parseInt(document.querySelector('#chips .order-count').textContent),
-    coctail: parseInt(document.querySelector('#coctail .order-count').textContent),
-    cafe: parseInt(document.querySelector('#cafe .order-count').textContent),
-    sandwish: parseInt(document.querySelector('#sandwish .order-count').textContent),
-    cake: parseInt(document.querySelector('#cake .order-count').textContent),
+  // Get CSRF token from meta tags
+  const token = document.querySelector('meta[name="_csrf"]').content;
+  const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+  let order = [];
+  let scannedUser = null;
+
+  // Disable submit button until user is scanned
+  submitOrderButton.disabled = true;
+
+  // Handle QR result integration
+  window.handleUserScan = (user) => {
+    scannedUser = user;
+    qrResultDiv.innerHTML = `
+      <h3>User Details</h3>
+      <p>ID: ${user.idNumber}</p>
+      <p>Name: ${user.firstName} ${user.lastName}</p>
+    `;
+    submitOrderButton.disabled = false;
   };
 
-  const orderSummary = document.getElementById('orderSummary');
-  const purchaseHistory = document.getElementById('purchaseHistory');
+  // Add item to order
+  addItemButton.addEventListener('click', () => {
+    const productId = productDropdown.value;
+    const productName = productDropdown.selectedOptions[0].textContent.split(' - $')[0];
+    const productPrice = parseFloat(productDropdown.selectedOptions[0].getAttribute('data-price'));
+    const quantity = parseInt(quantityInput.value, 10);
 
-
-  const hasItems = Object.values(itemCounts).some((count) => count > 0);
-  if (!hasItems) {
-  alert("you must select at least one item to order")
-    return;
-  }
-
-
-  const timestamp = new Date().toLocaleString();
-
-  let orderText = `Order at ${timestamp}: `;
-  for (const [item, count] of Object.entries(itemCounts)) {
-    if (count > 0) {
-      orderText += `${item.charAt(0).toUpperCase() + item.slice(1)}: ${count} | `;
+    if (!productId || quantity <= 0) {
+      alert('Please select a product and enter a valid quantity.');
+      return;
     }
-  }
 
+    const totalPrice = productPrice * quantity;
+    const item = { productId, productName, quantity, totalPrice };
+    order.push(item);
 
-  orderText = orderText.trim().replace(/\| $/, '');
+    const listItem = document.createElement('li');
+    listItem.textContent = `${productName} (x${quantity}) - $${totalPrice.toFixed(2)}`;
 
-  const newOrder = document.createElement('div');
-  newOrder.id = 'invite';
-  newOrder.textContent = orderText;
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove';
+    removeButton.className = 'remove-button';
+    removeButton.addEventListener('click', () => {
+      order = order.filter(o => o.productId !== productId);
+      listItem.remove();
+    });
 
+    listItem.appendChild(removeButton);
+    orderList.appendChild(listItem);
 
-  const deleteButton = document.createElement('button');
-  deleteButton.id = 'deleteButton';
-  deleteButton.textContent = 'Delete';
-  deleteButton.style.cursor = 'pointer';
-
-
-  deleteButton.addEventListener('click', () => {
-    newOrder.remove();
-    historyItem.remove();
-  });
-  const submitButton = document.createElement('button');
-  submitButton.id = 'submitButton';
-  submitButton.textContent = 'Submit';
-  submitButton.style.cursor = 'pointer';
-
-
-  submitButton.addEventListener('click', () => {
-    console.log('Submitted Order: ', orderText);
-    newOrder.remove();
+    productDropdown.value = '';
+    quantityInput.value = 1;
   });
 
-  newOrder.appendChild(deleteButton);
-  orderSummary.appendChild(newOrder);
-  newOrder.appendChild(submitButton);
+  // Submit order with CSRF
+  submitOrderButton.addEventListener('click', async () => {
+    if (!scannedUser) {
+      alert('Please scan a user before submitting the order.');
+      return;
+    }
 
+    if (order.length === 0) {
+      alert('Order is empty!');
+      return;
+    }
 
-  const historyItem = document.createElement('li');
-  historyItem.textContent = orderText;
+    const payload = {
+      userId: scannedUser.idNumber,
+      totalPrice: order.reduce((sum, item) => sum + item.totalPrice, 0),
+      orderDetails: order.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        unitPrice: item.totalPrice / item.quantity,
+        totalPrice: item.totalPrice
+      }))
+    };
 
-  const historyDeleteButton = deleteButton.cloneNode(true);
-  historyDeleteButton.addEventListener('click', () => {
-    newOrder.remove();
-    historyItem.remove();
-  });
+    try {
+      console.log('Payload:', JSON.stringify(payload));
 
-  historyItem.appendChild(historyDeleteButton);
-  purchaseHistory.appendChild(historyItem);
-}
+      const response = await fetch('/orders/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          [header]: token  // Add CSRF token
+        },
+        credentials: 'include',  // Important for CSRF
+        body: JSON.stringify(payload),
+      });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
 
-const minusButtons = document.querySelectorAll('.minus');
-const plusButtons = document.querySelectorAll('.plus');
+      const responseText = await response.text();
+      console.log('Response body:', responseText);
 
-minusButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const orderCount = button.nextElementSibling;
-    let count = parseInt(orderCount.textContent);
-    if (count > 0) {
-      orderCount.textContent = count - 1;
+      if (response.ok) {
+        alert('Order submitted successfully!');
+        // Clear the form after successful submission
+        order = [];
+        orderList.innerHTML = '';
+        scannedUser = null;
+        qrResultDiv.innerHTML = '';
+        submitOrderButton.disabled = true;
+      } else {
+        alert(`Failed to submit order. Status: ${response.status}, Body: ${responseText}`);
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('Error submitting order. Please try again.');
     }
   });
 });
-
-plusButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const orderCount = button.previousElementSibling;
-    let count = parseInt(orderCount.textContent);
-      if (count < 10) {
-          orderCount.textContent = count + 1;
-        }
-  });
-  });

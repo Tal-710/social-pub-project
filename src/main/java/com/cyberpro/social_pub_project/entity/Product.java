@@ -29,6 +29,10 @@ public class Product {
     @JsonIgnore
     private List<OrderDetail> orderDetails;
 
+    public Product(String productId) {
+
+    }
+
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
@@ -79,7 +83,5 @@ public class Product {
     public Product(){
 
     }
-
-
 
 }
