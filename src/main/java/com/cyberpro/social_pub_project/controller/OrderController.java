@@ -41,6 +41,15 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @GetMapping("/user/{userId}/recent-products")
+    public ResponseEntity<List<Product>> getRecentUniqueProducts(@PathVariable Integer userId) {
+        List<Product> recentProducts = orderService.findLastFiveUniqueProducts(userId);
+        if (recentProducts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(recentProducts);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);

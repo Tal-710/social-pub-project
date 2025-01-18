@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
+    public User saveWithQRCode(User user) {
         User savedUser = userRepository.save(user);
         try {
             String qrCodeUrl = qrCodeService.generateAndUploadQRCode(savedUser);
@@ -147,6 +147,12 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate QR code", e);
         }
+    }
+
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);  // Simple save without QR code generation
     }
 
     @Override

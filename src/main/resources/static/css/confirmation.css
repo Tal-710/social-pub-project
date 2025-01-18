@@ -96,3 +96,65 @@ button {
     margin-top: 20px;
     text-align: center;
     padding: 10px;
+
+#purchase-history-container {
+    width: 85%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.purchase-list {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    color: #5D403A;
+}
+
+.purchase-item:last-child {
+    border-bottom: none;
+}
+
+#showHistoryButton {
+    grid-row: 2/3;
+    grid-column: 1/3;
+    width: 50%;
+}
+
+h2 {
+    color: #5D403A;
+    text-shadow: 4px 4px 4px gray;
+    margin-bottom: 15px;
+}
+
+.empty-message {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
+
+.error-message {
+    text-align: center;
+    color: #dc3545;
+    padding: 20px;
+}
+
+.purchase-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.purchase-item:last-child {
+    border-bottom: none;
+}

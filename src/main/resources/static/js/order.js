@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const orderList = document.getElementById('order-list');
   const submitOrderButton = document.getElementById('submit-order-button');
   const qrResultDiv = document.getElementById('qrResult');
+  const totalAmountSpan = document.getElementById('total-amount');
 
 
   const token = document.querySelector('meta[name="_csrf"]').content;
@@ -12,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let order = [];
   let scannedUser = null;
+
+  function updateTotal() {
+    const total = order.reduce((sum, item) => sum + item.totalPrice, 0);
+    totalAmountSpan.textContent = total.toFixed(2);
+  }
 
   function restoreSessionData() {
     const savedOrder = sessionStorage.getItem('currentOrder');
@@ -36,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listItem.appendChild(removeButton);
         orderList.appendChild(listItem);
       });
+      updateTotal();
     }
 
     if (savedUser) {
@@ -61,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     submitOrderButton.disabled = false;
   };
 
-  addItemButton.addEventListener('click', () => {
+addItemButton.addEventListener('click', () => {
     const productId = productDropdown.value;
     const productName = productDropdown.selectedOptions[0].textContent.split(' - $')[0];
     const productPrice = parseFloat(productDropdown.selectedOptions[0].getAttribute('data-price'));
@@ -86,13 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
     removeButton.className = 'remove-button';
     removeButton.addEventListener('click', () => {
       order = order.filter(o => o.productId !== productId);
-      // Update session storage on remove
       sessionStorage.setItem('currentOrder', JSON.stringify(order));
       listItem.remove();
+      updateTotal();
     });
 
     listItem.appendChild(removeButton);
     orderList.appendChild(listItem);
+    updateTotal();
 
     productDropdown.value = '';
     quantityInput.value = 1;
@@ -142,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scannedUser = null;
         qrResultDiv.innerHTML = '';
         submitOrderButton.disabled = true;
+        updateTotal();
       } else {
         alert(`Failed to submit order. Status: ${response.status}`);
       }

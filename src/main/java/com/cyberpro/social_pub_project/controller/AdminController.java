@@ -38,24 +38,41 @@ public class AdminController {
 
     @PostMapping("/users/{id}/status")
     public ResponseEntity<?> updateUserStatus(@PathVariable Integer id, @RequestParam int enabled) {
+        logger.debug("Updating status for user ID: {} to enabled: {}", id, enabled);
+
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            logger.debug("Current user state - QR Code: {}, Enabled: {}",
+                    user.getQrCode() != null ? "exists" : "null",
+                    user.getEnabled());
 
             // Only generate QR code if it doesn't already have a QR code
             if (enabled == 1 && user.getQrCode() == null) {
+                logger.info("Generating new QR code for user ID: {}", id);
                 try {
                     String qrCodeUrl = qrCodeService.generateAndUploadQRCode(user);
                     user.setQrCode(qrCodeUrl);
+                    logger.info("Successfully generated QR code: {}", qrCodeUrl);
                 } catch (Exception e) {
-                    logger.error("Failed to generate QR code", e);
+                    logger.error("Failed to generate QR code for user ID: {}", id, e);
+                    return ResponseEntity.status(500).body("Failed to generate QR code");
                 }
+            } else {
+                logger.debug("Skipping QR code generation. Enabled={}, Existing QR code={}",
+                        enabled, user.getQrCode() != null ? "yes" : "no");
             }
 
             user.setEnabled(enabled);
-            userService.save(user);
+            User savedUser = userService.save(user);  // Use simple save here
+            logger.info("Successfully updated user status. ID: {}, Enabled: {}, QR Code: {}",
+                    savedUser.getId(),
+                    savedUser.getEnabled(),
+                    savedUser.getQrCode() != null ? "exists" : "null");
+
             return ResponseEntity.ok().build();
         }
+        logger.warn("User not found with ID: {}", id);
         return ResponseEntity.notFound().build();
     }
 
