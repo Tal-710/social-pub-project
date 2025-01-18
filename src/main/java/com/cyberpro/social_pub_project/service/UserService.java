@@ -23,6 +23,8 @@ public interface UserService {
 
     Optional<User> findByIdNumber(Integer idNumber);
 
+    User saveWithQRCode(User user);
+
     void addUserRole(User user, String roleName);
     void removeUserRole(User user, String roleName);
 }

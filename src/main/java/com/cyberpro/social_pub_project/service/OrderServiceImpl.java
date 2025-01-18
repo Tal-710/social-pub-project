@@ -8,13 +8,16 @@ import com.cyberpro.social_pub_project.repository.OrderRepository;
 import com.cyberpro.social_pub_project.repository.ProductRepository;
 import com.cyberpro.social_pub_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -53,6 +56,11 @@ public class OrderServiceImpl implements OrderService {
     public void deleteById(int theId) {
 
         orderRepository.deleteById(theId);
+    }
+
+    @Override
+    public List<Product> findLastFiveUniqueProducts(Integer userId) {
+        return orderRepository.findLast5UniqueProductsByUserId(userId);
     }
 
     public Order createOrder(OrderRequest orderRequest) {
