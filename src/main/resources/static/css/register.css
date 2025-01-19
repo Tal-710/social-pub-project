@@ -126,3 +126,16 @@ a:visited {
         max-width: 100%;
     }
 }
+
+.g-recaptcha {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+#captcha-error {
+    color: #ff4d4d;
+    font-size: 0.875rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}

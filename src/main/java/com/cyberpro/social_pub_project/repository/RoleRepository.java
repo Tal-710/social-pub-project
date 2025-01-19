@@ -14,7 +14,3 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Integer> {
    Optional<Role> findByRoleName(String roleName);
 }
-//   @Modifying
-//   @Query("DELETE FROM Authority a WHERE a.id.username = :username AND a.id.authority = :role")
-//   void deleteByUsernameAndRole(@Param("username") String username, @Param("role") String role);
-//}

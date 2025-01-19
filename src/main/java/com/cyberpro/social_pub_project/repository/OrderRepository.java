@@ -5,10 +5,11 @@ import com.cyberpro.social_pub_project.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.*;
+import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
 import java.util.List;
-
+@Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query(value = """
     SELECT * FROM products WHERE id IN (
