@@ -1,8 +1,7 @@
 package com.cyberpro.social_pub_project.dto;
 
 
-import com.cyberpro.social_pub_project.entity.OrderDetail;
-import com.cyberpro.social_pub_project.entity.User;
+
 import java.util.List;
 
 public class OrderRequest {

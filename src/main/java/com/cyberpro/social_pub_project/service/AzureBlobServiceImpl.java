@@ -53,10 +53,8 @@ public class AzureBlobServiceImpl {
         try (InputStream inputStream = new ByteArrayInputStream(qrCodeBytes)) {
             logger.info("Starting upload for file: {}", fileName);
 
-            // First upload the blob
             blobClient.upload(inputStream, qrCodeBytes.length, true);
 
-            // Then set the content type
             BlobHttpHeaders headers = new BlobHttpHeaders()
                     .setContentType("image/png");
             blobClient.setHttpHeaders(headers);

@@ -85,6 +85,20 @@ body {
 a {
     color: white;
 }
+
+.error {
+    color: #ff0000;  /* Bright red color */
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#captcha-error {
+    display: block;
+    color: #ff0000;
+    font-weight: bold;
+}
+
 @media (max-width: 480px) {
     .form-container {
         padding: 2%;

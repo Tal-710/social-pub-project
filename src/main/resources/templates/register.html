@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" th:href="@{/css/register.css}">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div class="form-container">
     <h1 class="title">Register</h1>
 
-    <form th:action="@{/register}" id="register-form" th:object="${user}" method="POST" class="form" onsubmit="return validatePassword()">
+    <form th:action="@{/register}"
+          id="register-form"
+          th:object="${user}"
+          method="POST"
+          class="form"
+          onsubmit="return validateForm(event)"
+          autocomplete="off"
+          data-csrf="${_csrf.token}">
         <div th:if="${errorMessage}" class="error">
             <span th:text="${errorMessage}"></span>
         </div>
@@ -50,6 +58,11 @@
         <div class="input-group">
             <label for="confirm-password">Confirm Password:</label>
             <input type="password" id="confirm-password" maxlength="30" name="confirm-password" required>
+        </div>
+
+        <div class="input-group">
+            <div class="g-recaptcha" th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"></div>
+            <span id="captcha-error" class="error"></span>
         </div>
 
         <div id="error-message"></div>

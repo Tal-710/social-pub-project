@@ -6,7 +6,17 @@ document.getElementById("register-form").addEventListener("submit", function(eve
     const confirmPassword = document.getElementById("confirm-password").value;
 
     const errorContainer = document.getElementById("error-message");
+    const captchaError = document.getElementById("captcha-error");
     errorContainer.textContent = "";
+    captchaError.textContent = "";
+
+    // Validate CAPTCHA
+    const captchaResponse = grecaptcha.getResponse();
+    if (!captchaResponse) {
+           captchaError.textContent = "Please complete the CAPTCHA";
+           event.preventDefault();
+           return;
+    }
 
     const nameRegex = /^[A-Za-zא-ת]+$/;
     if (!nameRegex.test(firstName)) {
