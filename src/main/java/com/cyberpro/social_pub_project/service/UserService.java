@@ -15,7 +15,7 @@ public interface UserService {
 
     void deleteById(int id);
 
-    void registerUser(String username, String password, String first_name, String last_name, int age,int Id_number);
+    void registerUser(String username, String password, String first_name, String last_name, int age,int Id_number, String profile_pic);
 
     Optional<User> findByUsername(String username);
 

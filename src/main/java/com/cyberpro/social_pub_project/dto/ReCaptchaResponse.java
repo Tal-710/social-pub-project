@@ -19,6 +19,7 @@ public class ReCaptchaResponse {
     }
 
     public void setSuccess(boolean success) {
+
         this.success = success;
     }
 }

@@ -40,7 +40,6 @@ div {
 
 #welcome-container {
     text-align: center;
-
 }
 
 #button-container {
@@ -53,13 +52,13 @@ div {
     margin-top: 20px;
 }
 
-#showImageButton{
+#showImageButton {
     grid-row: 1/2;
-    grid-column:1/3 ;
-    width:50%;
+    grid-column: 1/3;
+    width: 50%;
 }
 
-#logoutButton{
+#logoutButton {
     grid-row: 3/4;
     grid-column: 1/2;
     width: 100%;
@@ -91,11 +90,6 @@ button {
     width: 85%;
     height: auto;
 }
-
-.user-info {
-    margin-top: 20px;
-    text-align: center;
-    padding: 10px;
 
 #purchase-history-container {
     width: 85%;
@@ -147,14 +141,214 @@ h2 {
     padding: 20px;
 }
 
-.purchase-item {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+.profile-section {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.profile-pic-container {
+    position: relative;
+    width: 62vw;
+    height: 24vh;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #5D403A;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(93, 64, 58, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.profile-pic-container:hover .edit-overlay {
+    opacity: 1;
+}
+
+.edit-overlay span {
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #5D403A;
+}
+
+.profile-pic-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.action-btn {
+    background-color: #5D403A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #4a332f;
+}
+
+.camera-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#cameraFeed {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    background-color: #000;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.preview-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#previewImage {
+    max-width: 50%;
+    max-height: 300px;
+    border-radius: 5px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.close-camera-btn {
+    margin-top: 10px;
+    width: 100%;
+    background-color: #dc3545;
+}
+
+.close-camera-btn:hover {
+    background-color: #c82333;
+}
+
+.floating-editor {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.floating-editor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 15px;
+    background: #5D403A;
+    color: white;
+    border-radius: 10px 10px 0 0;
 }
 
-.purchase-item:last-child {
-    border-bottom: none;
+.close-floating {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.floating-editor-content {
+    padding: 15px;
+}
+
+.floating-editor .action-btn {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.floating-editor .camera-container {
+    margin: 10px 0;
+}
+
+.floating-editor #cameraFeed {
+    width: 100%;
+    height: 200px;
+    border-radius: 5px;
+    background: #000;
+}
+
+.floating-editor .preview-container {
+    margin: 10px 0;
+}
+
+.floating-editor #previewImage {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }

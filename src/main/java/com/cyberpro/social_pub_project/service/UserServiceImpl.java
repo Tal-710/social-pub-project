@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void registerUser(String username, String password, String firstName, String lastName, int age, int idNumber) {
-        // First encrypt the password
+    public void registerUser(String username, String password, String firstName,
+                             String lastName, int age, int idNumber, String profilePictureUrl) {  // Add profilePictureUrl parameter
         String hashedPassword = passwordEncoder.encode(password);
 
         User user = new User();
@@ -55,13 +55,13 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setAge(age);
         user.setIdNumber(idNumber);
-        user.setEnabled(0);  // Set enabled by default
+        user.setEnabled(0);
+        user.setProfilePicture(profilePictureUrl);  // Set the profile picture URL
 
         Role userRole = roleRepository.findByRoleName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
         user.getRoles().add(userRole);
 
-        // Save user
         userRepository.save(user);
     }
 

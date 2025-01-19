@@ -1,6 +1,7 @@
 package com.cyberpro.social_pub_project.controller;
 
 import com.cyberpro.social_pub_project.entity.User;
+import com.cyberpro.social_pub_project.service.AzureBlobService;
 import com.cyberpro.social_pub_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,22 +9,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-
-import com.cyberpro.social_pub_project.service.UserServiceImpl;
+import java.util.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Base64;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final AzureBlobService azureBlobService;
 
     @Autowired
-    public UserController(UserService theUserService) {
+    public UserController(UserService theUserService, AzureBlobService azureBlobService) {
         this.userService = theUserService;
+        this.azureBlobService = azureBlobService;
     }
 
     @GetMapping
@@ -59,6 +61,39 @@ public class UserController {
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating user: " + e.getMessage());
+        }
+    }
+    @PostMapping("/update-profile-picture")
+    @ResponseBody
+    public ResponseEntity<?> updateProfilePicture(
+            @RequestBody Map<String, String> request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String profilePicData = request.get("profilePicture");
+            if (profilePicData == null || profilePicData.isEmpty()) {
+                return ResponseEntity.badRequest().body("No profile picture data provided");
+            }
+
+            // Remove the "data:image/jpeg;base64," prefix
+            String base64Image = profilePicData.substring(profilePicData.indexOf(",") + 1);
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+
+            // Generate unique filename
+            String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
+
+            // Upload to Azure
+            String imageUrl = azureBlobService.uploadProfilePicture(imageBytes, fileName);
+
+            // Update user profile picture URL in database
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            user.setProfilePicture(imageUrl);
+            userService.save(user);
+
+            return ResponseEntity.ok().body(Map.of("url", imageUrl));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update profile picture: " + e.getMessage());
         }
     }
 
