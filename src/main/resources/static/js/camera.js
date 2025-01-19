@@ -109,7 +109,17 @@ async function fetchUserDetails(userId) {
 function displayUserDetails(user) {
   qrResultDiv.innerHTML = `
     <h3>User Details</h3>
-    <p>ID: ${user.idNumber}</p>
-    <p>Name: ${user.firstName + ' ' + user.lastName} </p>
+    <div class="user-info-container">
+      <div class="profile-pic-container">
+        <img src="${user.profilePicture || '/images/default-profile.png'}"
+             alt="Profile Picture"
+             class="profile-pic"
+             onerror="this.src='/images/default-profile.png'">
+      </div>
+      <div class="user-details">
+        <p>ID: ${user.idNumber}</p>
+        <p>Name: ${user.firstName} ${user.lastName}</p>
+      </div>
+    </div>
   `;
 }

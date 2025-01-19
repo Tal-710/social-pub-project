@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation</title>
     <link rel="stylesheet" th:href="@{/css/confirmation.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <body>
@@ -14,6 +16,40 @@
 </div>
 <div id="wellcome-container"><h1>Welcome, <span sec:authentication="principal.username"></span>!</h1></div>
 
+<!-- Replace your existing profile picture section with this simpler version -->
+<div class="profile-section">
+    <div class="profile-pic-container">
+        <img id="profileImage" src="/images/default-profile.png" alt="Profile Picture" class="profile-pic">
+    </div>
+</div>
+
+<!-- Add this floating window HTML -->
+<div id="floatingEditor" class="floating-editor">
+    <div class="floating-editor-header">
+        <span>Edit Profile Picture</span>
+        <span class="close-floating">&times;</span>
+    </div>
+    <div class="floating-editor-content">
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <button id="uploadBtn" class="action-btn">📁 Upload</button>
+        <button id="cameraBtn" class="action-btn">📸 Camera</button>
+
+        <div class="camera-container" style="display: none;">
+            <video id="cameraFeed" playsinline autoplay></video>
+            <button id="captureBtn" class="action-btn">Capture</button>
+        </div>
+
+        <div class="preview-container" style="display: none;">
+            <img id="previewImage" alt="Preview">
+            <div class="button-group">
+                <button id="saveBtn" class="action-btn">Save</button>
+                <button id="cancelBtn" class="action-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="qrImageContainer">
     <img id="image" src="https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png" alt="Placeholder Image">
 </div>
@@ -21,7 +57,6 @@
 <div id="purchase-history-container" style="display: none;">
     <h2>Recent Orders</h2>
     <div class="purchase-list">
-        <!-- Products will be populated here -->
     </div>
 </div>
 

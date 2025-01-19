@@ -15,39 +15,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class AzureBlobServiceImpl {
+public class AzureBlobServiceImpl implements AzureBlobService{
     private static final Logger logger = LoggerFactory.getLogger(AzureBlobServiceImpl.class);
     private final BlobServiceClient blobServiceClient;
-    private final String containerName = "qrcodes";
 
     @Autowired
     public AzureBlobServiceImpl(BlobServiceClient blobServiceClient) {
         this.blobServiceClient = blobServiceClient;
     }
 
+    private final String qrCodesContainer = "qrcodes";  // Change containerName to qrCodesContainer
+    private final String profilePicsContainer = "profile-pictures";  // Add this new container name
+
+
     @PostConstruct
     public void initialize() {
         try {
-            BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
-            if (!containerClient.exists()) {
-                logger.info("Creating new blob container: {}", containerName);
-                containerClient.create();
-                // Make container public
-                containerClient.setAccessPolicy(PublicAccessType.BLOB, null);
+            // Initialize QR codes container
+            BlobContainerClient qrContainerClient = blobServiceClient.getBlobContainerClient(qrCodesContainer);
+            if (!qrContainerClient.exists()) {
+                logger.info("Creating new blob container: {}", qrCodesContainer);
+                qrContainerClient.create();
             }
-            logger.info("Successfully initialized blob container");
+            // Always set public access policy
+            qrContainerClient.setAccessPolicy(PublicAccessType.BLOB, null);
+            logger.info("Set public access for QR codes container");
+
+            // Initialize profile pictures container
+            BlobContainerClient profileContainerClient = blobServiceClient.getBlobContainerClient(profilePicsContainer);
+            if (!profileContainerClient.exists()) {
+                logger.info("Creating new blob container: {}", profilePicsContainer);
+                profileContainerClient.create();
+            }
+            // Always set public access policy
+            profileContainerClient.setAccessPolicy(PublicAccessType.BLOB, null);
+            logger.info("Set public access for profile pictures container");
+
+            logger.info("Successfully initialized blob containers");
         } catch (Exception e) {
-            logger.error("Failed to initialize blob container: {}", e.getMessage(), e);
+            logger.error("Failed to initialize blob containers: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to initialize blob storage", e);
         }
     }
+
 
     public String uploadQRCode(byte[] qrCodeBytes, String fileName) {
         if (qrCodeBytes == null || qrCodeBytes.length == 0) {
             throw new IllegalArgumentException("QR code bytes cannot be null or empty");
         }
 
-        BlobClient blobClient = blobServiceClient.getBlobContainerClient(containerName)
+        BlobClient blobClient = blobServiceClient.getBlobContainerClient(qrCodesContainer)  // Use qrCodesContainer here
                 .getBlobClient(fileName);
 
         try (InputStream inputStream = new ByteArrayInputStream(qrCodeBytes)) {
@@ -65,6 +82,32 @@ public class AzureBlobServiceImpl {
         } catch (IOException e) {
             logger.error("Failed to upload QR code {}: {}", fileName, e.getMessage(), e);
             throw new RuntimeException("Failed to upload QR code: " + e.getMessage(), e);
+        }
+    }
+
+    public String uploadProfilePicture(byte[] imageBytes, String fileName) {
+        if (imageBytes == null || imageBytes.length == 0) {
+            throw new IllegalArgumentException("Image bytes cannot be null or empty");
+        }
+
+        BlobClient blobClient = blobServiceClient.getBlobContainerClient("profile-pictures")
+                .getBlobClient(fileName);
+
+        try (InputStream inputStream = new ByteArrayInputStream(imageBytes)) {
+            logger.info("Starting upload for profile picture: {}", fileName);
+
+            blobClient.upload(inputStream, imageBytes.length, true);
+
+            BlobHttpHeaders headers = new BlobHttpHeaders()
+                    .setContentType("image/jpeg");
+            blobClient.setHttpHeaders(headers);
+
+            String url = blobClient.getBlobUrl();
+            logger.info("Successfully uploaded profile picture: {} to URL: {}", fileName, url);
+            return url;
+        } catch (IOException e) {
+            logger.error("Failed to upload profile picture {}: {}", fileName, e.getMessage(), e);
+            throw new RuntimeException("Failed to upload profile picture: " + e.getMessage(), e);
         }
     }
 }

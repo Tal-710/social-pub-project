@@ -59,6 +59,18 @@
             <label for="confirm-password">Confirm Password:</label>
             <input type="password" id="confirm-password" maxlength="30" name="confirm-password" required>
         </div>
+        <div class="input-group">
+            <label>Profile Picture:</label>
+            <div class="profile-pic-options">
+                <input type="file" id="profile-pic-file" name="profilePicture" accept="image/*" class="file-input">
+                <button type="button" id="camera-button" class="btn-secondary">Take Photo</button>
+            </div>
+            <video id="camera-feed" style="display: none;" width="320" height="240"></video>
+            <canvas id="photo-canvas" style="display: none;" width="320" height="240"></canvas>
+            <img id="profile-preview" style="display: none; max-width: 200px; margin-top: 10px;">
+            <input type="hidden" id="profile-pic-data" name="profilePicData">
+            <div id="profile-pic-error" class="error"></div>
+        </div>
 
         <div class="input-group">
             <div class="g-recaptcha" th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"></div>
