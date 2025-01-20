@@ -19,6 +19,11 @@ public class User {
     @Column(name = "id")
     private Integer id;
 
+    @Transient
+    @Min(value = 1, message = "ID Number must be a 9-digit number")
+    @Max(value = 999999999, message = "ID Number must be a 9-digit number")
+    private Integer idNumber;
+
 
     @Column(name = "username", unique = true, nullable = false)
     @NotNull(message = "Username is required")
@@ -37,9 +42,8 @@ public class User {
     @Min(value = 18, message = "Must be at least 18 years old")
     private Integer age;
 
-    @Column(name = "id_number", unique = true, nullable = false, length = 9)
-    @NotNull(message = "ID Number is required")
-    private Integer idNumber;
+    @Column(name = "id_number", unique = true, nullable = false, length = 255)
+    private String encryptedIdNumber;  // Change type to String to store encrypted value
 
     @Column(name = "profile_picture")
     private String profilePicture;
@@ -75,7 +79,6 @@ public class User {
     private List<Order> orders;
 
     public List<Order> getOrders() {
-
         return orders;
     }
 
@@ -170,6 +173,14 @@ public class User {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEncryptedIdNumber() {
+        return encryptedIdNumber;
+    }
+
+    public void setEncryptedIdNumber(String encryptedIdNumber) {
+        this.encryptedIdNumber = encryptedIdNumber;
     }
 
 }

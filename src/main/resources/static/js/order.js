@@ -63,10 +63,10 @@ window.handleUserScan = (user) => {
     <h3>User Details</h3>
     <div class="user-info-container">
       <div class="profile-pic-container">
-        <img src="${user.profilePicture || '/images/default-profile.png'}"
+        <img src="${user.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}"
              alt="Profile Picture"
              class="profile-pic"
-             onerror="this.src='/images/default-profile.png'">
+             onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'">
       </div>
       <div class="user-details">
         <p>ID: ${user.idNumber}</p>

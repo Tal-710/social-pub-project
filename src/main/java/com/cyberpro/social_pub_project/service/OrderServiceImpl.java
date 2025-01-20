@@ -27,12 +27,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final  UserRepository userRepository;
     private final  ProductRepository productRepository;
+    private final IdEncryptionService idEncryptionService;
     @Autowired
-    public OrderServiceImpl (OrderRepository orderRepository , UserRepository userRepository ,ProductRepository productRepository){
+    public OrderServiceImpl (OrderRepository orderRepository , UserRepository userRepository , ProductRepository productRepository, IdEncryptionService idEncryptionService){
         this.orderRepository = orderRepository;
         this.productRepository =productRepository;
         this.userRepository = userRepository;
-
+        this.idEncryptionService = idEncryptionService;
     }
     @Override
     public List<Order> findAll() {
@@ -64,7 +65,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order createOrder(OrderRequest orderRequest) {
-        User user = userRepository.findByIdNumber(orderRequest.getUserId())
+        // Encrypt the ID before searching
+        String encryptedId = idEncryptionService.encryptId(orderRequest.getUserId());
+        User user = userRepository.findByEncryptedIdNumber(encryptedId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID Number: " + orderRequest.getUserId()));
 
         Order order = new Order();
@@ -72,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(orderRequest.getTotalPrice());
         order.setOrderDate(new Timestamp(System.currentTimeMillis()));
 
-        // Save the order first to get its ID
+        // Rest of your code remains the same
         order = orderRepository.save(order);
 
         List<OrderDetail> orderDetails = new ArrayList<>();

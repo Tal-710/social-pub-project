@@ -60,13 +60,20 @@ public class RegistrationController {
                                @RequestParam(value = "profilePicData", required = false) String profilePicData,
                                Model model) {
         try {
-            // Validate CAPTCHA
+
+            System.out.println("Received user: " + user);
+            System.out.println("ID Number: " + user.getIdNumber());
+
+            if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(error ->
+                        System.err.println("Validation Error: " + error.getDefaultMessage())
+                );
+            }
             if (!reCaptchaService.validateCaptcha(captchaResponse)) {
                 model.addAttribute("errorMessage", "Please verify that you are not a robot");
                 return "register";
             }
 
-            // Existing validation...
             if (userService.findByUsername(user.getUsername()).isPresent()) {
                 bindingResult.rejectValue("username", "error.user", "Username already exists");
             }
@@ -78,7 +85,6 @@ public class RegistrationController {
             }
 
             String profilePictureUrl = null;
-            // Handle profile picture if provided
             if (profilePicData != null && !profilePicData.isEmpty()) {
                 try {
                     // Remove the "data:image/jpeg;base64," prefix
@@ -103,7 +109,6 @@ public class RegistrationController {
                 }
             }
 
-            // Register user with profile picture URL
             userService.registerUser(
                     user.getUsername(),
                     user.getPassword(),
@@ -111,12 +116,14 @@ public class RegistrationController {
                     user.getLastName(),
                     user.getAge(),
                     user.getIdNumber(),
-                    profilePictureUrl  // Pass the profile picture URL
+                    profilePictureUrl
             );
 
             return "redirect:/login";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Registration failed: " + e.getMessage());
+            System.err.println("Registration failed: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Registration failed. Please try again later.");
             return "register";
         }
     }
