@@ -47,7 +47,7 @@ public class AdminController {
                     user.getQrCode() != null ? "exists" : "null",
                     user.getEnabled());
 
-            // Only generate QR code if it doesn't already have a QR code
+
             if (enabled == 1 && user.getQrCode() == null) {
                 logger.info("Generating new QR code for user ID: {}", id);
                 try {
@@ -64,7 +64,7 @@ public class AdminController {
             }
 
             user.setEnabled(enabled);
-            User savedUser = userService.save(user);  // Use simple save here
+            User savedUser = userService.save(user);
             logger.info("Successfully updated user status. ID: {}, Enabled: {}, QR Code: {}",
                     savedUser.getId(),
                     savedUser.getEnabled(),

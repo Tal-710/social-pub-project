@@ -74,17 +74,13 @@ public class UserController {
                 return ResponseEntity.badRequest().body("No profile picture data provided");
             }
 
-            // Remove the "data:image/jpeg;base64," prefix
             String base64Image = profilePicData.substring(profilePicData.indexOf(",") + 1);
             byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
-            // Generate unique filename
             String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
 
-            // Upload to Azure
             String imageUrl = azureBlobService.uploadProfilePicture(imageBytes, fileName);
 
-            // Update user profile picture URL in database
             User user = userService.findByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             user.setProfilePicture(imageUrl);

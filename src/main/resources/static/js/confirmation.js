@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Constants for image processing
+
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 800;
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-    // Existing elements
     const button = document.getElementById('showImageButton');
     const image = document.getElementById('image');
     let qrCodeFetched = false;
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let historyFetched = false;
     let cachedProducts = null;
 
-    // Profile picture elements
     const profileImage = document.getElementById('profileImage');
     const profilePicContainer = document.querySelector('.profile-pic-container');
     const floatingEditor = document.getElementById('floatingEditor');
@@ -33,20 +31,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let stream = null;
 
-    // Profile Picture Functions
     function loadProfilePicture() {
+        const cachedUser = sessionStorage.getItem('userData');
+        if (cachedUser) {
+            const user = JSON.parse(cachedUser);
+            if (user.profilePicture) {
+                profileImage.src = user.profilePicture;
+            }
+            return;
+        }
+
         fetch('/users/current')
             .then(response => response.json())
             .then(user => {
-                console.log('User data:', user); // Debug log
+                sessionStorage.setItem('userData', JSON.stringify(user));
                 if (user.profilePicture) {
-                    console.log('Profile picture URL:', user.profilePicture); // Debug log
                     profileImage.src = user.profilePicture;
-                } else {
-                    console.log('No profile picture found for user'); // Debug log
                 }
             })
-            .catch(error => console.error('Error loading profile picture:', error));
+            .catch();
     }
 
     function resizeImage(file) {
@@ -117,18 +120,17 @@ document.addEventListener('DOMContentLoaded', function() {
         cameraContainer.style.display = 'none';
     }
 
-    // Event Listeners for Profile Picture
-    profilePicContainer?.addEventListener('click', () => {
+    profilePicContainer.addEventListener('click', () => {
         floatingEditor.style.display = 'block';
     });
 
-    closeBtn?.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
 
-    uploadBtn?.addEventListener('click', () => {
+    uploadBtn.addEventListener('click', () => {
         fileInput.click();
     });
 
-    fileInput?.addEventListener('change', async (e) => {
+    fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (file) {
             try {
@@ -140,45 +142,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-cameraBtn?.addEventListener('click', async () => {
-    try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: 'user',
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
+    cameraBtn.addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'user',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            cameraFeed.srcObject = stream;
+            cameraContainer.style.display = 'block';
+            previewContainer.style.display = 'none';
+
+            const closeCameraBtn = document.createElement('button');
+            closeCameraBtn.textContent = 'Close Camera';
+            closeCameraBtn.classList.add('action-btn', 'close-camera-btn');
+            closeCameraBtn.addEventListener('click', () => {
+                stopCamera();
+                cameraContainer.style.display = 'none';
+            });
+
+            const existingCloseBtn = cameraContainer.querySelector('.close-camera-btn');
+            if (existingCloseBtn) {
+                existingCloseBtn.remove();
             }
-        });
-        cameraFeed.srcObject = stream;
-        cameraContainer.style.display = 'block';
-        previewContainer.style.display = 'none';
 
-        // Create and add close button to camera container
-        const closeCameraBtn = document.createElement('button');
-        closeCameraBtn.textContent = 'Close Camera';
-        closeCameraBtn.classList.add('action-btn', 'close-camera-btn');
-        closeCameraBtn.addEventListener('click', () => {
-            stopCamera();
-            cameraContainer.style.display = 'none';
-        });
+            cameraContainer.appendChild(closeCameraBtn);
 
-        // Remove any existing close buttons first
-        const existingCloseBtn = cameraContainer.querySelector('.close-camera-btn');
-        if (existingCloseBtn) {
-            existingCloseBtn.remove();
+            await cameraFeed.play();
+        } catch (error) {
+            alert('Could not access camera. Please ensure camera permissions are granted.');
         }
+    });
 
-        // Add close button after the video and capture button
-        cameraContainer.appendChild(closeCameraBtn);
-
-        await cameraFeed.play();
-    } catch (error) {
-        console.error('Camera error:', error);
-        alert('Could not access camera. Please ensure camera permissions are granted.');
-    }
-});
-
-    captureBtn?.addEventListener('click', () => {
+    captureBtn.addEventListener('click', () => {
         try {
             const canvas = document.createElement('canvas');
             canvas.width = cameraFeed.videoWidth;
@@ -189,12 +187,11 @@ cameraBtn?.addEventListener('click', async () => {
             showPreview(imageData);
             stopCamera();
         } catch (error) {
-            console.error('Capture error:', error);
             alert('Failed to capture photo. Please try again.');
         }
     });
 
-    saveBtn?.addEventListener('click', async () => {
+    saveBtn.addEventListener('click', async () => {
         if (!previewImage.src || previewContainer.style.display === 'none') {
             alert('Please select or capture an image first');
             return;
@@ -223,16 +220,22 @@ cameraBtn?.addEventListener('click', async () => {
             }
 
             profileImage.src = previewImage.src;
+
+            const cachedUser = sessionStorage.getItem('userData');
+            if (cachedUser) {
+                const user = JSON.parse(cachedUser);
+                user.profilePicture = previewImage.src;
+                sessionStorage.setItem('userData', JSON.stringify(user));
+            }
+
             closeModal();
         } catch (error) {
-            console.error('Save error:', error);
             alert('Error updating profile picture: ' + error.message);
         }
     });
 
-    cancelBtn?.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
 
-    // Existing QR Code Functions
     function restoreQRCode() {
         const savedQRCode = sessionStorage.getItem('userQRCode');
         if (savedQRCode) {
@@ -241,9 +244,22 @@ cameraBtn?.addEventListener('click', async () => {
         }
     }
 
-    // Existing Event Listeners
     button.addEventListener('click', function() {
         if (!qrCodeFetched) {
+            const cachedUser = sessionStorage.getItem('userData');
+            if (cachedUser) {
+                const user = JSON.parse(cachedUser);
+                if (user.qrCode) {
+                    image.src = user.qrCode;
+                    sessionStorage.setItem('userQRCode', user.qrCode);
+                    qrCodeFetched = true;
+                    image.style.display = 'block';
+                } else {
+                    image.style.display = 'none';
+                }
+                return;
+            }
+
             fetch('/users/current')
                 .then(response => {
                     if (response.ok) {
@@ -253,18 +269,17 @@ cameraBtn?.addEventListener('click', async () => {
                     }
                 })
                 .then(user => {
+                    sessionStorage.setItem('userData', JSON.stringify(user));
                     if (user.qrCode) {
                         image.src = user.qrCode;
                         sessionStorage.setItem('userQRCode', user.qrCode);
                         qrCodeFetched = true;
                         image.style.display = 'block';
                     } else {
-                        console.error('No QR code found for the user');
                         image.style.display = 'none';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     image.style.display = 'none';
                 });
         } else {
@@ -295,11 +310,34 @@ cameraBtn?.addEventListener('click', async () => {
             return;
         }
 
+        const storedProducts = sessionStorage.getItem('userProducts');
+        if (storedProducts) {
+            const products = JSON.parse(storedProducts);
+            cachedProducts = products;
+            displayProducts(products);
+            return;
+        }
+
+        const cachedUser = sessionStorage.getItem('userData');
+        if (cachedUser) {
+            const user = JSON.parse(cachedUser);
+            fetchProducts(user);
+            return;
+        }
+
         fetch('/users/current')
             .then(response => response.json())
             .then(user => {
-                return fetch(`/orders/user/${user.id}/recent-products`);
+                sessionStorage.setItem('userData', JSON.stringify(user));
+                fetchProducts(user);
             })
+            .catch(error => {
+                displayError(error.message);
+            });
+    }
+
+    function fetchProducts(user) {
+        fetch(`/orders/user/${user.id}/recent-products`)
             .then(response => {
                 if (response.status === 204) {
                     displayNoOrders();
@@ -313,6 +351,7 @@ cameraBtn?.addEventListener('click', async () => {
             .then(products => {
                 if (products) {
                     cachedProducts = products;
+                    sessionStorage.setItem('userProducts', JSON.stringify(products));
                     displayProducts(products);
                 }
                 historyFetched = true;
@@ -352,9 +391,11 @@ cameraBtn?.addEventListener('click', async () => {
                 ${message}
             </div>`;
     }
-
-    // Initial setup
     image.style.display = 'none';
     restoreQRCode();
     loadProfilePicture();
+
+    document.querySelector('#logoutButton form')?.addEventListener('submit', () => {
+        sessionStorage.clear();
+    });
 });

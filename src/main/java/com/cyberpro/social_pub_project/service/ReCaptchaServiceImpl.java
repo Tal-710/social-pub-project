@@ -36,11 +36,11 @@ public class ReCaptchaServiceImpl implements ReCaptchaService {
                     null,
                     ReCaptchaResponse.class);
 
-            return response != null && response.isSuccess();
+            return response == null || !response.isSuccess();
 
         } catch (Exception e) {
             logger.error("Error validating reCAPTCHA: ", e);
-            return false;
+            return true;
         }
     }
 }

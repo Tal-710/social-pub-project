@@ -29,17 +29,16 @@ public class QRCodeServiceImpl implements QRCodeService {
             String qrContent = String.format("http://localhost:8080/users/%d", user.getId());
             logger.info("Generating QR code for user: {}", user.getId());
 
-            // Create QR code
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 350, 350);
 
-            // Convert to image
+
             BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(qrImage, "PNG", baos);
             byte[] imageBytes = baos.toByteArray();
 
-            // Upload to Azure Blob Storage
+
             String fileName = String.format("qr_code_%d.png", user.getId());
             logger.info("Uploading QR code to Azure Blob Storage: {}", fileName);
 

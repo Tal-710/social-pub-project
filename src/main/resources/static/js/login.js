@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(form) {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Stop form from submitting immediately
+            event.preventDefault();
 
             const errorContainer = document.getElementById('error-message');
             const captchaError = document.getElementById('captcha-error');
@@ -12,16 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 captchaError.textContent = '';
             }
 
-            // Validate CAPTCHA
             const captchaResponse = grecaptcha.getResponse();
             if (!captchaResponse) {
                 if(captchaError) {
                     captchaError.textContent = 'Please complete the CAPTCHA';
                 }
-                return false; // Stop form submission
+                return false;
             }
 
-            // If CAPTCHA is completed, submit the form
+
             form.submit();
         });
     }

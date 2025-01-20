@@ -4,19 +4,11 @@ import com.cyberpro.social_pub_project.entity.Role;
 import com.cyberpro.social_pub_project.entity.User;
 import com.cyberpro.social_pub_project.repository.RoleRepository;
 import com.cyberpro.social_pub_project.repository.UserRepository;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +19,6 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final QRCodeServiceImpl qrCodeService;
-    private final AzureBlobServiceImpl azureBlobService;
     private final IdEncryptionService idEncryptionService;
 
     @Autowired
@@ -40,7 +31,6 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.qrCodeService = qrCodeService;
-        this.azureBlobService = azureBlobService;
         this.idEncryptionService = idEncryptionService;
     }
 
@@ -49,15 +39,12 @@ public class UserServiceImpl implements UserService {
     public void registerUser(String username, String password, String firstName,
                              String lastName, int age, int idNumber, String profilePictureUrl) {
         try {
-            // Validate ID number
-            String idNumberStr = String.format("%09d", idNumber);  // Ensure 9 digits with leading zeros
+            String idNumberStr = String.format("%09d", idNumber);
 
-            // Check if ID number is exactly 9 digits
             if (idNumberStr.length() != 9 || !idNumberStr.matches("\\d{9}")) {
                 throw new IllegalArgumentException("ID Number must be a 9-digit number (000000001 to 999999999)");
             }
 
-            // First check if ID exists
             String encryptedId = idEncryptionService.encryptId(idNumber);
 
             if (userRepository.findByEncryptedIdNumber(encryptedId).isPresent()) {
@@ -74,7 +61,7 @@ public class UserServiceImpl implements UserService {
             user.setAge(age);
             user.setIdNumber(idNumber);
             user.setEncryptedIdNumber(encryptedId);
-            user.setEnabled(0);  // Enabled by default
+            user.setEnabled(0);
             user.setProfilePicture(profilePictureUrl);
 
             Role userRole = roleRepository.findByRoleName("ROLE_USER")
@@ -152,12 +139,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        // If the user already exists, preserve the existing encrypted ID
         if (user.getId() != null) {
             Optional<User> existingUser = userRepository.findById(user.getId());
-            if (existingUser.isPresent()) {
-                user.setEncryptedIdNumber(existingUser.get().getEncryptedIdNumber());
-            }
+            existingUser.ifPresent(value -> user.setEncryptedIdNumber(value.getEncryptedIdNumber()));
         }
 
         return userRepository.save(user);

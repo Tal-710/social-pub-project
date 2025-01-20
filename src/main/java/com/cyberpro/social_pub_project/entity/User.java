@@ -43,7 +43,7 @@ public class User {
     private Integer age;
 
     @Column(name = "id_number", unique = true, nullable = false, length = 255)
-    private String encryptedIdNumber;  // Change type to String to store encrypted value
+    private String encryptedIdNumber;
 
     @Column(name = "profile_picture")
     private String profilePicture;

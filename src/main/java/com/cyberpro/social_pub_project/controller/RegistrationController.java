@@ -69,7 +69,7 @@ public class RegistrationController {
                         System.err.println("Validation Error: " + error.getDefaultMessage())
                 );
             }
-            if (!reCaptchaService.validateCaptcha(captchaResponse)) {
+            if (reCaptchaService.validateCaptcha(captchaResponse)) {
                 model.addAttribute("errorMessage", "Please verify that you are not a robot");
                 return "register";
             }
@@ -97,10 +97,8 @@ public class RegistrationController {
                         return "register";
                     }
 
-                    // Generate unique filename
                     String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
 
-                    // Upload to Azure and get the URL
                     profilePictureUrl = azureBlobService.uploadProfilePicture(imageBytes, fileName);
 
                 } catch (Exception e) {

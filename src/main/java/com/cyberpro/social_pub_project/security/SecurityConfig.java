@@ -39,7 +39,6 @@ public class SecurityConfig {
 
     @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            // Create and configure CAPTCHA filter
             CaptchaAuthenticationFilter captchaFilter = new CaptchaAuthenticationFilter(reCaptchaService);
             captchaFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
             captchaFilter.setAuthenticationFailureHandler((request, response, exception) -> {
@@ -54,6 +53,9 @@ public class SecurityConfig {
                             .requestMatchers("/register/**").permitAll()
                             .requestMatchers("/home").permitAll()
                             .requestMatchers("/bartender").hasAnyRole("BARTENDER","ADMIN")
+                            .requestMatchers("/users/update-profile-picture").permitAll()
+                            .requestMatchers("/users/current").permitAll()
+                            .requestMatchers("/users/*").hasAnyRole("BARTENDER","ADMIN")
                             .requestMatchers("/error/**").permitAll()
                             .requestMatchers("/admin/****").hasRole("ADMIN")
                             .requestMatchers("/orders").permitAll()

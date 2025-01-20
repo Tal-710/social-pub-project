@@ -53,8 +53,8 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
 
-        if (!user.getRoles().stream()
-                .anyMatch(r -> r.getRoleName().equals(roleName))) {
+        if (user.getRoles().stream()
+                .noneMatch(r -> r.getRoleName().equals(roleName))) {
             user.getRoles().add(role);
             userRepository.save(user);
         }

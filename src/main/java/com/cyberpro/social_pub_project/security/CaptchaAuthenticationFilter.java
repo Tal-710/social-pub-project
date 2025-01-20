@@ -22,7 +22,7 @@ public class CaptchaAuthenticationFilter extends UsernamePasswordAuthenticationF
             throws AuthenticationException {
 
         String captchaResponse = request.getParameter("g-recaptcha-response");
-        if (!reCaptchaService.validateCaptcha(captchaResponse)) {
+        if (reCaptchaService.validateCaptcha(captchaResponse)) {
             throw new AuthenticationServiceException("Invalid Captcha");
         }
 

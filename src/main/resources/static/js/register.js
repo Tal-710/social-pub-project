@@ -1,9 +1,9 @@
-// Constants for image processing
-const MAX_WIDTH = 800;  // Maximum width in pixels
-const MAX_HEIGHT = 800; // Maximum height in pixels
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
-// Profile picture variables
+const MAX_WIDTH = 800;
+const MAX_HEIGHT = 800;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+
 let stream = null;
 const profilePicFile = document.getElementById('profile-pic-file');
 const cameraButton = document.getElementById('camera-button');
@@ -12,10 +12,9 @@ const photoCanvas = document.getElementById('photo-canvas');
 const profilePreview = document.getElementById('profile-preview');
 const profilePicData = document.getElementById('profile-pic-data');
 
-// Image resizing function
+
 function resizeImage(file) {
     return new Promise((resolve, reject) => {
-        // First check file size
         if (file.size > MAX_FILE_SIZE) {
             reject(new Error("File size too large. Maximum size is 5MB."));
             return;
@@ -30,7 +29,7 @@ function resizeImage(file) {
             let width = img.width;
             let height = img.height;
 
-            // Calculate new dimensions while maintaining aspect ratio
+
             if (width > MAX_WIDTH) {
                 height = Math.round((height * MAX_WIDTH) / width);
                 width = MAX_WIDTH;
@@ -57,7 +56,6 @@ function resizeImage(file) {
     });
 }
 
-// Profile picture file input handler
 profilePicFile.addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -86,7 +84,7 @@ profilePicFile.addEventListener('change', async function(e) {
     }
 });
 
-// Camera button handler
+
 cameraButton.addEventListener('click', async function() {
     if (cameraFeed.style.display === 'none') {
         try {
@@ -142,7 +140,6 @@ function stopCamera() {
     cameraButton.textContent = 'Take Photo';
 }
 
-// Form submission handler
 document.getElementById("register-form").addEventListener("submit", function(event) {
     const firstName = document.getElementById("firstName").value;
     const lastName = document.getElementById("lastName").value;
@@ -155,7 +152,7 @@ document.getElementById("register-form").addEventListener("submit", function(eve
     errorContainer.textContent = "";
     captchaError.textContent = "";
 
-    // Validate CAPTCHA
+
     const captchaResponse = grecaptcha.getResponse();
     if (!captchaResponse) {
         captchaError.textContent = "Please complete the CAPTCHA";
@@ -190,7 +187,7 @@ document.getElementById("register-form").addEventListener("submit", function(eve
     }
 });
 
-// ID number input handler
+
 document.getElementById("idNumber").addEventListener("input", function(event) {
     const idRegex = /^\d*$/;
     if (!idRegex.test(event.target.value)) {

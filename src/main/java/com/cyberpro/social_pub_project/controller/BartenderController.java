@@ -25,9 +25,9 @@ public class BartenderController {
     @GetMapping("/bartender")
     public String showOrderPage(Model model) {
         try {
-            List<Product> products = productService.findAll(); // Fetch product list from database
-            model.addAttribute("products", products); // Add products to the model for Thymeleaf
-            return "bartender"; // Render the bartender Thymeleaf template
+            List<Product> products = productService.findAll();
+            model.addAttribute("products", products);
+            return "bartender";
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to load bartender page");
         }

@@ -24,30 +24,25 @@ public class AzureBlobServiceImpl implements AzureBlobService{
         this.blobServiceClient = blobServiceClient;
     }
 
-    private final String qrCodesContainer = "qrcodes";  // Change containerName to qrCodesContainer
-    private final String profilePicsContainer = "profile-pictures";  // Add this new container name
+    private final String qrCodesContainer = "qrcodes";
+    private final String profilePicsContainer = "profile-pictures";
 
 
     @PostConstruct
     public void initialize() {
         try {
-            // Initialize QR codes container
             BlobContainerClient qrContainerClient = blobServiceClient.getBlobContainerClient(qrCodesContainer);
             if (!qrContainerClient.exists()) {
                 logger.info("Creating new blob container: {}", qrCodesContainer);
                 qrContainerClient.create();
             }
-            // Always set public access policy
             qrContainerClient.setAccessPolicy(PublicAccessType.BLOB, null);
             logger.info("Set public access for QR codes container");
 
-            // Initialize profile pictures container
             BlobContainerClient profileContainerClient = blobServiceClient.getBlobContainerClient(profilePicsContainer);
             if (!profileContainerClient.exists()) {
                 logger.info("Creating new blob container: {}", profilePicsContainer);
-                profileContainerClient.create();
             }
-            // Always set public access policy
             profileContainerClient.setAccessPolicy(PublicAccessType.BLOB, null);
             logger.info("Set public access for profile pictures container");
 
