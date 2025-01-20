@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 800;
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -31,6 +30,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let stream = null;
 
+    function updateUserData(newData) {
+        const cachedUser = sessionStorage.getItem('userData');
+        let userData = cachedUser ? JSON.parse(cachedUser) : {};
+
+        // Update only the provided fields
+        userData = {
+            ...userData,
+            ...newData
+        };
+
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+        return userData;
+    }
+
+    function fetchAndStoreUserData() {
+        return fetch('/users/current')
+            .then(response => response.json())
+            .then(user => {
+                return updateUserData({
+                    id: user.id,
+                    username: user.username,
+                    profilePicture: user.profilePicture,
+                    qrCode: user.qrCode
+                });
+            });
+    }
+
     function loadProfilePicture() {
         const cachedUser = sessionStorage.getItem('userData');
         if (cachedUser) {
@@ -41,10 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/users/current')
-            .then(response => response.json())
+        fetchAndStoreUserData()
             .then(user => {
-                sessionStorage.setItem('userData', JSON.stringify(user));
                 if (user.profilePicture) {
                     profileImage.src = user.profilePicture;
                 }
@@ -220,14 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             profileImage.src = previewImage.src;
-
-            const cachedUser = sessionStorage.getItem('userData');
-            if (cachedUser) {
-                const user = JSON.parse(cachedUser);
-                user.profilePicture = previewImage.src;
-                sessionStorage.setItem('userData', JSON.stringify(user));
-            }
-
+            updateUserData({ profilePicture: previewImage.src });
             closeModal();
         } catch (error) {
             alert('Error updating profile picture: ' + error.message);
@@ -260,16 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            fetch('/users/current')
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Error fetching user details');
-                    }
-                })
+            fetchAndStoreUserData()
                 .then(user => {
-                    sessionStorage.setItem('userData', JSON.stringify(user));
                     if (user.qrCode) {
                         image.src = user.qrCode;
                         sessionStorage.setItem('userQRCode', user.qrCode);
@@ -279,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         image.style.display = 'none';
                     }
                 })
-                .catch(error => {
+                .catch(() => {
                     image.style.display = 'none';
                 });
         } else {
@@ -325,10 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/users/current')
-            .then(response => response.json())
+        fetchAndStoreUserData()
             .then(user => {
-                sessionStorage.setItem('userData', JSON.stringify(user));
                 fetchProducts(user);
             })
             .catch(error => {
@@ -391,6 +398,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${message}
             </div>`;
     }
+
+
     image.style.display = 'none';
     restoreQRCode();
     loadProfilePicture();
