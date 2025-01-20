@@ -28,75 +28,65 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final QRCodeServiceImpl qrCodeService;
     private final AzureBlobServiceImpl azureBlobService;
+    private final IdEncryptionService idEncryptionService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
                            BCryptPasswordEncoder passwordEncoder,
                            QRCodeServiceImpl qrCodeService,
-                           AzureBlobServiceImpl azureBlobService) {
+                           AzureBlobServiceImpl azureBlobService, IdEncryptionService idEncryptionService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.qrCodeService = qrCodeService;
         this.azureBlobService = azureBlobService;
+        this.idEncryptionService = idEncryptionService;
     }
 
     @Override
     @Transactional
     public void registerUser(String username, String password, String firstName,
-                             String lastName, int age, int idNumber, String profilePictureUrl) {  // Add profilePictureUrl parameter
-        String hashedPassword = passwordEncoder.encode(password);
+                             String lastName, int age, int idNumber, String profilePictureUrl) {
+        try {
+            // Validate ID number
+            String idNumberStr = String.format("%09d", idNumber);  // Ensure 9 digits with leading zeros
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(hashedPassword);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setAge(age);
-        user.setIdNumber(idNumber);
-        user.setEnabled(0);
-        user.setProfilePicture(profilePictureUrl);  // Set the profile picture URL
+            // Check if ID number is exactly 9 digits
+            if (idNumberStr.length() != 9 || !idNumberStr.matches("\\d{9}")) {
+                throw new IllegalArgumentException("ID Number must be a 9-digit number (000000001 to 999999999)");
+            }
 
-        Role userRole = roleRepository.findByRoleName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Default role not found"));
-        user.getRoles().add(userRole);
+            // First check if ID exists
+            String encryptedId = idEncryptionService.encryptId(idNumber);
 
-        userRepository.save(user);
+            if (userRepository.findByEncryptedIdNumber(encryptedId).isPresent()) {
+                throw new RuntimeException("ID Number already exists");
+            }
+
+            String hashedPassword = passwordEncoder.encode(password);
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(hashedPassword);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setAge(age);
+            user.setIdNumber(idNumber);
+            user.setEncryptedIdNumber(encryptedId);
+            user.setEnabled(0);  // Enabled by default
+            user.setProfilePicture(profilePictureUrl);
+
+            Role userRole = roleRepository.findByRoleName("ROLE_USER")
+                    .orElseThrow(() -> new RuntimeException("Default role not found"));
+            user.getRoles().add(userRole);
+
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Registration failed: " + e.getMessage(), e);
+        }
     }
 
-//    @Override
-//    @Transactional
-//    public void registerUser(String username, String password, String firstName, String lastName, int age, int idNumber) {
-//        // First encrypt the password
-//        String hashedPassword = passwordEncoder.encode(password);
-//
-//        User user = new User();
-//        user.setUsername(username);
-//        user.setPassword(hashedPassword);
-//        user.setFirstName(firstName);
-//        user.setLastName(lastName);
-//        user.setAge(age);
-//        user.setIdNumber(idNumber);
-//        user.setEnabled(0);  // Set enabled by default
-//
-//        Role userRole = roleRepository.findByRoleName("ROLE_USER")
-//                .orElseThrow(() -> new RuntimeException("Default role not found"));
-//        user.getRoles().add(userRole);
-//
-//        // Save user first to get ID
-//        User savedUser = userRepository.save(user);
-//
-//        // Generate and set QR code
-//        try {
-//            String localUrl = String.format("http://localhost:8080/users/%d", savedUser.getId());
-//            String qrCodeUrl = qrCodeService.generateAndUploadQRCode(savedUser);
-//            savedUser.setQrCode(qrCodeUrl);
-//            userRepository.save(savedUser);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to generate QR code", e);
-//        }
-//    }
 
     @Override
     public void addUserRole(User user, String roleName) {
@@ -119,7 +109,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(int id) {
-        return userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(u -> {
+            if (u.getEncryptedIdNumber() != null) {
+                Integer decryptedIdNumber = idEncryptionService.decryptId(u.getEncryptedIdNumber());
+                u.setIdNumber(decryptedIdNumber);
+            }
+        });
+        return user;
     }
 
     @Override
@@ -134,7 +131,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByIdNumber(Integer idNumber) {
-        return userRepository.findByIdNumber(idNumber);
+        String encryptedId = idEncryptionService.encryptId(idNumber);
+        Optional<User> user = userRepository.findByEncryptedIdNumber(encryptedId);
+        user.ifPresent(u -> u.setIdNumber(idNumber));
+        return user;
     }
 
     @Override
@@ -152,7 +152,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        return userRepository.save(user);  // Simple save without QR code generation
+        // If the user already exists, preserve the existing encrypted ID
+        if (user.getId() != null) {
+            Optional<User> existingUser = userRepository.findById(user.getId());
+            if (existingUser.isPresent()) {
+                user.setEncryptedIdNumber(existingUser.get().getEncryptedIdNumber());
+            }
+        }
+
+        return userRepository.save(user);
     }
 
     @Override
