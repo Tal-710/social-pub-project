@@ -9,14 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-//@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5500", "http://127.0.0.1:5500"},
-//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-//        allowedHeaders = "*",
-//        allowCredentials = "true")
 public class ProductController {
 
     private final ProductService productService;
@@ -49,6 +46,21 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         return ResponseEntity.ok(productService.save(product));
+    }
+
+    @PostMapping("/{id}/status")
+    public ResponseEntity<?> updateProductStatus(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Integer> status) {
+
+        Optional<Product> productOpt = productService.findById(id);
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            product.setIsValid(status.get("isValid"));
+            productService.save(product);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")

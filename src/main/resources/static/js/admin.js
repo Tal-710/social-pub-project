@@ -17,6 +17,10 @@ function reloadPage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+   document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
     const message = sessionStorage.getItem('toastMessage');
     const type = sessionStorage.getItem('toastType');
 
@@ -29,6 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const activeSection = sessionStorage.getItem('activeSection') || 'users';
+     const activeButton = document.querySelector(`[data-section="${activeSection}"]`);
+
 
     if (activeSection === 'products') {
         productSection.style.display = 'block';
@@ -39,12 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelectorAll('.nav-btn').forEach(button => {
-        if (button.dataset.section === activeSection) {
-            button.classList.add('active');
-        }
-
         button.addEventListener('click', () => {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to clicked button
             button.classList.add('active');
 
             if (button.dataset.section === 'products') {
@@ -69,42 +76,45 @@ document.addEventListener('DOMContentLoaded', function() {
         productModal.style.display = 'block';
     });
 
-    productForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const token = document.querySelector('meta[name="_csrf"]').content;
-        const header = document.querySelector('meta[name="_csrf_header"]').content;
+productForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = document.querySelector('meta[name="_csrf"]').content;
+    const header = document.querySelector('meta[name="_csrf_header"]').content;
 
-        const formData = {
-            name: document.getElementById('productName').value,
-            price: parseFloat(document.getElementById('productPrice').value),
-            image: document.getElementById('productImage').value || null
-        };
+    const formData = {
+        name: document.getElementById('productName').value,
+        price: parseFloat(document.getElementById('productPrice').value),
+        image: document.getElementById('productImage').value || null,
+        isValid: currentProductId ? document.querySelector(`[data-product-id="${currentProductId}"]`).dataset.status : 1
+    };
 
-        const url = currentProductId ? `/products/${currentProductId}` : '/products';
-        const method = currentProductId ? 'PUT' : 'POST';
+    const url = currentProductId ? `/products/${currentProductId}` : '/products';
+    const method = currentProductId ? 'PUT' : 'POST';
 
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: token
-                },
-                body: JSON.stringify(formData)
-            });
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(formData)
+        });
 
-            if (response.ok) {
-                showToast('Product saved successfully', 'success');
-                productModal.style.display = 'none';
-                reloadPage();
-            } else {
-                showToast('Error saving product', 'error');
-            }
-        } catch (error) {
+        if (response.ok) {
+            sessionStorage.setItem('toastMessage', 'Product saved successfully');
+            sessionStorage.setItem('toastType', 'success');
+            sessionStorage.setItem('activeSection', 'products'); // Force products section
+            productModal.style.display = 'none';
+            reloadPage();
+        } else {
             showToast('Error saving product', 'error');
-            console.error('Error:', error);
         }
-    });
+    } catch (error) {
+        showToast('Error saving product', 'error');
+        console.error('Error:', error);
+    }
+});
 });
 
 addRoleModal?.querySelector('.save-btn')?.addEventListener('click', function() {
@@ -186,6 +196,38 @@ document.addEventListener('click', async function(e) {
     if (e.target.classList.contains('close') || e.target.classList.contains('cancel-btn')) {
         closeAllModals();
     }
+if (e.target.classList.contains('toggle-status-btn')) {
+    const productId = e.target.dataset.productId;
+    const currentStatus = parseInt(e.target.dataset.status);
+    const newStatus = currentStatus === 1 ? 0 : 1;
+
+    const token = document.querySelector('meta[name="_csrf"]').content;
+    const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+    try {
+        const response = await fetch(`/products/${productId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify({ isValid: newStatus })
+        });
+
+        if (response.ok) {
+            // Store the message in sessionStorage before reloading
+            sessionStorage.setItem('toastMessage', 'Product status updated successfully');
+            sessionStorage.setItem('toastType', 'success');
+            // Reload immediately
+            reloadPage();
+        } else {
+            showToast('Error updating product status', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Error updating product status', 'error');
+    }
+  }
 });
 
 

@@ -273,3 +273,6 @@ font-size: 0.8em;
     object-fit: cover;
     border-radius: 4px;
 }
+.toggle-status-btn {
+    background-color: #007bff;
+}

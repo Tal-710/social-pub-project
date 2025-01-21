@@ -16,6 +16,9 @@ public class Product {
     @Column(name="id")
     private Integer id;
 
+    @Column(name = "is_valid", nullable = false)
+    private Integer isValid = 1;
+
     @Column(name= "name", nullable= false)
     private String name;
 
@@ -73,15 +76,23 @@ public class Product {
         this.id = id;
     }
 
-    public Product(Integer id, String name, Double price, String image) {
+    public Product(Integer id, String name, Double price, String image,Integer isValid ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
+        this.isValid = isValid;
     }
 
     public Product(){
 
     }
 
+    public Integer getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Integer isValid) {
+        this.isValid = isValid;
+    }
 }

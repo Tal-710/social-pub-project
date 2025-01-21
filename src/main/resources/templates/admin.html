@@ -82,6 +82,7 @@
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -94,7 +95,17 @@
                     </td>
                     <td th:text="${product.name}"></td>
                     <td th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></td>
+                    <td>
+            <span th:class="${product.isValid == 1 ? 'active' : 'inactive'}"
+                  th:text="${product.isValid == 1 ? 'Valid' : 'Invalid'}">
+            </span>
+                    </td>
                     <td class="action-buttons">
+                        <button class="toggle-status-btn"
+                                th:data-product-id="${product.id}"
+                                th:data-status="${product.isValid}">
+                            Toggle Status
+                        </button>
                         <button class="edit-btn" th:data-product-id="${product.id}">Edit</button>
                         <button class="delete-btn" th:data-product-id="${product.id}">Delete</button>
                     </td>

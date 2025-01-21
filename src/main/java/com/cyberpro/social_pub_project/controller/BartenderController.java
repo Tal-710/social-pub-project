@@ -25,7 +25,7 @@ public class BartenderController {
     @GetMapping("/bartender")
     public String showOrderPage(Model model) {
         try {
-            List<Product> products = productService.findAll();
+            List<Product> products = productService.findValidProducts();;
             model.addAttribute("products", products);
             return "bartender";
         } catch (Exception e) {
