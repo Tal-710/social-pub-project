@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.header {
+    background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
+    background-size: cover;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid #5d403a;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.welcome-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.welcome-section h2 {
+    color: #5d403a;
+    margin: 0;
+}
+
+.back-button {
+    background-color: #5d403a;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #4a332f;
+}
+
+.order-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.order-header {
+    background-color: #5d403a;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-details {
+    padding: 15px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-name {
+    font-weight: 500;
+}
+
+.quantity {
+    color: #666;
+}
+
+.price-info {
+    display: flex;
+    gap: 20px;
+}
+
+.unit-price {
+    color: #666;
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    font-weight: 600;
+    color: #5d403a;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .welcome-section {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .order-header {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+}

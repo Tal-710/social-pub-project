@@ -20,4 +20,5 @@ public interface OrderService {
     Order createOrder(OrderRequest orderRequest);
 
     List<Product> findLastFiveUniqueProducts(Integer userId);
+    List<Order> findAllByUserId(Integer userId);
 }

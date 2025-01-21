@@ -20,8 +20,8 @@ public class Order {
     @JsonManagedReference("user-orders")
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("order-details")  // Add this
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference("order-details")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     public List<OrderDetail> getOrderDetails() {

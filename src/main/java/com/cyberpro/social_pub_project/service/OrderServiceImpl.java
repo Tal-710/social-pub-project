@@ -60,6 +60,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Product> findLastFiveUniqueProducts(Integer userId) {
         return orderRepository.findLast5UniqueProductsByUserId(userId);
     }
+    @Override
+    public List<Order> findAllByUserId(Integer userId) {
+        return orderRepository.findAllByUserIdOrderByOrderDateDesc(userId);
+    }
 
     public Order createOrder(OrderRequest orderRequest) {
         String encryptedId = idEncryptionService.encryptId(orderRequest.getUserId());
