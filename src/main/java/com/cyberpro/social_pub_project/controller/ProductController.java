@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5500", "http://127.0.0.1:5500"},
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-        allowedHeaders = "*",
-        allowCredentials = "true")
+//@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5500", "http://127.0.0.1:5500"},
+//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+//        allowedHeaders = "*",
+//        allowCredentials = "true")
 public class ProductController {
 
     private final ProductService productService;

@@ -18,8 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/orders")
-@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:5500", "http://127.0.0.1:5500"},
+@RequestMapping("/orders/")
+@CrossOrigin(origins = {"http://localhost:8080"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
         allowedHeaders = "*",
         allowCredentials = "true")
@@ -41,7 +41,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/user/{userId}/recent-products")
+    @GetMapping("user/{userId}/recent-products")
     public ResponseEntity<List<Product>> getRecentUniqueProducts(@PathVariable Integer userId) {
         List<Product> recentProducts = orderService.findLastFiveUniqueProducts(userId);
         if (recentProducts.isEmpty()) {
@@ -50,7 +50,7 @@ public class OrderController {
         return ResponseEntity.ok(recentProducts);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);
         if (order.isPresent()) {
@@ -61,14 +61,14 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest)
     {
         Order order = orderService.createOrder(orderRequest);
         return ResponseEntity.ok(order);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);
         if (order.isPresent()) {
