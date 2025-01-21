@@ -5,27 +5,34 @@ import com.cyberpro.social_pub_project.dto.OrderRequest;
 import com.cyberpro.social_pub_project.entity.Order;
 import com.cyberpro.social_pub_project.entity.OrderDetail;
 import com.cyberpro.social_pub_project.entity.Product;
+import com.cyberpro.social_pub_project.entity.User;
 import com.cyberpro.social_pub_project.service.OrderService;
 import com.cyberpro.social_pub_project.service.OrderServiceImpl;
+import com.cyberpro.social_pub_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequestMapping("/orders/")
 public class OrderController {
 
     private final OrderService orderService;
+    private final UserService userService;
 
     @Autowired
-    public OrderController(OrderService orderService1) {
+    public OrderController(OrderService orderService1, UserService userService) {
         this.orderService = orderService1;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -62,6 +69,18 @@ public class OrderController {
     {
         Order order = orderService.createOrder(orderRequest);
         return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("history")
+    public String showOrderHistory(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        List<Order> orders = orderService.findAllByUserId(user.getId());
+        model.addAttribute("orders", orders);
+        model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+
+        return "order-history";
     }
 
     @DeleteMapping("{id}")
