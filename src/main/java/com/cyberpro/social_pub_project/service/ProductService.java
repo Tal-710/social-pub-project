@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    List<Product> findAll();
+    List<Product> findAll();// For admin to see all products
+    List<Product> findValidProducts();
 
     Optional<Product> findById(int theId);
 
