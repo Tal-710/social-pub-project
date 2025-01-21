@@ -30,8 +30,7 @@ public class AdminController {
 
     @GetMapping("/")
     public String showAdminPanel(Model model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.findAll());
         model.addAttribute("products", productService.findAll());
         return "admin";
     }

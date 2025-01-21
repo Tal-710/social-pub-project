@@ -267,6 +267,10 @@ font-size: 0.8em;
     font-weight: 500;
 }
 
+.edit-btn {
+    background-color: #2196F3;
+}
+
 .product-thumbnail {
     max-width: 50px;
     max-height: 50px;

@@ -21,6 +21,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>ID Number</th>
                     <th>Username</th>
                     <th>Full Name</th>
                     <th>Roles</th>
@@ -31,6 +32,7 @@
                 <tbody>
                 <tr th:each="user : ${users}">
                     <td th:text="${user.id}"></td>
+                    <td th:text="${user.idNumber != null ? user.idNumber : 'N/A'}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.firstName + ' ' + user.lastName}"></td>
                     <td>
@@ -107,7 +109,6 @@
                             Toggle Status
                         </button>
                         <button class="edit-btn" th:data-product-id="${product.id}">Edit</button>
-                        <button class="delete-btn" th:data-product-id="${product.id}">Delete</button>
                     </td>
                 </tr>
                 </tbody>
@@ -166,17 +167,6 @@
                     <button type="submit" class="save-btn">Save</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div id="deleteProductModal" class="modal">
-        <div class="modal-content">
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete this product?</p>
-            <div class="modal-buttons">
-                <button class="cancel-btn">Cancel</button>
-                <button class="delete-btn">Delete</button>
-            </div>
         </div>
     </div>
 

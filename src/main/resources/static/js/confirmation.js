@@ -7,11 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const image = document.getElementById('image');
     let qrCodeFetched = false;
 
-//    const showHistoryButton = document.getElementById('showHistoryButton');
-//    const purchaseHistoryContainer = document.getElementById('purchase-history-container');
-//    const purchaseList = document.querySelector('.purchase-list');
-//    let historyFetched = false;
-//    let cachedProducts = null;
 
     const profileImage = document.getElementById('profileImage');
     const profilePicContainer = document.querySelector('.profile-pic-container');
@@ -34,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const cachedUser = sessionStorage.getItem('userData');
         let userData = cachedUser ? JSON.parse(cachedUser) : {};
 
-        // Update only the provided fields
         userData = {
             ...userData,
             ...newData
@@ -299,106 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-
-//    showHistoryButton.addEventListener('click', function() {
-//        if (purchaseHistoryContainer.style.display === 'none') {
-//            purchaseHistoryContainer.style.display = 'block';
-//            showHistoryButton.textContent = 'Hide History';
-//            if (!historyFetched) {
-//                loadPurchaseHistory();
-//            }
-//        } else {
-//            purchaseHistoryContainer.style.display = 'none';
-//            showHistoryButton.textContent = 'Order History';
-//        }
-//    });
-
-//    function loadPurchaseHistory() {
-//        if (cachedProducts) {
-//            displayProducts(cachedProducts);
-//            return;
-//        }
-
-        const storedProducts = sessionStorage.getItem('userProducts');
-        if (storedProducts) {
-            const products = JSON.parse(storedProducts);
-            cachedProducts = products;
-            displayProducts(products);
-            return;
-        }
-
-        const cachedUser = sessionStorage.getItem('userData');
-        if (cachedUser) {
-            const user = JSON.parse(cachedUser);
-            fetchProducts(user);
-            return;
-        }
-
-        fetchAndStoreUserData()
-            .then(user => {
-                fetchProducts(user);
-            })
-            .catch(error => {
-                displayError(error.message);
-            });
-    }
-
-//    function fetchProducts(user) {
-//        fetch(`/orders/user/${user.id}/recent-products`)
-//            .then(response => {
-//                if (response.status === 204) {
-//                    displayNoOrders();
-//                    return null;
-//                }
-//                if (!response.ok) {
-//                    throw new Error('Failed to load orders');
-//                }
-//                return response.json();
-//            })
-//            .then(products => {
-//                if (products) {
-//                    cachedProducts = products;
-//                    sessionStorage.setItem('userProducts', JSON.stringify(products));
-//                    displayProducts(products);
-//                }
-//                historyFetched = true;
-//            })
-//            .catch(error => {
-//                displayError(error.message);
-//            });
-//    }
-//
-//    function displayProducts(products) {
-//        purchaseList.innerHTML = '';
-//        if (products.length === 0) {
-//            displayNoOrders();
-//            return;
-//        }
-//        products.forEach(product => {
-//            const productElement = document.createElement('div');
-//            productElement.className = 'purchase-item';
-//            productElement.innerHTML = `
-//                <span class="product-name">${product.name}</span>
-//                <span class="product-price">$${product.price.toFixed(2)}</span>
-//            `;
-//            purchaseList.appendChild(productElement);
-//        });
-//    }
-//
-//    function displayNoOrders() {
-//        purchaseList.innerHTML = `
-//            <div class="purchase-item empty-message">
-//                No orders found. Visit our bar to start ordering!
-//            </div>`;
-//    }
-//
-//    function displayError(message) {
-//        purchaseList.innerHTML = `
-//            <div class="purchase-item error-message">
-//                ${message}
-//            </div>`;
-//    }
-
 
     image.style.display = 'none';
     restoreQRCode();

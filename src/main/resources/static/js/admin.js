@@ -3,7 +3,6 @@ let currentProductId = null;
 const addRoleModal = document.getElementById('addRoleModal');
 const deleteModal = document.getElementById('deleteModal');
 const productModal = document.getElementById('productModal');
-const deleteProductModal = document.getElementById('deleteProductModal');
 const toast = document.getElementById('toast');
 const productSection = document.getElementById('products-section');
 const userSection = document.getElementById('users-section');
@@ -312,34 +311,7 @@ function closeAllModals() {
     addRoleModal.style.display = 'none';
     deleteModal.style.display = 'none';
     productModal.style.display = 'none';
-    deleteProductModal.style.display = 'none';
 }
-
-
-deleteProductModal?.querySelector('.delete-btn')?.addEventListener('click', async function() {
-    const token = document.querySelector('meta[name="_csrf"]').content;
-    const header = document.querySelector('meta[name="_csrf_header"]').content;
-
-    try {
-        const response = await fetch(`/products/${currentProductId}`, {
-            method: 'DELETE',
-            headers: {
-                [header]: token
-            }
-        });
-
-        if (response.ok) {
-            showToast('Product deleted successfully', 'success');
-            deleteProductModal.style.display = 'none';
-            reloadPage();
-        } else {
-            showToast('Error deleting product', 'error');
-        }
-    } catch (error) {
-        showToast('Error deleting product', 'error');
-        console.error('Error:', error);
-    }
-});
 
 function showToast(message, type) {
     const toast = document.getElementById('toast');

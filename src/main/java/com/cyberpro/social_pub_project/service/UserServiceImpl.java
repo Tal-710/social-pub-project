@@ -91,7 +91,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        users.forEach(user -> {
+            if (user.getEncryptedIdNumber() != null) {
+                Integer decryptedIdNumber = idEncryptionService.decryptId(user.getEncryptedIdNumber());
+                user.setIdNumber(decryptedIdNumber);
+            }
+        });
+        return users;
     }
 
     @Override
