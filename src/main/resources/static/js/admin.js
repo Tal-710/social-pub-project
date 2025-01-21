@@ -46,12 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.nav-btn').forEach(button => {
         button.addEventListener('click', () => {
-            // Remove active class from all buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // Add active class to clicked button
             button.classList.add('active');
 
             if (button.dataset.section === 'products') {

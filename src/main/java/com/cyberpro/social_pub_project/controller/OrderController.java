@@ -19,10 +19,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders/")
-@CrossOrigin(origins = {"http://localhost:8080"},
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-        allowedHeaders = "*",
-        allowCredentials = "true")
 public class OrderController {
 
     private final OrderService orderService;
