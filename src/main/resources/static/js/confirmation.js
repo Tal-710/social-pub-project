@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
-    loadProfilePicture();
+    // Clear session storage function
+    function clearUserSessionData() {
+        sessionStorage.removeItem('userData');
+        sessionStorage.removeItem('userQRCode');
+
+        const profileImage = document.getElementById('profileImage');
+        const qrImage = document.getElementById('image');
+
+        if (profileImage) {
+            profileImage.src = '/images/default-profile.png';
+        }
+        if (qrImage) {
+            qrImage.style.display = 'none';
+        }
+
+        qrCodeFetched = false;
+    }
+
+    // Add logout listener
+    const logoutForm = document.querySelector('form[action="/logout"]');
+    if (logoutForm) {
+        logoutForm.addEventListener('submit', function() {
+            clearUserSessionData();
+        });
+    }
+
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 800;
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -7,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const QRbutton = document.getElementById('showQRButton');
     const image = document.getElementById('image');
     let qrCodeFetched = false;
-
 
     const profileImage = document.getElementById('profileImage');
     const profilePicContainer = document.querySelector('.profile-pic-container');
@@ -25,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelBtn = document.getElementById('cancelBtn');
 
     let stream = null;
-
 
     function updateUserData(newData) {
         const cachedUser = sessionStorage.getItem('userData');
@@ -53,56 +76,64 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-function loadProfilePicture() {
-    console.log('Loading profile picture...'); // Debug log
+    function loadProfilePicture() {
+        console.log('Loading profile picture...');
 
-    // Set a loading state or spinner if you want
+        // Check for user mismatch
+        const currentUsername = document.querySelector('[sec\\:authentication="principal.username"]')?.textContent;
+        const cachedUser = sessionStorage.getItem('userData');
 
-    const cachedUser = sessionStorage.getItem('userData');
-    if (cachedUser) {
-        const user = JSON.parse(cachedUser);
-        if (user.profilePicture) {
-            fetch(`/users/profile-picture/${user.profilePicture}`)
-                .then(response => response.text())
-                .then(profilePictureUrl => {
-                    profileImage.src = profilePictureUrl;
-                    // Only show image once it's loaded
-                    profileImage.onload = () => {
-                        profileImage.style.display = 'block';
-                    };
-                })
-                .catch(error => {
-                    console.error('Failed to load profile picture:', error);
-                    profileImage.src = '/images/default-profile.png';
-                    profileImage.style.display = 'block';
-                });
-            return;
+        if (cachedUser) {
+            const user = JSON.parse(cachedUser);
+            if (user.username !== currentUsername) {
+                clearUserSessionData();
+            }
         }
-    }
 
-    fetchAndStoreUserData()
-        .then(user => {
+        if (cachedUser) {
+            const user = JSON.parse(cachedUser);
             if (user.profilePicture) {
-                return fetch(`/users/profile-picture/${user.profilePicture}`)
+                fetch(`/users/profile-picture/${user.profilePicture}`)
                     .then(response => response.text())
                     .then(profilePictureUrl => {
                         profileImage.src = profilePictureUrl;
                         profileImage.onload = () => {
                             profileImage.style.display = 'block';
                         };
+                    })
+                    .catch(error => {
+                        console.error('Failed to load profile picture:', error);
+                        profileImage.src = '/images/default-profile.png';
+                        profileImage.style.display = 'block';
                     });
-            } else {
+                return;
+            }
+        }
+
+        fetchAndStoreUserData()
+            .then(user => {
+                if (user.profilePicture) {
+                    return fetch(`/users/profile-picture/${user.profilePicture}`)
+                        .then(response => response.text())
+                        .then(profilePictureUrl => {
+                            profileImage.src = profilePictureUrl;
+                            profileImage.onload = () => {
+                                profileImage.style.display = 'block';
+                            };
+                        });
+                } else {
+                    profileImage.src = '/images/default-profile.png';
+                    profileImage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Failed to load profile picture:', error);
                 profileImage.src = '/images/default-profile.png';
                 profileImage.style.display = 'block';
-            }
-        })
-        .catch(error => {
-            console.error('Failed to load profile picture:', error);
-            profileImage.src = '/images/default-profile.png';
-            profileImage.style.display = 'block';
-        });
-}
+            });
+    }
 
+    // Rest of your existing functions remain the same
     function resizeImage(file) {
         return new Promise((resolve, reject) => {
             if (file.size > MAX_FILE_SIZE) {
@@ -171,6 +202,7 @@ function loadProfilePicture() {
         cameraContainer.style.display = 'none';
     }
 
+    // Event Listeners
     profilePicContainer.addEventListener('click', () => {
         floatingEditor.style.display = 'block';
     });
@@ -242,71 +274,66 @@ function loadProfilePicture() {
         }
     });
 
-saveBtn.addEventListener('click', async () => {
-    if (!previewImage.src || previewContainer.style.display === 'none') {
-        alert('Please select or capture an image first');
-        return;
-    }
-
-    try {
-        // Add loading state
-        saveBtn.disabled = true;
-        saveBtn.textContent = 'Saving...';
-
-        const token = document.querySelector('meta[name="_csrf"]')?.content;
-        const header = document.querySelector('meta[name="_csrf_header"]')?.content;
-
-        if (!token || !header) {
-            throw new Error('CSRF tokens not found');
+    saveBtn.addEventListener('click', async () => {
+        if (!previewImage.src || previewContainer.style.display === 'none') {
+            alert('Please select or capture an image first');
+            return;
         }
 
-        // Add console.log to debug the image data being sent
-        console.log('Sending image data:', previewImage.src.substring(0, 100) + '...');
+        try {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
 
-        const response = await fetch('/users/update-profile-picture', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                [header]: token
-            },
-            body: JSON.stringify({
-                profilePicture: previewImage.src
-            }),
-            credentials: 'same-origin' // Add this to ensure cookies are sent
-        });
+            const token = document.querySelector('meta[name="_csrf"]')?.content;
+            const header = document.querySelector('meta[name="_csrf_header"]')?.content;
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || 'Failed to update profile picture');
+            if (!token || !header) {
+                throw new Error('CSRF tokens not found');
+            }
+
+            console.log('Sending image data:', previewImage.src.substring(0, 100) + '...');
+
+            const response = await fetch('/users/update-profile-picture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [header]: token
+                },
+                body: JSON.stringify({
+                    profilePicture: previewImage.src
+                }),
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Failed to update profile picture');
+            }
+
+            const result = await response.json();
+            console.log('Server response:', result);
+
+            if (!result.fileName) {
+                throw new Error('No filename received from server');
+            }
+
+            const urlResponse = await fetch(`/users/profile-picture/${result.fileName}`);
+            const profilePictureUrl = await urlResponse.text();
+
+            profileImage.src = profilePictureUrl;
+            updateUserData({ profilePicture: result.fileName });
+
+            sessionStorage.removeItem('userData');
+            await fetchAndStoreUserData();
+            closeModal();
+        } catch (error) {
+            console.error('Error details:', error);
+            alert('Error updating profile picture: ' + error.message);
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
         }
-
-        const result = await response.json();
-
-        // Add console.log to debug the response
-        console.log('Server response:', result);
-
-        if (!result.fileName) {
-            throw new Error('No filename received from server');
-        }
-
-        const urlResponse = await fetch(`/users/profile-picture/${result.fileName}`);
-        const profilePictureUrl = await urlResponse.text();
-
-        // Update the profile picture immediately
-        profileImage.src = profilePictureUrl;
-        updateUserData({ profilePicture: result.fileName });
-
-        sessionStorage.removeItem('userData');
-        await fetchAndStoreUserData();
-        closeModal();
-    } catch (error) {
-        console.error('Error details:', error);
-        alert('Error updating profile picture: ' + error.message);
-    } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Save';
-    }
-});
+    });
 
     cancelBtn.addEventListener('click', closeModal);
 
@@ -318,30 +345,13 @@ saveBtn.addEventListener('click', async () => {
         }
     }
 
-QRbutton.addEventListener('click', function() {
-    if (!qrCodeFetched) {
-        const cachedUser = sessionStorage.getItem('userData');
-        if (cachedUser) {
-            const user = JSON.parse(cachedUser);
-            if (user.qrCode) {
-                fetch(`/users/qr-code/${user.qrCode}`)
-                    .then(response => response.text())
-                    .then(qrCodeUrl => {
-                        image.src = qrCodeUrl;
-                        sessionStorage.setItem('userQRCode', qrCodeUrl);
-                        qrCodeFetched = true;
-                        image.style.display = 'block';
-                    });
-            } else {
-                image.style.display = 'none';
-            }
-            return;
-        }
-
-        fetchAndStoreUserData()
-            .then(user => {
+    QRbutton.addEventListener('click', function() {
+        if (!qrCodeFetched) {
+            const cachedUser = sessionStorage.getItem('userData');
+            if (cachedUser) {
+                const user = JSON.parse(cachedUser);
                 if (user.qrCode) {
-                    return fetch(`/users/qr-code/${user.qrCode}`)
+                    fetch(`/users/qr-code/${user.qrCode}`)
                         .then(response => response.text())
                         .then(qrCodeUrl => {
                             image.src = qrCodeUrl;
@@ -351,17 +361,37 @@ QRbutton.addEventListener('click', function() {
                         });
                 } else {
                     image.style.display = 'none';
+                    fetchAndStoreUserData();
                 }
-            })
-            .catch(() => {
-                image.style.display = 'none';
-            });
-    } else {
-        if (image.style.display === 'none' || image.style.display === '') {
-            image.style.display = 'block';
+                return;
+            }
+
+            fetchAndStoreUserData()
+                .then(user => {
+                    if (user.qrCode) {
+                        return fetch(`/users/qr-code/${user.qrCode}`)
+                            .then(response => response.text())
+                            .then(qrCodeUrl => {
+                                image.src = qrCodeUrl;
+                                sessionStorage.setItem('userQRCode', qrCodeUrl);
+                                qrCodeFetched = true;
+                                image.style.display = 'block';
+                            });
+                    } else {
+                        image.style.display = 'none';
+                    }
+                })
+                .catch(() => {
+                    image.style.display = 'none';
+                });
         } else {
-            image.style.display = 'none';
+            if (image.style.display === 'none' || image.style.display === '') {
+                image.style.display = 'block';
+            } else {
+                image.style.display = 'none';
+            }
         }
-    }
-});
+    });
+
+    loadProfilePicture();
 });

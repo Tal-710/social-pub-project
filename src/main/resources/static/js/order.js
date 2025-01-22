@@ -14,14 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let order = [];
   let scannedUser = null;
 
+  document.querySelectorAll('a').forEach(link => {
+    if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
+      link.addEventListener('click', () => {
+        sessionStorage.removeItem('scannedUser');
+      });
+    }
+  });
+
+
   function updateTotal() {
     const total = order.reduce((sum, item) => sum + item.totalPrice, 0);
     totalAmountSpan.textContent = total.toFixed(2);
   }
+  window.clearUserData = () => {
+     scannedUser = null;
+     sessionStorage.removeItem('scannedUser');
+     submitOrderButton.disabled = true;
+     qrResultDiv.innerHTML = '';
+  };
 
   function restoreSessionData() {
     const savedOrder = sessionStorage.getItem('currentOrder');
-    const savedUser = sessionStorage.getItem('scannedUser');
 
     if (savedOrder) {
       order = JSON.parse(savedOrder);
@@ -43,11 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         orderList.appendChild(listItem);
       });
       updateTotal();
-    }
-
-    if (savedUser) {
-      scannedUser = JSON.parse(savedUser);
-      window.handleUserScan(scannedUser);
     }
   }
 
