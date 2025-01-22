@@ -14,6 +14,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
 
+
   <body>
     <!-- display profile pic -->
     <div class="profile-section">
@@ -35,6 +36,7 @@
           ></div>
         </div>
       </div>
+
     </div>
 
     <div id="wellcome-container">
@@ -71,6 +73,7 @@
       </div>
     </div>
 
+
     <div id="order-options-container">
       <button id="showImageButton">QR</button>
       <div id="qrImageContainer">
@@ -81,6 +84,7 @@
         />
       </div>
       <div sec:authorize="hasRole('BARTENDER')">
+
         <a th:href="@{/bartender}" class="button">
           <button id="order">Create Order</button>
         </a>

@@ -23,7 +23,6 @@ async function toggleCamera() {
       cameraActive = true;
       startQRScan();
     } catch (error) {
-      console.error("Error accessing camera:", error);
       alert("Unable to access camera. Please check your permissions.");
     }
   } else {
@@ -46,7 +45,6 @@ function startQRScan() {
 
     if (qrCode) {
       qrResultDiv.textContent = "QR Code Detected: " + qrCode.data;
-      console.log(qrCode)
       fetchUserDetails(qrCode.data);
       closeCamera();
     } else {
@@ -71,47 +69,24 @@ function closeCamera() {
 
 async function fetchUserDetails(userId) {
   try {
-    console.log('Fetching user details for ID:', userId);
-
-    // Additional debugging for the fetch URL
-    console.log('Fetch URL:', userId);
-
     const response = await fetch(userId);
-
-    console.log('Fetch Response:', {
-      status: response.status,
-      ok: response.ok,
-      type: response.type
-    });
 
     if (response.ok) {
       const user = await response.json();
-
-      console.log('Fetched User Object:', user);
-      console.log('User Profile Picture:', user.profilePicture);
-
       displayUserDetails(user);
 
       if (typeof window.handleUserScan === "function") {
         window.handleUserScan(user);
       }
     } else {
-      console.error('Fetch failed with status:', response.status);
       qrResultDiv.textContent = "User not found.";
     }
   } catch (error) {
-    console.error("Complete Error Details:", {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
-    });
     qrResultDiv.textContent = "Error fetching user details.";
   }
 }
 
 function displayUserDetails(user) {
-  console.log('Profile Picture:', user.profilePicture);
-
   if (!user.profilePicture) {
     qrResultDiv.innerHTML = `
       <h3>User Details</h3>
@@ -130,11 +105,9 @@ function displayUserDetails(user) {
     return;
   }
 
-  // Fetch the profile picture URL
   fetch(`/users/profile-picture/${user.profilePicture}`)
     .then(response => response.text())
     .then(profilePictureUrl => {
-      // Create a unique, random attribute to prevent browser caching attempts
       const uniqueAttr = `data-img-${Date.now()}`;
 
       qrResultDiv.innerHTML = `
