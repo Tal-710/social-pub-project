@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const MAX_HEIGHT = 800;
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-    const button = document.getElementById('showImageButton');
+    const QRbutton = document.getElementById('showQRButton');
     const image = document.getElementById('image');
     let qrCodeFetched = false;
 
@@ -88,7 +88,6 @@ function loadProfilePicture() {
                     .then(response => response.text())
                     .then(profilePictureUrl => {
                         profileImage.src = profilePictureUrl;
-                        // Only show image once it's loaded
                         profileImage.onload = () => {
                             profileImage.style.display = 'block';
                         };
@@ -320,7 +319,7 @@ saveBtn.addEventListener('click', async () => {
         }
     }
 
-button.addEventListener('click', function() {
+QRbutton.addEventListener('click', function() {
     if (!qrCodeFetched) {
         const cachedUser = sessionStorage.getItem('userData');
         if (cachedUser) {
