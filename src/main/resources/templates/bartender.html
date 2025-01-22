@@ -1,67 +1,100 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+  <head>
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Add CSRF meta tags -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <title>Social Pub</title>
     <link rel="stylesheet" th:href="@{/css/bartender.css}" />
-</head>
-<body>
-<div class="container">
-    <header class="header">
-        <h1>Social Pub</h1>
-    </header>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <div id="description" style="font-size: 30px">order</div>
+        <div class="menu">
+          <div class="item">
+            <a href="#" class="link">
+              <span> Menu </span>
+              <svg viewBox="0 0 360 360" xml:space="preserve">
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    id="XMLID_225_"
+                    d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
+                  ></path>
+                </g>
+              </svg>
+            </a>
+            <div class="submenu">
+              <div class="submenu-item">
+                <a href="/home" class="submenu-link"> Home </a>
+              </div>
+              <div class="submenu-item">
+                <a href="/confirmation" class="submenu-link"> User Page </a>
+              </div>
+              <div class="submenu-item">
+                <a href="/admin/" class="submenu-link"> Admin Panel </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-    <main>
+      <main>
         <section id="order-management">
-            <h2>Order Management</h2>
+          <h2>Order Management</h2>
 
-            <div id="product-selection">
-                <label for="product-dropdown">Select Product:</label>
-                <select id="product-dropdown">
-                    <option value="" disabled selected>Select a product</option>
-                    <option th:each="product : ${products}"
-                            th:value="${product.id}"
-                            th:data-price="${product.price}"
-                            th:text="${product.name} + ' - $' + ${product.price}">
-                    </option>
-                </select>
-
-                <label for="quantity-input">Quantity:</label>
-                <input type="number" id="quantity-input" min="1" value="1" />
-
-                <button id="add-item-button">Add Item</button>
+          <!-- Product Selection -->
+          <div id="product-selection">
+            <label id="product-label" for="product-dropdown"
+              >Select Product:</label
+            >
+            <select id="product-dropdown">
+              <option value="" disabled selected>Select a product</option>
+              <option
+                th:each="product : ${products}"
+                th:value="${product.id}"
+                th:data-price="${product.price}"
+                th:text="${product.name} + ' - $' + ${product.price}"
+              ></option>
+            </select>
+            <label id="quantity-name" for="quantity-input">Quantity:</label>
+            <div id="quantity-section">
+              <input type="number" id="quantity-input" min="1" value="1" />
+              <button id="add-item-button">Add Item</button>
             </div>
+          </div>
 
-            <h3>Order Summary</h3>
-            <ul id="order-list"></ul>
+          <h3>Order Summary</h3>
+          <ul id="order-list"></ul>
 
-            <div id="order-total" class="order-total">
-                <strong>Total: $<span id="total-amount">0.00</span></strong>
-            </div>
+          <div id="order-total" class="order-total">
+            <strong>Total: $<span id="total-amount">0.00</span></strong>
+          </div>
 
-            <button id="submit-order-button">Submit Order</button>
+          <button id="submit-order-button">Submit Order</button>
         </section>
 
         <section id="camera">
-            <h2>QR Code Scanner</h2>
-            <div class="scan">
-                <div class="button-container" id="buttonContainer">
-                    <button id="toggleButton" onclick="toggleCamera()">Open Camera</button>
-                    <video id="cameraFeed" autoplay></video>
-                    <canvas id="qrCanvas" style="display: none"></canvas>
-                    <span id="closeCamera" onclick="closeCamera()"></span>
-                </div>
-                <div id="qrResult"></div>
+          <h2>QR Code Scanner</h2>
+          <div class="scan">
+            <div class="button-container" id="buttonContainer">
+              <button id="toggleButton" onclick="toggleCamera()">
+                Open Camera
+              </button>
+              <video id="cameraFeed" autoplay></video>
+              <canvas id="qrCanvas" style="display: none"></canvas>
+              <span id="closeCamera" onclick="closeCamera()"></span>
             </div>
+            <div id="qrResult"></div>
+          </div>
         </section>
-    </main>
-</div>
+      </main>
+    </div>
 
-<script th:src="@{/js/order.js}"></script>
-<script th:src="@{/js/camera.js}"></script>
-</body>
+    <script th:src="@{/js/order.js}"></script>
+    <script th:src="@{/js/camera.js}"></script>
+  </body>
 </html>
