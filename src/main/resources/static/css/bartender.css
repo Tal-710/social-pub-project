@@ -3,31 +3,38 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-   height: auto;
-   min-height: 100vh;
-}
 
-* {
-  box-sizing: border-box;
 }
-
-/* Header */
+nav{
+  width: 100%;
+  height: 60px;
+  background-color: #90e3ff;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+#description{
+  padding-left: 15px; ;
+}
+/* Header
 .header {
   color: white;
+  width: 100%;
   padding: 1em;
   text-align: center;
   align-items: center;
   border: solid 1px black;
   height: 30vh;
   background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
-  background-size: 100% 100%;
+   background-size: 100% 100%; 
   font-size: 1.7em;
 }
 
 .header h1 {
   text-shadow: 7px 7px 7px gray;
-}
+} */
 .svgHome {
   text-decoration: none;
   display: flex;
@@ -79,9 +86,9 @@ section.active {
 .item {
   display: flex;
   text-align: center;
-  max-width: 250px;
+  max-width: 200px;
   flex: 1;
-  min-width: 200px;
+  min-width: 125px;
   justify-content: space-evenly;
   align-items: center;
 }
@@ -127,10 +134,19 @@ section.active {
   justify-content: space-evenly;
   gap: 10px;
 }
+#camera{
+  border-radius: 10px;
+  border:#ccc solid 1px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width:90%;
+  text-align: center;
 
+}
 #cameraFeed {
   display: none;
-  width: 100%;
+  width: 95%;
+  border:2px black solid;
 }
 
 #orderSummary,
@@ -232,20 +248,70 @@ ul li {
 }
 
 #order-management {
-    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    background: #fff;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    width:90%;
 }
 
 #product-selection {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+  max-width: 500px;
+  padding: 1rem;
 }
 
-#product-dropdown, #quantity-input, #add-item-button {
+#product-label {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+#product-dropdown {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+#quantity-name {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+#quantity-section {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#quantity-input {
+  width: 80px;
+  padding: 0.5rem;
+}
+/* 
+#add-item-button {
+  padding: 0.5rem 1rem;
+  background-color: #4a5568;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#add-item-button:hover {
+  background-color: #2d3748;
+} */
+#product-dropdown, #quantity-input {
     padding: 10px;
     border-radius: 5px;
 }
@@ -266,14 +332,7 @@ ul li {
     border-radius: 5px;
 }
 
-.remove-button {
-    background: #d9534f;
-    color: white;
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 
 .user-info-container {
   display: flex;
@@ -305,3 +364,283 @@ ul li {
   margin: 5px 0;
   font-size: 1.1em;
 }
+
+
+/*button style start:*/
+#add-item-button {
+  --bg: #646464;
+  --hover-bg: #90ffa8;
+  --hover-text: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.8em 2em;
+  background: var(--bg);
+  transition: 0.2s;
+}
+
+#add-item-button:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#add-item-button:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+#submit-order-button {
+  --bg: #646464;
+  --hover-bg: #646464;
+  --hover-text: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.8em 2em;
+  background: var(--bg);
+  transition: 0.2s;
+}
+
+#submit-order-button:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#submit-order-button:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+#toggleButton {
+  --bg: #646464;
+  --hover-bg: #90e3ff;
+  --hover-text: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.8em 2em;
+  background: var(--bg);
+  transition: 0.2s;
+  display: flex;
+  justify-content: center;
+}
+
+#toggleButton:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#toggleButton:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+.remove-button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  --bg: #fe655f;
+  --hover-bg: #d9534f;
+  --hover-text: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.8em 2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin-left: 15px;
+}
+.remove-button:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+.remove-button:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+
+.go-back {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  --bg: #fe655f;
+  --hover-bg: #d9534f;
+  --hover-text: #000;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.8em 2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin-left: 15px;
+}
+.go-back:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+.go-back:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+/*end of button style*/
+
+/*start of dropdown menu*/
+.menu {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #000000;
+  width: fit-content;
+  display: flex;
+  list-style: none;
+  
+}
+
+.menu a {
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: center;
+}
+
+.menu .link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.menu .link::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #90e3ff;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.menu .link svg {
+  width: 14px;
+  height: 14px;
+  fill: #000000;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.menu .item {
+  position: relative;
+  text-align: center;
+}
+.submenu {
+  text-align: center;
+}
+
+.menu .item .submenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 100%;
+  border-radius: 0 0 16px 16px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #cccccc;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-12px);
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 1;
+  pointer-events: none;
+  list-style: none;
+}
+
+.menu .item:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-top: transparent;
+  border-color: #90e3ff;
+}
+
+.menu .item:hover .link {
+  color: #ffffff;
+  border-radius: 16px 16px 0 0;
+}
+
+.menu .item:hover .link::after {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+
+.menu .item:hover .link svg {
+  fill: #ffffff;
+  transform: rotate(-180deg);
+}
+
+.submenu .submenu-item {
+  width: 100%;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.submenu .submenu-link {
+  display: block;
+  padding: 12px 24px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.submenu .submenu-item:last-child .submenu-link {
+  border-bottom: none;
+}
+
+.submenu .submenu-link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  width: 100%;
+  height: 100%;
+  background-color: #90e3ff;
+  z-index: -1;
+  transform-origin: left;
+  transition: transform 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.submenu .submenu-link:hover:before {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+
+.submenu .submenu-link:hover {
+  color: #ffffff;
+}
+/*end of dropdown*/
