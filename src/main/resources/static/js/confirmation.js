@@ -80,7 +80,6 @@ function loadProfilePicture() {
         }
     }
 
-    // If no cached user or no profile picture, fetch fresh data
     fetchAndStoreUserData()
         .then(user => {
             if (user.profilePicture) {

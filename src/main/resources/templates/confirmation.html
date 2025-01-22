@@ -1,119 +1,88 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  xmlns="http://www.w3.org/1999/html"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation</title>
-    <link rel="stylesheet" th:href="@{/css/confirmation.css}" />
-    <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-  </head>
+    <link rel="stylesheet" th:href="@{/css/confirmation.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 
+<body>
+<div class="header">
+    <h1 id="social-pub">Social Pub</h1>
+</div>
+<div id="wellcome-container"><h1>Welcome, <span sec:authentication="principal.username"></span>!</h1></div>
 
-  <body>
-    <!-- display profile pic -->
-    <div class="profile-section">
-      <div class="profile-pic-container">
-        <!-- <img
-          id="profileImage"
-          src="/images/default-profile.png"
-          alt="Profile Picture"
-          class="profile-pic"
-        /> -->
-        <div class="avatar-edit">
-          <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" />
-          <label for="imageUpload"></label>
-        </div>
-        <div class="avatar-preview">
-          <div
-            id="imagePreview"
-            style="background-image: url('http://i.pravatar.cc/500?img=7')"
-          ></div>
-        </div>
-      </div>
-
+<div class="profile-section">
+    <div class="profile-pic-container">
+        <img id="profileImage" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Picture" class="profile-pic">
     </div>
+</div>
 
-    <div id="wellcome-container">
-      <h1>Welcome, <span sec:authentication="principal.username"></span>!</h1>
-    </div>
-    <!-- profile pic editor -->
-    <div id="floatingEditor" class="floating-editor">
-      <div class="floating-editor-header">
+<div id="floatingEditor" class="floating-editor">
+    <div class="floating-editor-header">
         <span>Edit Profile Picture</span>
         <span class="close-floating">&times;</span>
-      </div>
-      <div class="floating-editor-content">
-        <input
-          type="file"
-          id="fileInput"
-          accept="image/*"
-          style="display: none"
-        />
+    </div>
+    <div class="floating-editor-content">
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
         <button id="uploadBtn" class="action-btn">📁 Upload</button>
         <button id="cameraBtn" class="action-btn">📸 Camera</button>
 
-        <div class="camera-container" style="display: none">
-          <video id="cameraFeed" playsinline autoplay></video>
-          <button id="captureBtn" class="action-btn">Capture</button>
+        <div class="camera-container" style="display: none;">
+            <video id="cameraFeed" playsinline autoplay></video>
+            <button id="captureBtn" class="action-btn">Capture</button>
         </div>
 
-        <div class="preview-container" style="display: none">
-          <img id="previewImage" alt="Preview" />
-          <div class="button-group">
-            <button id="saveBtn" class="action-btn">Save</button>
-            <button id="cancelBtn" class="action-btn">Cancel</button>
-          </div>
+        <div class="preview-container" style="display: none;">
+            <img id="previewImage" alt="Preview">
+            <div class="button-group">
+                <button id="saveBtn" class="action-btn">Save</button>
+                <button id="cancelBtn" class="action-btn">Cancel</button>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
 
-    <div id="order-options-container">
-      <button id="showImageButton">QR</button>
-      <div id="qrImageContainer">
-        <img
-          id="image"
-          src="https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png"
-          alt="Placeholder Image"
-        />
-      </div>
-      <div sec:authorize="hasRole('BARTENDER')">
+<div id="qrImageContainer">
+    <img id="image" src="https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png" alt="Placeholder Image">
+</div>
 
+<div id="purchase-history-container" style="display: none;">
+    <h2>Recent Orders</h2>
+    <div class="purchase-list">
+    </div>
+</div>
+<a th:href="@{/orders/history}" class="button">
+    <button id="orderHistoryBtn">Order History</button>
+</a>
+<div id="button-container">
+    <button id="showQRButton">QR</button>
+
+    <div sec:authorize="hasRole('BARTENDER')">
         <a th:href="@{/bartender}" class="button">
-          <button id="order">Create Order</button>
+            <button id="order">Create Order</button>
         </a>
-      </div>
-
-      <button id="showHistoryButton">Order History</button>
-      <div id="purchase-history-container" style="display: none">
-        <h2>Recent Orders</h2>
-        <div class="purchase-list"></div>
-        <a href=""
-          ><button id="history-page-button">See full history</button></a
-        >
-      </div>
     </div>
 
-    <div id="profile_options">
-      <div sec:authorize="hasRole('ADMIN')">
-        <a th:href="@{/admin/}" class="button">
-          <button id="admin">Admin Panel</button>
-        </a>
-      </div>
-      <div id="logoutButton">
+    <div id="logoutButton">
         <form th:action="@{/logout}" method="POST">
-          <button type="submit" value="Logout">Logout</button>
+            <button type="submit" value="Logout">Logout</button>
         </form>
-      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-    <script th:src="@{/js/confirmation.js}"></script>
-  </body>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/}" class="button">
+            <button id="admin">Admin Panel</button>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script th:src="@{/js/confirmation.js}"></script>
+</body>
 </html>
