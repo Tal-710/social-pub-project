@@ -52,7 +52,7 @@ function startQRScan() {
     } else {
       qrResultDiv.textContent = "";
     }
-  }, 300);
+  }, 500);
 }
 
 function closeCamera() {
@@ -71,39 +71,104 @@ function closeCamera() {
 
 async function fetchUserDetails(userId) {
   try {
-    const response = await fetch(`${userId}`);
+    console.log('Fetching user details for ID:', userId);
+
+    // Additional debugging for the fetch URL
+    console.log('Fetch URL:', userId);
+
+    const response = await fetch(userId);
+
+    console.log('Fetch Response:', {
+      status: response.status,
+      ok: response.ok,
+      type: response.type
+    });
+
     if (response.ok) {
       const user = await response.json();
-      displayUserDetails(user);
 
+      console.log('Fetched User Object:', user);
+      console.log('User Profile Picture:', user.profilePicture);
+
+      displayUserDetails(user);
 
       if (typeof window.handleUserScan === "function") {
         window.handleUserScan(user);
       }
     } else {
+      console.error('Fetch failed with status:', response.status);
       qrResultDiv.textContent = "User not found.";
     }
   } catch (error) {
-    console.error("Error fetching user details:", error);
+    console.error("Complete Error Details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     qrResultDiv.textContent = "Error fetching user details.";
   }
 }
 
-
 function displayUserDetails(user) {
-  qrResultDiv.innerHTML = `
-    <h3>User Details</h3>
-    <div class="user-info-container">
-      <div class="profile-pic-container">
-        <img src="${user.profilePicture || '/images/default-profile.png'}"
-             alt="Profile Picture"
-             class="profile-pic"
-             onerror="this.src='/images/default-profile.png'">
+  console.log('Profile Picture:', user.profilePicture);
+
+  if (!user.profilePicture) {
+    qrResultDiv.innerHTML = `
+      <h3>User Details</h3>
+      <div class="user-info-container">
+        <div class="profile-pic-container">
+          <img src="/images/default-profile.png"
+               alt="Profile Picture"
+               class="profile-pic">
+        </div>
+        <div class="user-details">
+          <p>ID: ${user.idNumber}</p>
+          <p>Name: ${user.firstName} ${user.lastName}</p>
+        </div>
       </div>
-      <div class="user-details">
-        <p>ID: ${user.idNumber}</p>
-        <p>Name: ${user.firstName} ${user.lastName}</p>
-      </div>
-    </div>
-  `;
+    `;
+    return;
+  }
+
+  // Fetch the profile picture URL
+  fetch(`/users/profile-picture/${user.profilePicture}`)
+    .then(response => response.text())
+    .then(profilePictureUrl => {
+      // Create a unique, random attribute to prevent browser caching attempts
+      const uniqueAttr = `data-img-${Date.now()}`;
+
+      qrResultDiv.innerHTML = `
+        <h3>User Details</h3>
+        <div class="user-info-container">
+          <div class="profile-pic-container">
+            <img ${uniqueAttr}="${profilePictureUrl}"
+                 src="${profilePictureUrl}"
+                 alt="Profile Picture"
+                 class="profile-pic"
+                 onload="this.setAttribute('src', this.getAttribute('${uniqueAttr}'))"
+                 onerror="this.src='/images/default-profile.png'">
+          </div>
+          <div class="user-details">
+            <p>ID: ${user.idNumber}</p>
+            <p>Name: ${user.firstName} ${user.lastName}</p>
+          </div>
+        </div>
+      `;
+    })
+    .catch(() => {
+      qrResultDiv.innerHTML = `
+        <h3>User Details</h3>
+        <div class="user-info-container">
+          <div class="profile-pic-container">
+            <img src="/images/default-profile.png"
+                 alt="Profile Picture"
+                 class="profile-pic">
+          </div>
+          <div class="user-details">
+            <p>ID: ${user.idNumber}</p>
+            <p>Name: ${user.firstName} ${user.lastName}</p>
+          </div>
+        </div>
+      `;
+    });
 }

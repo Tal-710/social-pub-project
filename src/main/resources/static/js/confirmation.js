@@ -51,24 +51,39 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    function loadProfilePicture() {
-        const cachedUser = sessionStorage.getItem('userData');
-        if (cachedUser) {
-            const user = JSON.parse(cachedUser);
-            if (user.profilePicture) {
-                profileImage.src = user.profilePicture;
-            }
-            return;
+function loadProfilePicture() {
+    const cachedUser = sessionStorage.getItem('userData');
+    if (cachedUser) {
+        const user = JSON.parse(cachedUser);
+        if (user.profilePicture) {
+            fetch(`/users/profile-picture/${user.profilePicture}`)
+                .then(response => response.text())
+                .then(profilePictureUrl => {
+                    profileImage.src = profilePictureUrl;
+                })
+                .catch(error => {
+                    console.error('Failed to load profile picture:', error);
+                    profileImage.src = '/images/default-profile.png';
+                });
         }
-
-        fetchAndStoreUserData()
-            .then(user => {
-                if (user.profilePicture) {
-                    profileImage.src = user.profilePicture;
-                }
-            })
-            .catch();
+        return;
     }
+
+    fetchAndStoreUserData()
+        .then(user => {
+            if (user.profilePicture) {
+                return fetch(`/users/profile-picture/${user.profilePicture}`)
+                    .then(response => response.text())
+                    .then(profilePictureUrl => {
+                        profileImage.src = profilePictureUrl;
+                    });
+            }
+        })
+        .catch(error => {
+            console.error('Failed to load profile picture:', error);
+            profileImage.src = '/images/default-profile.png';
+        });
+}
 
     function resizeImage(file) {
         return new Promise((resolve, reject) => {
@@ -224,25 +239,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const response = await fetch('/users/update-profile-picture', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: token
-                },
-                body: JSON.stringify({ profilePicture: previewImage.src })
-            });
+                       method: 'POST',
+                       headers: {
+                           'Content-Type': 'application/json',
+                           [header]: token
+                       },
+                       body: JSON.stringify({ profilePicture: previewImage.src })
+                   });
 
-            if (!response.ok) {
-                const error = await response.text();
-                throw new Error(error || 'Failed to update profile picture');
-            }
+                   if (!response.ok) {
+                       const error = await response.text();
+                       throw new Error(error || 'Failed to update profile picture');
+                   }
 
-            profileImage.src = previewImage.src;
-            updateUserData({ profilePicture: previewImage.src });
-            closeModal();
-        } catch (error) {
-            alert('Error updating profile picture: ' + error.message);
-        }
+                   const result = await response.json();
+                   const urlResponse = await fetch(`/users/profile-picture/${result.fileName}`);
+                   const profilePictureUrl = await urlResponse.text();
+
+                   profileImage.src = profilePictureUrl;
+                   updateUserData({ profilePicture: result.fileName });
+                   closeModal();
+               } catch (error) {
+                   alert('Error updating profile picture: ' + error.message);
+               }
     });
 
     cancelBtn.addEventListener('click', closeModal);
@@ -255,50 +274,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    button.addEventListener('click', function() {
-        if (!qrCodeFetched) {
-            const cachedUser = sessionStorage.getItem('userData');
-            if (cachedUser) {
-                const user = JSON.parse(cachedUser);
-                if (user.qrCode) {
-                    image.src = user.qrCode;
-                    sessionStorage.setItem('userQRCode', user.qrCode);
-                    qrCodeFetched = true;
-                    image.style.display = 'block';
-                } else {
-                    image.style.display = 'none';
-                }
-                return;
-            }
-
-            fetchAndStoreUserData()
-                .then(user => {
-                    if (user.qrCode) {
-                        image.src = user.qrCode;
-                        sessionStorage.setItem('userQRCode', user.qrCode);
+button.addEventListener('click', function() {
+    if (!qrCodeFetched) {
+        const cachedUser = sessionStorage.getItem('userData');
+        if (cachedUser) {
+            const user = JSON.parse(cachedUser);
+            if (user.qrCode) {
+                fetch(`/users/qr-code/${user.qrCode}`)
+                    .then(response => response.text())
+                    .then(qrCodeUrl => {
+                        image.src = qrCodeUrl;
+                        sessionStorage.setItem('userQRCode', qrCodeUrl);
                         qrCodeFetched = true;
                         image.style.display = 'block';
-                    } else {
-                        image.style.display = 'none';
-                    }
-                })
-                .catch(() => {
-                    image.style.display = 'none';
-                });
-        } else {
-            if (image.style.display === 'none' || image.style.display === '') {
-                image.style.display = 'block';
+                    });
             } else {
                 image.style.display = 'none';
             }
+            return;
         }
-    });
 
-    image.style.display = 'none';
-    restoreQRCode();
-    loadProfilePicture();
-
-    document.querySelector('#logoutButton form')?.addEventListener('submit', () => {
-        sessionStorage.clear();
-    });
+        fetchAndStoreUserData()
+            .then(user => {
+                if (user.qrCode) {
+                    return fetch(`/users/qr-code/${user.qrCode}`)
+                        .then(response => response.text())
+                        .then(qrCodeUrl => {
+                            image.src = qrCodeUrl;
+                            sessionStorage.setItem('userQRCode', qrCodeUrl);
+                            qrCodeFetched = true;
+                            image.style.display = 'block';
+                        });
+                } else {
+                    image.style.display = 'none';
+                }
+            })
+            .catch(() => {
+                image.style.display = 'none';
+            });
+    } else {
+        if (image.style.display === 'none' || image.style.display === '') {
+            image.style.display = 'block';
+        } else {
+            image.style.display = 'none';
+        }
+    }
+});
 });

@@ -59,21 +59,59 @@ window.handleUserScan = (user) => {
   scannedUser = user;
   sessionStorage.setItem('scannedUser', JSON.stringify(user));
 
-  qrResultDiv.innerHTML = `
-    <h3>User Details</h3>
-    <div class="user-info-container">
-      <div class="profile-pic-container">
-        <img src="${user.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}"
-             alt="Profile Picture"
-             class="profile-pic"
-             onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'">
+  if (user.profilePicture) {
+    fetch(`/users/profile-picture/${user.profilePicture}`)
+      .then(response => response.text())
+      .then(profilePictureUrl => {
+        qrResultDiv.innerHTML = `
+          <h3>User Details</h3>
+          <div class="user-info-container">
+            <div class="profile-pic-container">
+              <img src="${profilePictureUrl}"
+                   alt="Profile Picture"
+                   class="profile-pic"
+                   onerror="this.src='/images/default-profile.png'">
+            </div>
+            <div class="user-details">
+              <p>ID: ${user.idNumber}</p>
+              <p>Name: ${user.firstName} ${user.lastName}</p>
+            </div>
+          </div>
+        `;
+      })
+      .catch(() => {
+        qrResultDiv.innerHTML = `
+          <h3>User Details</h3>
+          <div class="user-info-container">
+            <div class="profile-pic-container">
+              <img src="/images/default-profile.png"
+                   alt="Profile Picture"
+                   class="profile-pic">
+            </div>
+            <div class="user-details">
+              <p>ID: ${user.idNumber}</p>
+              <p>Name: ${user.firstName} ${user.lastName}</p>
+            </div>
+          </div>
+        `;
+      });
+  } else {
+    qrResultDiv.innerHTML = `
+      <h3>User Details</h3>
+      <div class="user-info-container">
+        <div class="profile-pic-container">
+          <img src="/images/default-profile.png"
+               alt="Profile Picture"
+               class="profile-pic">
+        </div>
+        <div class="user-details">
+          <p>ID: ${user.idNumber}</p>
+          <p>Name: ${user.firstName} ${user.lastName}</p>
+        </div>
       </div>
-      <div class="user-details">
-        <p>ID: ${user.idNumber}</p>
-        <p>Name: ${user.firstName} ${user.lastName}</p>
-      </div>
-    </div>
-  `;
+    `;
+  }
+
   submitOrderButton.disabled = false;
 };
 addItemButton.addEventListener('click', () => {

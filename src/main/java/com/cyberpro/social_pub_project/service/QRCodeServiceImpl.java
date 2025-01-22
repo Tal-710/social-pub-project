@@ -32,20 +32,20 @@ public class QRCodeServiceImpl implements QRCodeService {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 350, 350);
 
-
             BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(qrImage, "PNG", baos);
             byte[] imageBytes = baos.toByteArray();
 
-
             String fileName = String.format("qr_code_%d.png", user.getId());
+
             logger.info("Uploading QR code to Azure Blob Storage: {}", fileName);
 
-            String qrCodeUrl = azureBlobService.uploadQRCode(imageBytes, fileName);
-            logger.info("Successfully uploaded QR code: {}", qrCodeUrl);
+            // Upload the QR code and get the filename (not the URL)
+            azureBlobService.uploadQRCode(imageBytes, fileName);
+            logger.info("Successfully uploaded QR code: {}", fileName);
 
-            return qrCodeUrl;
+            return fileName;
 
         } catch (Exception e) {
             logger.error("Failed to generate/upload QR code for user {}: {}", user.getId(), e.getMessage(), e);
