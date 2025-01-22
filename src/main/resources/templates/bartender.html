@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
   <head>
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     <meta charset="UTF-8" />
@@ -34,8 +34,9 @@
               <div class="submenu-item">
                 <a href="/confirmation" class="submenu-link"> User Page </a>
               </div>
-              <div class="submenu-item">
-                <a href="/admin/" class="submenu-link"> Admin Panel </a>
+
+              <div sec:authorize="hasRole('ADMIN')" class="submenu-item">
+                <a th:href="@{/admin/}" class="submenu-link"> Admin Panel </a>
               </div>
             </div>
           </div>
