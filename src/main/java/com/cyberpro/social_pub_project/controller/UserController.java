@@ -79,18 +79,34 @@ public class UserController {
 
             String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
 
-            String imageUrl = azureBlobService.uploadProfilePicture(imageBytes, fileName);
+            // Upload the profile picture and get the filename
+            azureBlobService.uploadProfilePicture(imageBytes, fileName);
 
             User user = userService.findByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            user.setProfilePicture(imageUrl);
+
+            // Set only the filename, not the full URL
+            user.setProfilePicture(fileName);
             userService.save(user);
 
-            return ResponseEntity.ok().body(Map.of("url", imageUrl));
+            // Return the filename instead of the URL
+            return ResponseEntity.ok().body(Map.of("fileName", fileName));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update profile picture: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/profile-picture/{fileName}")
+    public ResponseEntity<String> getProfilePictureUrl(@PathVariable String fileName) {
+        String url = azureBlobService.getProfilePictureUrl(fileName);
+        return ResponseEntity.ok(url);
+    }
+
+    @GetMapping("/qr-code/{fileName}")
+    public ResponseEntity<String> getQrCodeUrl(@PathVariable String fileName) {
+        String url = azureBlobService.getQrCodeUrl(fileName);
+        return ResponseEntity.ok(url);
     }
 
     @DeleteMapping("/{id}")

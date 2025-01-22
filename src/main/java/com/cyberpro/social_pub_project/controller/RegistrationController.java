@@ -84,10 +84,9 @@ public class RegistrationController {
                 return "register";
             }
 
-            String profilePictureUrl = null;
+            String profilePictureFileName = null;
             if (profilePicData != null && !profilePicData.isEmpty()) {
                 try {
-                    // Remove the "data:image/jpeg;base64," prefix
                     String base64Image = profilePicData.substring(profilePicData.indexOf(",") + 1);
                     byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
@@ -99,7 +98,8 @@ public class RegistrationController {
 
                     String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
 
-                    profilePictureUrl = azureBlobService.uploadProfilePicture(imageBytes, fileName);
+                    azureBlobService.uploadProfilePicture(imageBytes, fileName);
+                    profilePictureFileName = fileName;
 
                 } catch (Exception e) {
                     model.addAttribute("errorMessage", "Failed to process profile picture: " + e.getMessage());
@@ -114,7 +114,7 @@ public class RegistrationController {
                     user.getLastName(),
                     user.getAge(),
                     user.getIdNumber(),
-                    profilePictureUrl
+                    profilePictureFileName
             );
 
             return "redirect:/login";

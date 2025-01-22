@@ -50,9 +50,9 @@ public class AdminController {
             if (enabled == 1 && user.getQrCode() == null) {
                 logger.info("Generating new QR code for user ID: {}", id);
                 try {
-                    String qrCodeUrl = qrCodeService.generateAndUploadQRCode(user);
-                    user.setQrCode(qrCodeUrl);
-                    logger.info("Successfully generated QR code: {}", qrCodeUrl);
+                    String qrCodeFileName = qrCodeService.generateAndUploadQRCode(user);
+                    user.setQrCode(qrCodeFileName);
+                    logger.info("Successfully generated QR code: {}", qrCodeFileName);
                 } catch (Exception e) {
                     logger.error("Failed to generate QR code for user ID: {}", id, e);
                     return ResponseEntity.status(500).body("Failed to generate QR code");
