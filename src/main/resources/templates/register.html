@@ -1,92 +1,173 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<body>
-<div class="form-container">
-    <h1 class="title">Register</h1>
+  </head>
+  <body>
+    <div class="form-container">
+      <h1 class="title">Register</h1>
 
-    <form th:action="@{/register}"
-          id="register-form"
-          th:object="${user}"
-          method="POST"
-          class="form"
-          onsubmit="return validateForm(event)"
-          autocomplete="off"
-          data-csrf="${_csrf.token}">
+      <form
+        th:action="@{/register}"
+        id="register-form"
+        th:object="${user}"
+        method="POST"
+        class="form"
+        onsubmit="return validateForm(event)"
+        autocomplete="off"
+        data-csrf="${_csrf.token}"
+      >
         <div th:if="${errorMessage}" class="error">
-            <span th:text="${errorMessage}"></span>
+          <span th:text="${errorMessage}"></span>
         </div>
 
         <div class="input-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" th:field="*{username}" maxlength="50" required>
-            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></span>
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            th:field="*{username}"
+            maxlength="50"
+            required
+          />
+          <span
+            th:if="${#fields.hasErrors('username')}"
+            th:errors="*{username}"
+            class="error"
+          ></span>
         </div>
 
         <div class="input-group">
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" th:field="*{firstName}" maxlength="50" required>
+          <label for="firstName">First Name:</label>
+          <input
+            type="text"
+            id="firstName"
+            th:field="*{firstName}"
+            maxlength="50"
+            required
+          />
         </div>
 
         <div class="input-group">
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" th:field="*{lastName}" maxlength="50" required autocomplete="new-password">
+          <label for="lastName">Last Name:</label>
+          <input
+            type="text"
+            id="lastName"
+            th:field="*{lastName}"
+            maxlength="50"
+            required
+            autocomplete="new-password"
+          />
         </div>
 
         <div class="input-group">
-            <label for="idNumber">ID Number:</label>
-            <input type="number" id="idNumber" th:field="*{idNumber}" required autocomplete="new-password">
-            <span th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></span>
+          <label for="idNumber">ID Number:</label>
+          <input
+            type="number"
+            id="idNumber"
+            th:field="*{idNumber}"
+            required
+            autocomplete="new-password"
+          />
+          <span
+            th:if="${#fields.hasErrors('idNumber')}"
+            th:errors="*{idNumber}"
+            class="error"
+          ></span>
         </div>
 
         <div class="input-group">
-            <label for="age">Age:</label>
-            <input type="number" id="age" th:field="*{age}" max="130" min="18" required>
+          <label for="age">Age:</label>
+          <input
+            type="number"
+            id="age"
+            th:field="*{age}"
+            max="130"
+            min="18"
+            required
+          />
         </div>
 
         <div class="input-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" th:field="*{password}" maxlength="30" required>
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            th:field="*{password}"
+            maxlength="30"
+            required
+          />
         </div>
 
         <div class="input-group">
-            <label for="confirm-password">Confirm Password:</label>
-            <input type="password" id="confirm-password" maxlength="30" name="confirm-password" required>
+          <label for="confirm-password">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirm-password"
+            maxlength="30"
+            name="confirm-password"
+            required
+          />
         </div>
         <div class="input-group">
-            <label>Profile Picture:</label>
-            <div class="profile-pic-options">
-                <input type="file" id="profile-pic-file" name="profilePicture" accept="image/*" class="file-input">
-                <button type="button" id="camera-button" class="btn-secondary">Take Photo</button>
-            </div>
-            <video id="camera-feed" style="display: none;" width="320" height="240"></video>
-            <canvas id="photo-canvas" style="display: none;" width="320" height="240"></canvas>
-            <img id="profile-preview" style="display: none; max-width: 200px; margin-top: 10px;">
-            <input type="hidden" id="profile-pic-data" name="profilePicData">
-            <div id="profile-pic-error" class="error"></div>
+          <label>Profile Picture:</label>
+          <div class="profile-pic-options">
+            <input
+              type="file"
+              id="profile-pic-file"
+              name="profilePicture"
+              accept="image/*"
+              class="file-input"
+            />
+            <button type="button" id="camera-button" class="btn-secondary">
+              Take Photo
+            </button>
+          </div>
+          <video
+            id="camera-feed"
+            style="display: none"
+            width="320"
+            height="240"
+          ></video>
+          <canvas
+            id="photo-canvas"
+            style="display: none"
+            width="320"
+            height="240"
+          ></canvas>
+          <img
+            id="profile-preview"
+            style="display: none; max-width: 200px; margin-top: 10px"
+          />
+          <input type="hidden" id="profile-pic-data" name="profilePicData" />
+          <div id="profile-pic-error" class="error"></div>
         </div>
 
         <div class="input-group">
-            <div class="g-recaptcha" th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"></div>
-            <span id="captcha-error" class="error"></span>
+          <div
+            class="g-recaptcha"
+            th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"
+          ></div>
+          <span id="captcha-error" class="error"></span>
         </div>
 
         <div id="error-message"></div>
 
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" id="submit" class="btn">Register</button>
 
-        <div class="signup">
-            <a th:href="@{/login}" class="btn">Already Sign up? Login</a>
+        <div class="social-message">
+          <p class="signup">
+            Have an account? Login
+            <a th:href="@{/login}" class="a">here</a>
+          </p>
         </div>
-    </form>
-</div>
+      </form>
+    </div>
 
-<script th:src="@{/js/register.js}"></script>
-</body>
+    <script th:src="@{/js/register.js}"></script>
+  </body>
 </html>
