@@ -12,7 +12,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 class SocialPubProjectApplicationTests {
 
 	@MockitoBean
-	private AzureBlobService azureBlobService; // Mock the AzureBlobService
+	private AzureBlobService azureBlobService;
 	@MockitoBean
 	private QRCodeServiceImpl qrCodeService;
 

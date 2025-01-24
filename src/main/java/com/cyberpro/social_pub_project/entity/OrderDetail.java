@@ -12,7 +12,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonBackReference("order-details")  // Add this
+    @JsonBackReference("order-details")
     private Order order;
 
     @ManyToOne

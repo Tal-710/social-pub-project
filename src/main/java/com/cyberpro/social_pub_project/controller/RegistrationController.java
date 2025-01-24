@@ -24,7 +24,7 @@ public class RegistrationController {
     private final ReCaptchaService reCaptchaService;
     private final AzureBlobService azureBlobService;
 
-    private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+    private static final long MAX_IMAGE_SIZE = 5 * 1024 * 1024;
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 800;
 
@@ -90,7 +90,7 @@ public class RegistrationController {
                     String base64Image = profilePicData.substring(profilePicData.indexOf(",") + 1);
                     byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
-                    // Validate image size
+
                     if (imageBytes.length > MAX_IMAGE_SIZE) {
                         model.addAttribute("errorMessage", "Profile picture size exceeds maximum allowed size (5MB)");
                         return "register";

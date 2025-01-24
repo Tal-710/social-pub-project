@@ -41,7 +41,7 @@ public class QRCodeServiceImpl implements QRCodeService {
 
             logger.info("Uploading QR code to Azure Blob Storage: {}", fileName);
 
-            // Upload the QR code and get the filename (not the URL)
+
             azureBlobService.uploadQRCode(imageBytes, fileName);
             logger.info("Successfully uploaded QR code: {}", fileName);
 

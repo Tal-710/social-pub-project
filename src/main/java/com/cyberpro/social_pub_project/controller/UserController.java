@@ -79,17 +79,16 @@ public class UserController {
 
             String fileName = "profile_" + UUID.randomUUID().toString() + ".jpg";
 
-            // Upload the profile picture and get the filename
+
             azureBlobService.uploadProfilePicture(imageBytes, fileName);
 
             User user = userService.findByUsername(userDetails.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            // Set only the filename, not the full URL
+
             user.setProfilePicture(fileName);
             userService.save(user);
 
-            // Return the filename instead of the URL
             return ResponseEntity.ok().body(Map.of("fileName", fileName));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
