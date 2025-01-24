@@ -1,38 +1,122 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Social Pub</title>
     <link rel="stylesheet" th:href="@{/css/homePage.css}" />
-</head>
-
-<body>
-<div class="header">
-    <h1>Social Pub</h1>
-
-</div>
-<h2>Welcome to  Social Pub-Kibbutz Zikim!</h2>
-<div id="button-container">
-        <a th:href="@{/register}" class="button">
-            <button id="text">Register</button>
-        </a>
-        <a th:href="@{/login}" class="button">
-            <button>Login</button>
-        </a>
-</div>
-<div class="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="https://images.squarespace-cdn.com/content/v1/57eaddcf2e69cfdc14bda7b2/1495654720897-42ORYPPSGK4YCWLYX62Q/draft+beer+pour"
-                 alt="Slide 1" />
-        </div>
-        <div class="carousel-item">
-            <img src="image/pic5.jpg" alt="Slide 3" />
-        </div>
+  </head>
+  <body>
+    <div class="hero-section">
+      <video autoplay muted loop class="background-video">
+        <source th:src="@{/images/heroVideo.mp4}" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <h1 class="hero-title">SOCIAL PUB</h1>
     </div>
-</div>
-<script th:src="@{js/homepage.js}"></script>
-</body>
+
+    <div class="content">
+      <p class="purpose-text">
+        Welcome to Social Pub, the perfect place to unwind, socialize, and enjoy
+        an unforgettable night with friends. Whether you're here for our wide
+        selection of drinks, lively atmosphere, or just with your friends, Here
+        we you wont need to pay a cent, just scan Your QR code, order and enjoy.
+      </p>
+      <div id="button-container">
+        <button id="text">
+          <a th:href="@{/register}" class="button">Register</a>
+        </button>
+
+        <button><a th:href="@{/login}" class="button">Login</a></button>
+      </div>
+    </div>
+
+    <div class="flow-container">
+      <b style="font-size: 22px; margin-bottom: 20px"> How does it Work? </b>
+      <div class="box">
+        <h3>Scan your QR-code</h3>
+        <div class="svg-container">
+          <img
+            th:src="@{/images/qr-scan-svgrepo-com.svg}"
+            alt="qrsvg"
+            id="qrsvg"
+          />
+        </div>
+      </div>
+
+      <div class="arrow">
+        <img
+          th:src="@{/images/arrow-down-1-svgrepo-com.svg}"
+          alt="arrow-right"
+          class="arrow"
+        />
+      </div>
+
+      <div class="box">
+        <h3>Order your drinks</h3>
+        <div class="svg-container">
+          <img
+            th:src="@{/images/order-1-svgrepo-com.svg}"
+            alt="scan"
+            id="scan"
+          />
+        </div>
+      </div>
+
+      <div class="arrow">
+        <img
+          th:src="@{/images/arrow-down-1-svgrepo-com.svg}"
+          alt="arrow-right"
+          class="arrow"
+        />
+      </div>
+
+      <div class="box">
+        <h3>Enjoy your stay!</h3>
+        <div class="svg-container">
+          <img
+            th:src="@{/images/drink-cocktail-svgrepo-com.svg}"
+            alt="wine"
+            id="wine"
+          />
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-about">
+          <h4>About Social Pub</h4>
+          <p>
+            Social Pub is your ultimate destination for great drinks, good
+            company, and unforgettable memories. Join us for a night to
+            remember!
+          </p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a
+              href="https://github.com/Tal-710/social-pub-project"
+              target="_blank"
+              ><i class="fab"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Social Pub. All rights reserved.</p>
+      </div>
+    </footer>
+    <script th:src="@{js/homepage.js}"></script>
+  </body>
 </html>
