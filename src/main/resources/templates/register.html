@@ -27,13 +27,16 @@
 
         <div class="input-group">
           <label for="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            th:field="*{username}"
-            maxlength="50"
-            required
-          />
+            <input
+                    type="text"
+                    id="username"
+                    th:field="*{username}"
+                    maxlength="20"
+                    pattern="[^\s]+"
+                    oninvalid="this.setCustomValidity('Spaces are not allowed in username')"
+                    oninput="this.setCustomValidity('')"
+                    required
+            />
           <span
             th:if="${#fields.hasErrors('username')}"
             th:errors="*{username}"
@@ -47,7 +50,7 @@
             type="text"
             id="firstName"
             th:field="*{firstName}"
-            maxlength="50"
+            maxlength="30"
             required
           />
         </div>
@@ -58,7 +61,7 @@
             type="text"
             id="lastName"
             th:field="*{lastName}"
-            maxlength="50"
+            maxlength="30"
             required
             autocomplete="new-password"
           />

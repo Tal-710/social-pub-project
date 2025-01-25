@@ -21,9 +21,13 @@
           <label for="username">Username</label>
           <input
             type="text"
-            name="username"
             id="username"
+            name="username"
             placeholder="Enter your username"
+            maxlength="50"
+            pattern="[^\s]+"
+            oninvalid="this.setCustomValidity('Spaces are not allowed in username')"
+            oninput="this.setCustomValidity('')"
             required
           />
         </div>

@@ -212,10 +212,8 @@ if (e.target.classList.contains('toggle-status-btn')) {
         });
 
         if (response.ok) {
-            // Store the message in sessionStorage before reloading
             sessionStorage.setItem('toastMessage', 'Product status updated successfully');
             sessionStorage.setItem('toastType', 'success');
-            // Reload immediately
             reloadPage();
         } else {
             showToast('Error updating product status', 'error');

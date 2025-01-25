@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-
-
   function updateTotal() {
     const total = order.reduce((sum, item) => sum + item.totalPrice, 0);
     totalAmountSpan.textContent = total.toFixed(2);

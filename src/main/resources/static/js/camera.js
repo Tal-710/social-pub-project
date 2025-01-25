@@ -12,7 +12,6 @@ let cameraActive = false;
 async function toggleCamera() {
   if (!cameraActive) {
     try {
-     // Clear previous user details and disable submit button
      if (typeof window.handleUserScan === "function") {
           window.clearUserData();
      }

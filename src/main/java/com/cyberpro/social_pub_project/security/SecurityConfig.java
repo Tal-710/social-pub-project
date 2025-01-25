@@ -57,6 +57,7 @@ public class SecurityConfig {
                             .requestMatchers("/users/current").permitAll()
                             .requestMatchers("/users/*").hasAnyRole("BARTENDER","ADMIN")
                             .requestMatchers("/error/**").permitAll()
+                            .requestMatchers("/session-timeout").permitAll()
                             .requestMatchers("/admin/****").hasRole("ADMIN")
                             .requestMatchers("/orders/history").permitAll()
                             .requestMatchers("/orders/***").hasAnyRole("BARTENDER","ADMIN")

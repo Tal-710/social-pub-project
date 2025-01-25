@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Clear session storage function
     function clearUserSessionData() {
         sessionStorage.removeItem('userData');
         sessionStorage.removeItem('userQRCode');
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
         qrCodeFetched = false;
     }
 
-    // Add logout listener
     const logoutForm = document.querySelector('form[action="/logout"]');
     if (logoutForm) {
         logoutForm.addEventListener('submit', function() {
@@ -79,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadProfilePicture() {
         console.log('Loading profile picture...');
 
-        // Check for user mismatch
         const currentUsername = document.querySelector('[sec\\:authentication="principal.username"]')?.textContent;
         const cachedUser = sessionStorage.getItem('userData');
 
@@ -133,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Rest of your existing functions remain the same
     function resizeImage(file) {
         return new Promise((resolve, reject) => {
             if (file.size > MAX_FILE_SIZE) {
@@ -202,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
         cameraContainer.style.display = 'none';
     }
 
-    // Event Listeners
     profilePicContainer.addEventListener('click', () => {
         floatingEditor.style.display = 'block';
     });
