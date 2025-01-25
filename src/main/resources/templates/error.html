@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Oops! Something went wrong.</h1>
-<p>Status Code: ${status}</p>
-<p>Error Message: ${error}</p>
+<p th:text="'Status Code: ' + ${status}"></p>
+<p th:text="'Error Message: ' + ${error}"></p>
 </body>
 </html>

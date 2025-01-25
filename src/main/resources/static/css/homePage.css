@@ -22,7 +22,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 56.25vw;
+  height: 45.25vh;
   overflow: hidden;
 }
 
@@ -47,11 +47,18 @@ body {
   .hero-title {
     font-size: 3rem; /* Reduce the font size by half */
   }
+  .hero-section{
+    height:22.25vh
+    }
 }
 
 @media (max-width: 400px) {
   .hero-title {
     font-size: 1.6rem; /* Reduce the font size by half */
+  }
+
+  .hero-section{
+  height:22.25vh
   }
 }
 
