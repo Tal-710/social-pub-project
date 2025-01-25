@@ -46,6 +46,8 @@ input:focus {
   width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center ;
   gap: 0.5rem;
 }
 
@@ -208,4 +210,61 @@ p.signup {
 a.a {
   color: #28fa55;
   text-decoration: underline;
+}
+#return-home {
+  --bg: #90ffa8;
+  --hover-bg: #28fa55;
+  --hover-text: #000;
+  color: black;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.9em 2.2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin: 7.5px;
+  width: 200px;
+}
+
+#return-home:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#return-home:active {
+  transform: translate(0);
+  box-shadow: none;
+}
+.social-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#camera-close {
+  --bg: #ff9790;
+  --hover-bg: #fa6e28;
+  --hover-text: #000;
+  color: black;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.9em 2.2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin: 7.5px;
+  width: 200px;
+}
+
+#camera-close:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#camera-close:active {
+  transform: translate(0);
+  box-shadow: none;
 }

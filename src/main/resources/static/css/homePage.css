@@ -24,6 +24,7 @@ body {
   width: 100vw;
   height: 45.25vh;
   overflow: hidden;
+  flex-direction: column;
 }
 
 .background-video {
