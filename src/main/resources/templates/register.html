@@ -145,6 +145,14 @@
           />
           <input type="hidden" id="profile-pic-data" name="profilePicData" />
           <div id="profile-pic-error" class="error"></div>
+          <button
+            type="button"
+            id="camera-close"
+            class="btn-secondary"
+            style="display: none"
+          >
+            Close
+          </button>
         </div>
 
         <div class="input-group">
@@ -164,6 +172,13 @@
             Have an account? Login
             <a th:href="@{/login}" class="a">here</a>
           </p>
+          <div>
+            <a th:href="@{/home}" class="a"
+              ><button type="button" id="return-home" class="btn">
+                Home
+              </button></a
+            >
+          </div>
         </div>
       </form>
     </div>

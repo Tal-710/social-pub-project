@@ -162,3 +162,34 @@ a.a {
   transform: translate(0);
   box-shadow: none;
 }
+.social-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#return-home {
+  --bg: #90ffa8;
+  --hover-bg: #28fa55;
+  --hover-text: #000;
+  color: black;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.9em 2.2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin: 7.5px;
+  width: 200px;
+}
+
+#return-home:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#return-home:active {
+  transform: translate(0);
+  box-shadow: none;
+}

@@ -1,43 +1,69 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Page</title>
-    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<body>
-<div class="form-container">
-    <p class="title">Login</p>
+  </head>
+  <body>
+    <div class="form-container">
+      <p class="title">Login</p>
 
-    <form class="form" th:action="@{/authenticateTheUser}" method="post" id="login-form">
+      <form
+        class="form"
+        th:action="@{/authenticateTheUser}"
+        method="post"
+        id="login-form"
+      >
         <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="Enter your username" required>
+          <label for="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter your username"
+            required
+          />
         </div>
         <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+          <label for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
         <div class="input-group">
-            <div class="g-recaptcha" th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"></div>
+          <div
+            class="g-recaptcha"
+            th:data-sitekey="${@environment.getProperty('google.recaptcha.site-key')}"
+          ></div>
         </div>
         <div id="error-container" class="error-container">
-            <div id="login-error" class="login-error" th:if="${param.error}">
-                <p>Sorry! you have entered wrong password or username</p>
-            </div>
-            <span id="captcha-error" class="error"></span>
-            <div id="general-error-message" class="error"></div>
+          <div id="login-error" class="login-error" th:if="${param.error}">
+            <p>Sorry! you have entered wrong password or username</p>
+          </div>
+          <span id="captcha-error" class="error"></span>
+          <div id="general-error-message" class="error"></div>
         </div>
         <button type="submit" class="sign">Sign in</button>
-    </form>
-    <div class="social-message">
-        <p class="signup">Don't have an account?
-            <a th:href="@{/register}" class="a">Sign up</a>
+      </form>
+      <div class="social-message">
+        <p class="signup">
+          Don't have an account?
+          <a th:href="@{/register}" class="a">Sign up</a>
         </p>
+        <div>
+          <a th:href="@{/home}" class="a"
+            ><button type="button" id="return-home" class="btn">Home</button></a
+          >
+        </div>
+      </div>
     </div>
-</div>
-<script th:src="@{/js/login.js}"></script>
-</body>
+    <script th:src="@{/js/login.js}"></script>
+  </body>
 </html>

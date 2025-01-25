@@ -1,51 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+  <head>
     <title>Order History</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/order-history.css}">
-</head>
-<body>
-<div class="header">
-    <h1>Social Pub</h1>
-</div>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/css/order-history.css}" />
+  </head>
+  <body>
+    <nav>
+      <div>
+        <form th:action="@{/confirmation}">
+          <button id="HomeButton" type="submit" value="Logout">
+            <img
+              th:src="@{/images/left-arrow-alt-svgrepo-com.svg}"
+              alt="left"
+              id="left"
+            />
+            Home
+          </button>
+        </form>
+      </div>
+      <h1 id="social-pub">Social Pub</h1>
+    </nav>
 
-<div class="container">
-    <div class="welcome-section">
+    <main>
+      <div class="welcome-section">
         <h2>Order History for <span th:text="${username}"></span></h2>
-        <a href="/confirmation" class="back-button">Back to Profile</a>
-    </div>
+      </div>
 
-    <div class="orders-container">
+      <div class="orders-container">
         <div th:if="${orders.empty}" class="no-orders">
-            <p>You haven't placed any orders yet.</p>
+          <p>You haven't placed any orders yet.</p>
         </div>
 
         <div th:each="order : ${orders}" class="order-card">
-            <div class="order-header">
-                <span class="order-number">Order #<span th:text="${order.id}"></span></span>
-                <span class="order-date" th:text="${#dates.format(order.orderDate, 'MMM dd, yyyy HH:mm')}"></span>
-            </div>
+          <div class="order-header">
+            <span class="order-number"
+              >Order #<span th:text="${order.id}"></span
+            ></span>
+            <span
+              class="order-date"
+              th:text="${#dates.format(order.orderDate, 'MMM dd, yyyy HH:mm')}"
+            ></span>
+          </div>
 
-            <div class="order-details">
-                <div th:each="detail : ${order.orderDetails}" class="order-item">
-                    <div class="product-info">
-                        <span class="product-name" th:text="${detail.product.name}"></span>
-                        <span class="quantity">x<span th:text="${detail.quantity}"></span></span>
-                    </div>
-                    <div class="price-info">
-                        <span class="unit-price">$<span th:text="${#numbers.formatDecimal(detail.unitPrice, 1, 2)}"></span></span>
-                        <span class="subtotal">$<span th:text="${#numbers.formatDecimal(detail.subtotal, 1, 2)}"></span></span>
-                    </div>
-                </div>
-                <div class="order-total">
-                    <span>Total:</span>
-                    <span class="total-amount">$<span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span></span>
-                </div>
+          <div class="order-details">
+            <div th:each="detail : ${order.orderDetails}" class="order-item">
+              <div class="product-info">
+                <span
+                  class="product-name"
+                  th:text="${detail.product.name}"
+                ></span>
+                <span class="quantity"
+                  >x<span th:text="${detail.quantity}"></span
+                ></span>
+              </div>
+              <div class="price-info">
+                <span class="unit-price"
+                  >$<span
+                    th:text="${#numbers.formatDecimal(detail.unitPrice, 1, 2)}"
+                  ></span
+                ></span>
+                <span class="subtotal"
+                  >$<span
+                    th:text="${#numbers.formatDecimal(detail.subtotal, 1, 2)}"
+                  ></span
+                ></span>
+              </div>
             </div>
+            <div class="order-total">
+              <span>Total:</span>
+              <span class="total-amount"
+                >$<span
+                  th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"
+                ></span
+              ></span>
+            </div>
+          </div>
         </div>
-    </div>
-</div>
-</body>
+      </div>
+    </main>
+  </body>
 </html>

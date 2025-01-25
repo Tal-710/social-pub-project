@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.w3.org/1999/xhtml"
+>
   <head>
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     <meta charset="UTF-8" />
@@ -12,42 +16,29 @@
   </head>
   <body>
     <div class="container">
+      
       <nav>
-        <div id="description" style="font-size: 30px">order</div>
-        <div class="menu">
-          <div class="item">
-            <a href="#" class="link">
-              <span> Menu </span>
-              <svg viewBox="0 0 360 360" xml:space="preserve">
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    id="XMLID_225_"
-                    d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
-                  ></path>
-                </g>
-              </svg>
-            </a>
-            <div class="submenu">
-              <div class="submenu-item">
-                <a href="/home" class="submenu-link"> Home </a>
-              </div>
-              <div class="submenu-item">
-                <a href="/confirmation" class="submenu-link"> User Page </a>
-              </div>
-
-              <div sec:authorize="hasRole('ADMIN')" class="submenu-item">
-                <a th:href="@{/admin/}" class="submenu-link"> Admin Panel </a>
-              </div>
-            </div>
-          </div>
+        <div>
+          <form th:action="@{/confirmation}">
+            <button id="HomeButton" type="submit" value="Logout">
+              <img
+                th:src="@{/images/left-arrow-alt-svgrepo-com.svg}"
+                alt="left"
+                id="left"
+              />
+              Home
+            </button>
+          </form>
         </div>
+        <h1 id="social-pub">Social Pub</h1>
+      
       </nav>
 
       <main>
         <section id="order-management">
           <h2>Order Management</h2>
 
-          <!-- Product Selection -->
+          
           <div id="product-selection">
             <label id="product-label" for="product-dropdown"
               >Select Product:</label

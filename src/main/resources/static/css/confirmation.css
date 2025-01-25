@@ -2,7 +2,7 @@
 body {
   height: 100vh;
   width: 100vw;
-  background-color: rgb(255, 255, 255);
+  background-color: #f4f4f4;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -12,11 +12,11 @@ body {
 }
 
 .profile-pic {
-    transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .profile-pic[src] {
-    opacity: 1;
+  opacity: 1;
 }
 
 #social-pub {
@@ -34,15 +34,53 @@ h1 {
 
 .header {
   border: solid 1px black;
-  height: 30vh;
+  height: 32.5vh;
   text-align: center;
   width: 100vw;
   background-size: cover;
-  background-image: url("https://cuantotiempo.com.es/wp-content/uploads/2023/05/Cuanto-tiempo-dura-el-alcohol-en-la-orina-img-1.jpg");
-  background-size: 100% 100%;
+  background-image: url("../images/barbackground2.jpg");
+  /* background-size: 100% 100%; */
+  /* width: 50%; */
   font-size: 1.7em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  border-bottom: solid 6px #90ffa8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+#HomeButton {
+  position: absolute;
+  left: 15px;
+  --bg: #90ffa8;
+  --hover-bg: #90ffa8;
+  --hover-text: #000;
+  color: black;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  border-radius: 15px;
+  padding-right: 12.5px;
+  background: var(--bg);
+  transition: 0.2s;
+  margin: 7.5px;
+  height: 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+}
+#HomeButton:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+}
+
+#HomeButton:active {
+  transform: translate(0);
+  box-shadow: none;
+}
 #welcome-container {
   text-align: center;
 }
@@ -74,32 +112,7 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.295);
   margin-bottom: 20px;
 }
-#showImageButton,
-#admin {
-  border-radius: 10px 10px 0 0;
-}
 
-#logoutButton,
-#showHistoryButton {
-  border-radius: 0 0 10px 10px;
-}
-
-button {
-  width: 100%;
-  height: 10vh;
-  background-color: #007ea7;
-  font-size: 18px;
-  color: rgb(0, 0, 0);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  gap: 0;
-  display: block;
-  padding-left: 10px;
-}
 #history-page-button {
   width: 80%;
   height: 8vh;
@@ -112,10 +125,6 @@ button {
   text-align: left;
   border-radius: 10px;
   margin-top: 5px;
-}
-#qrImageContainer {
-  display: flex;
-  justify-content: center;
 }
 
 #image {
@@ -197,6 +206,9 @@ h2 {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  border-radius: 50%;
+  border: 5px solid #90ffa8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .edit-overlay {
@@ -261,19 +273,31 @@ h2 {
 }
 
 .action-btn {
-  background-color: #5d403a;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  --bg: #90ffa8;
+  --hover-bg: #28fa55;
+  --hover-text: #000;
+  color: black;
   cursor: pointer;
-  transition: background-color 0.3s;
+  border: 1px solid var(--bg);
+  border-radius: 4px;
+  padding: 0.9em 2.2em;
+  background: var(--bg);
+  transition: 0.2s;
+  margin: 7.5px;
+  width: 200px;
 }
 
 .action-btn:hover {
-  background-color: #4a332f;
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
 }
 
+.action-btn:active {
+  transform: translate(0);
+  box-shadow: none;
+}
 .camera-container {
   text-align: center;
   margin: 20px 0;
@@ -334,7 +358,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background: #5d403a;
+  background: #90ffa8;
   color: white;
   border-radius: 10px 10px 0 0;
 }
@@ -391,6 +415,7 @@ h2 {
   border-radius: 5px;
   width: 95vw;
   height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /*start of profile pic edit*/
@@ -453,32 +478,79 @@ h2 {
   background-repeat: no-repeat;
   background-position: center;
 }
-/*end of profile pic edit*/
-/*old part*/
-/*
-.profile-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .profile-pic-container {
-    position: relative;
-    width: 50vw; 
-    height: 50vw; 
-    border-radius: 50%;
-    overflow: hidden;
-    background-color: #cccccc; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  #profileImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-*/
+.buttons-container {
+  width: 85%;
+  border-radius: 10px;
+  max-width: 550px;
+}
+.buttons-container button {
+  height: 10vh;
+  width: 100%;
+  background-color: #ffffff;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+.buttons-container button:hover {
+  color: var(--hover-text);
+  transform: translate(-0.25rem, -0.25rem);
+  background: var(--hover-bg);
+  box-shadow: 0.25rem 0.25rem var(--bg);
+  --bg: #90ffa8;
+  --hover-bg: #90ffa8;
+}
+
+.buttons-container button:active {
+  transform: translate(0);
+  box-shadow: none;
+  --bg: #90ffa8;
+  --active-bg: #90ffa8;
+}
+#qrImageContainer {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+a,
+a:hover,
+a:visited,
+a:active {
+  text-decoration: none;
+}
+a {
+  color: rgb(0, 0, 0);
+}
+.order-buttons {
+  margin-bottom: 10px;
+  border-radius: 15px;
+  border: 3px solid #90ffa8;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.role-buttons {
+  margin-bottom: 30px;
+  border-radius: 15px;
+  border: 3px solid #90ffa8;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#qrcode,
+#hist,
+#cart,
+#key,
+#logou,
+#left {
+  width: 30px;
+  margin-right: 5px;
+}
