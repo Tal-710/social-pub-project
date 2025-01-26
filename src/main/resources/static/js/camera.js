@@ -5,6 +5,8 @@ const qrContext = qrCanvas.getContext("2d");
 const qrResultDiv = document.getElementById("qrResult");
 const closeCameraButton = document.getElementById("closeCamera");
 const buttonContainer = document.getElementById("buttonContainer");
+const errorAlertCamera = document.getElementById("errorAlertCamera");
+const closeCameraAlert = document.getElementById("closeCameraAlert");
 let cameraStream = null;
 let qrScanInterval = null;
 let cameraActive = false;
@@ -26,7 +28,11 @@ async function toggleCamera() {
       cameraActive = true;
       startQRScan();
     } catch (error) {
-      alert("Unable to access camera. Please check your permissions.");
+      // alert("Unable to access camera. Please check your permissions.");
+      errorAlertCamera.style.display = "flex";
+      closeCameraAlert.addEventListener("click", () => {
+        errorAlertCamera.style.display = "none";
+      });
     }
   } else {
     closeCamera();

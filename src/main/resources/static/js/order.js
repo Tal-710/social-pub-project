@@ -1,23 +1,28 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const productDropdown = document.getElementById('product-dropdown');
-  const quantityInput = document.getElementById('quantity-input');
-  const addItemButton = document.getElementById('add-item-button');
-  const orderList = document.getElementById('order-list');
-  const submitOrderButton = document.getElementById('submit-order-button');
-  const qrResultDiv = document.getElementById('qrResult');
-  const totalAmountSpan = document.getElementById('total-amount');
-
-
+document.addEventListener("DOMContentLoaded", () => {
+  const productDropdown = document.getElementById("product-dropdown");
+  const quantityInput = document.getElementById("quantity-input");
+  const addItemButton = document.getElementById("add-item-button");
+  const orderList = document.getElementById("order-list");
+  const submitOrderButton = document.getElementById("submit-order-button");
+  const qrResultDiv = document.getElementById("qrResult");
+  const totalAmountSpan = document.getElementById("total-amount");
+  const errorAlert = document.getElementById("error");
+  const errorAlertScan = document.getElementById("errorScan");
+  const close = document.getElementById("ex");
+  const exclose = document.getElementById("exScan");
   const token = document.querySelector('meta[name="_csrf"]').content;
   const header = document.querySelector('meta[name="_csrf_header"]').content;
+  const submitSuccess = document.getElementById("submitSuccess");
+  const closeSubmit = document.getElementById("closeSubmit");
+
 
   let order = [];
   let scannedUser = null;
 
-  document.querySelectorAll('a').forEach(link => {
-    if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
-      link.addEventListener('click', () => {
-        sessionStorage.removeItem('scannedUser');
+  document.querySelectorAll("a").forEach((link) => {
+    if (link.getAttribute("href") && link.getAttribute("href") !== "#") {
+      link.addEventListener("click", () => {
+        sessionStorage.removeItem("scannedUser");
       });
     }
   });
@@ -26,28 +31,30 @@ document.addEventListener('DOMContentLoaded', () => {
     totalAmountSpan.textContent = total.toFixed(2);
   }
   window.clearUserData = () => {
-     scannedUser = null;
-     sessionStorage.removeItem('scannedUser');
-     submitOrderButton.disabled = true;
-     qrResultDiv.innerHTML = '';
+    scannedUser = null;
+    sessionStorage.removeItem("scannedUser");
+    submitOrderButton.disabled = true;
+    qrResultDiv.innerHTML = "";
   };
 
   function restoreSessionData() {
-    const savedOrder = sessionStorage.getItem('currentOrder');
+    const savedOrder = sessionStorage.getItem("currentOrder");
 
     if (savedOrder) {
       order = JSON.parse(savedOrder);
-      orderList.innerHTML = '';
-      order.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${item.productName} (x${item.quantity}) - $${item.totalPrice.toFixed(2)}`;
+      orderList.innerHTML = "";
+      order.forEach((item) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${item.productName} (x${
+          item.quantity
+        }) - $${item.totalPrice.toFixed(2)}`;
 
-        const removeButton = document.createElement('button');
-        removeButton.textContent = 'Remove';
-        removeButton.className = 'remove-button';
-        removeButton.addEventListener('click', () => {
-          order = order.filter(o => o.productId !== item.productId);
-          sessionStorage.setItem('currentOrder', JSON.stringify(order));
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.className = "remove-button";
+        removeButton.addEventListener("click", () => {
+          order = order.filter((o) => o.productId !== item.productId);
+          sessionStorage.setItem("currentOrder", JSON.stringify(order));
           listItem.remove();
         });
 
@@ -58,19 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   submitOrderButton.disabled = true;
 
+  window.handleUserScan = (user) => {
+    scannedUser = user;
+    sessionStorage.setItem("scannedUser", JSON.stringify(user));
 
-window.handleUserScan = (user) => {
-  scannedUser = user;
-  sessionStorage.setItem('scannedUser', JSON.stringify(user));
-
-  if (user.profilePicture) {
-    fetch(`/users/profile-picture/${user.profilePicture}`)
-      .then(response => response.text())
-      .then(profilePictureUrl => {
-        qrResultDiv.innerHTML = `
+    if (user.profilePicture) {
+      fetch(`/users/profile-picture/${user.profilePicture}`)
+        .then((response) => response.text())
+        .then((profilePictureUrl) => {
+          qrResultDiv.innerHTML = `
           <h3>User Details</h3>
           <div class="user-info-container">
             <div class="profile-pic-container">
@@ -85,9 +90,9 @@ window.handleUserScan = (user) => {
             </div>
           </div>
         `;
-      })
-      .catch(() => {
-        qrResultDiv.innerHTML = `
+        })
+        .catch(() => {
+          qrResultDiv.innerHTML = `
           <h3>User Details</h3>
           <div class="user-info-container">
             <div class="profile-pic-container">
@@ -101,9 +106,9 @@ window.handleUserScan = (user) => {
             </div>
           </div>
         `;
-      });
-  } else {
-    qrResultDiv.innerHTML = `
+        });
+    } else {
+      qrResultDiv.innerHTML = `
       <h3>User Details</h3>
       <div class="user-info-container">
         <div class="profile-pic-container">
@@ -117,18 +122,25 @@ window.handleUserScan = (user) => {
         </div>
       </div>
     `;
-  }
+    }
 
-  submitOrderButton.disabled = false;
-};
-addItemButton.addEventListener('click', () => {
+    submitOrderButton.disabled = false;
+  };
+  addItemButton.addEventListener("click", () => {
     const productId = productDropdown.value;
-    const productName = productDropdown.selectedOptions[0].textContent.split(' - $')[0];
-    const productPrice = parseFloat(productDropdown.selectedOptions[0].getAttribute('data-price'));
+    const productName =
+      productDropdown.selectedOptions[0].textContent.split(" - $")[0];
+    const productPrice = parseFloat(
+      productDropdown.selectedOptions[0].getAttribute("data-price")
+    );
     const quantity = parseInt(quantityInput.value, 10);
 
     if (!productId || quantity <= 0) {
-      alert('Please select a product and enter a valid quantity.');
+      // alert('Please select a product and enter a valid quantity.');
+      errorAlert.style.display = "flex";
+      close.addEventListener("click", () => {
+        errorAlert.style.display = "none";
+      });
       return;
     }
 
@@ -136,17 +148,19 @@ addItemButton.addEventListener('click', () => {
     const item = { productId, productName, quantity, totalPrice };
     order.push(item);
 
-    sessionStorage.setItem('currentOrder', JSON.stringify(order));
+    sessionStorage.setItem("currentOrder", JSON.stringify(order));
 
-    const listItem = document.createElement('li');
-    listItem.textContent = `${productName} (x${quantity}) - $${totalPrice.toFixed(2)}`;
+    const listItem = document.createElement("li");
+    listItem.textContent = `${productName} (x${quantity}) - $${totalPrice.toFixed(
+      2
+    )}`;
 
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'Remove';
-    removeButton.className = 'remove-button';
-    removeButton.addEventListener('click', () => {
-      order = order.filter(o => o.productId !== productId);
-      sessionStorage.setItem('currentOrder', JSON.stringify(order));
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove";
+    removeButton.className = "remove-button";
+    removeButton.addEventListener("click", () => {
+      order = order.filter((o) => o.productId !== productId);
+      sessionStorage.setItem("currentOrder", JSON.stringify(order));
       listItem.remove();
       updateTotal();
     });
@@ -155,61 +169,73 @@ addItemButton.addEventListener('click', () => {
     orderList.appendChild(listItem);
     updateTotal();
 
-    productDropdown.value = '';
+    productDropdown.value = "";
     quantityInput.value = 1;
   });
 
-  submitOrderButton.addEventListener('click', async () => {
+  submitOrderButton.addEventListener("click", async () => {
     if (!scannedUser) {
-      alert('Please scan a user before submitting the order.');
+      // alert("Please scan a user before submitting the order.");
+      errorAlertScan.style.display = "flex";
+      exclose.addEventListener("click", () => {
+        errorAlertScan.style.display = "none";
+      });
       return;
     }
 
     if (order.length === 0) {
-      alert('Order is empty!');
+      //alert("Order is empty!");
+      errorAlertScan.style.display = "flex";
+      exclose.addEventListener("click", () => {
+        errorAlertScan.style.display = "none";
+      });
       return;
     }
 
     const payload = {
       userId: scannedUser.idNumber,
       totalPrice: order.reduce((sum, item) => sum + item.totalPrice, 0),
-      orderDetails: order.map(item => ({
+      orderDetails: order.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
         unitPrice: item.totalPrice / item.quantity,
-        totalPrice: item.totalPrice
-      }))
+        totalPrice: item.totalPrice,
+      })),
     };
 
     try {
-      const response = await fetch('/orders/', {
-        method: 'POST',
+      const response = await fetch("/orders/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          [header]: token
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          [header]: token,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        alert('Order submitted successfully!');
-        sessionStorage.removeItem('currentOrder');
-        sessionStorage.removeItem('scannedUser');
+        //alert("Order submitted successfully!");
+        submitSuccess.style.display = "flex";
+        closeSubmit.addEventListener("click", () => {
+          submitSuccess.style.display = "none";
+        });
+        sessionStorage.removeItem("currentOrder");
+        sessionStorage.removeItem("scannedUser");
 
         order = [];
-        orderList.innerHTML = '';
+        orderList.innerHTML = "";
         scannedUser = null;
-        qrResultDiv.innerHTML = '';
+        qrResultDiv.innerHTML = "";
         submitOrderButton.disabled = true;
         updateTotal();
       } else {
         alert(`Failed to submit order. Status: ${response.status}`);
       }
     } catch (error) {
-      console.error('Error submitting order:', error);
-      alert('Error submitting order. Please try again.');
+      console.error("Error submitting order:", error);
+      alert("Error submitting order. Please try again.");
     }
   });
 
