@@ -10,7 +10,10 @@ const photoCanvas = document.getElementById("photo-canvas");
 const profilePreview = document.getElementById("profile-preview");
 const profilePicData = document.getElementById("profile-pic-data");
 const cameraClose = document.getElementById("camera-close");
+const errorAlertCamera = document.getElementById("errorAlertCamera");
+const closeCameraAlert = document.getElementById("closeCameraAlert");
 
+let cameraStream = null;
 function resizeImage(file) {
   return new Promise((resolve, reject) => {
     if (file.size > MAX_FILE_SIZE) {
@@ -101,9 +104,13 @@ cameraButton.addEventListener("click", async function () {
       });
     } catch (err) {
       console.error("Error accessing camera:", err);
-      alert(
-        "Could not access camera. Please ensure camera permissions are granted."
-      );
+      // alert(
+      //   "Could not access camera. Please ensure camera permissions are granted."
+      // );
+      errorAlertCamera.style.display = "flex";
+      closeCameraAlert.addEventListener("click", () => {
+        errorAlertCamera.style.display = "none";
+      });
     }
   } else {
     const canvas = document.createElement("canvas");
