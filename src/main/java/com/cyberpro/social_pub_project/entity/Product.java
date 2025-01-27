@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "image")
     private String image;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY )
     @JsonIgnore
     private List<OrderDetail> orderDetails;
 

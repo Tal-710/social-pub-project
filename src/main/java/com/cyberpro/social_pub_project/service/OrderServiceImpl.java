@@ -60,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Product> findLastFiveUniqueProducts(Integer userId) {
         return orderRepository.findLast5UniqueProductsByUserId(userId);
     }
+    @Transactional(readOnly = true)
     @Override
     public List<Order> findAllByUserId(Integer userId) {
         return orderRepository.findAllByUserIdOrderByOrderDateDesc(userId);

@@ -22,7 +22,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     """, nativeQuery = true)
     List<Product> findLast5UniqueProductsByUserId(@Param("userId") Integer userId);
 
-    @Query("SELECT o FROM Order o WHERE o.user.id = :userId ORDER BY o.orderDate DESC")
+    @Query("SELECT DISTINCT o FROM Order o " +
+            "LEFT JOIN FETCH o.orderDetails od " +
+            "LEFT JOIN FETCH od.product " +
+            "WHERE o.user.id = :userId " +
+            "ORDER BY o.orderDate DESC")
     List<Order> findAllByUserIdOrderByOrderDateDesc(@Param("userId") Integer userId);
 
 
